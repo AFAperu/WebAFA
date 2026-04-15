@@ -1,13 +1,10 @@
 #!/usr/bin/env node
 /**
- * Fetches eventos (calendar) data from Airtable and writes it to data/eventos.json.
- * 
+ * Fetches events from Airtable ("Eventos colegio Perú" table) and writes to data/eventos.json.
+ * Only includes records where "Dónde publicar" contains "Web".
+ *
  * Usage:
- *   AIRTABLE_TOKEN=pat... AIRTABLE_EVENTOS_BASE_ID=app... node scripts/fetch-eventos.js
- * 
- * Environment variables:
- *   AIRTABLE_TOKEN            — Personal Access Token (read-only scope)
- *   AIRTABLE_EVENTOS_BASE_ID  — Base ID for eventos (starts with "app...")
+ *   AIRTABLE_TOKEN=pat... AIRTABLE_BASE_ID=app... node scripts/fetch-eventos.js
  */
 
 import fs from 'fs';
@@ -34,7 +31,7 @@ async function fetchAllRecords() {
 
   do {
     const url = new URL(`${API_URL}/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`);
-    url.searchParams.set('sort[0][field]', 'Fecha');
+    url.searchParams.set('sort[0][field]', 'Fecha evento');
     url.searchParams.set('sort[0][direction]', 'asc');
     if (offset) url.searchParams.set('offset', offset);
 
@@ -59,10 +56,10 @@ function transformRecord(record) {
   const f = record.fields;
   return {
     id: record.id,
-    nombre: f['Nombre'] || f['NOMBRE'] || f['nombre'] || '',
-    fecha: f['Fecha'] || f['FECHA'] || f['fecha'] || '',
-    hora: f['Hora'] || f['HORA'] || f['hora'] || '',
-    dondePublicar: f['Donde publicar'] || f['DONDE PUBLICAR'] || [],
+    nombre: f['Name'] || '',
+    fecha: f['Fecha evento'] || '',
+    hora: f['Hora (hh:mm)'] || '',
+    dondePublicar: f['Dónde publicar'] || [],
   };
 }
 
@@ -72,7 +69,7 @@ async function main() {
   const records = await fetchAllRecords();
   const eventos = records
     .map(transformRecord)
-    .filter(e => e.nombre && e.dondePublicar.includes('Web'));
+    .filter(e => e.nombre && Array.isArray(e.dondePublicar) && e.dondePublicar.includes('Web'));
 
   const dataDir = path.dirname(OUTPUT_PATH);
   if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
