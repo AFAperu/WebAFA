@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 
 const TOKEN = process.env.AIRTABLE_TOKEN;
 const BASE_ID = process.env.AIRTABLE_EVENTOS_BASE_ID;
-const TABLE_NAME = 'eventos';
+const TABLE_NAME = 'Eventos colegio Perú';
 const API_URL = 'https://api.airtable.com/v0';
 const OUTPUT_PATH = path.join(__dirname, '..', 'data', 'eventos.json');
 
