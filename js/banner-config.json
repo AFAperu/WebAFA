@@ -1,0 +1,10 @@
+{
+  "enabled": true,
+  "message": "🎉 Bienvenidas a nuestra nueva web. Para cualquier comentario tienes nuestro email.",
+  "type": "info",
+  "dismissible": false,
+  "link": {
+    "text": "afaceipperu@gmail.com",
+    "url": "mailto:afaceipperu@gmail.com"
+  }
+}

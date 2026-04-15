@@ -1,0 +1,112 @@
+{
+  "lastUpdated": "2026-04-10T08:36:07.494Z",
+  "count": 11,
+  "eventos": [
+    {
+      "id": "recy7BwkaPBWmWnzK",
+      "nombre": "Risoterapia",
+      "fecha": "2026-04-17",
+      "hora": "17:15",
+      "dondePublicar": [
+        "Web"
+      ]
+    },
+    {
+      "id": "recqb9qCzXp7N7S0X",
+      "nombre": "Concurso relatos",
+      "fecha": "2026-04-22",
+      "hora": "",
+      "dondePublicar": [
+        "WhatsApp",
+        "Email",
+        "Web"
+      ]
+    },
+    {
+      "id": "recyhz9M5eCv1UiYK",
+      "nombre": "Noche de sacos",
+      "fecha": "2026-05-08",
+      "hora": "19:30",
+      "dondePublicar": [
+        "WhatsApp",
+        "Instagram",
+        "Email",
+        "Web"
+      ]
+    },
+    {
+      "id": "recpWcyR4B6txJH08",
+      "nombre": "Caseta San Isidro",
+      "fecha": "2026-05-08",
+      "hora": "",
+      "dondePublicar": [
+        "Web"
+      ]
+    },
+    {
+      "id": "recj9j8XJ8U3aqjpZ",
+      "nombre": "Club lectura infantil",
+      "fecha": "2026-05-22",
+      "hora": "16:00",
+      "dondePublicar": [
+        "Web"
+      ]
+    },
+    {
+      "id": "reckLBF9pmiMLuSId",
+      "nombre": "exhibición capoeira ",
+      "fecha": "2026-05-30",
+      "hora": "",
+      "dondePublicar": [
+        "Web"
+      ]
+    },
+    {
+      "id": "reca4RLRPXIuB1Iml",
+      "nombre": "Asamblea AFA",
+      "fecha": "2026-06-05",
+      "hora": "16:00",
+      "dondePublicar": [
+        "Web"
+      ]
+    },
+    {
+      "id": "recSYoE5yGiyH6xLX",
+      "nombre": "Club lectura infantil",
+      "fecha": "2026-06-05",
+      "hora": "16:00",
+      "dondePublicar": [
+        "Web"
+      ]
+    },
+    {
+      "id": "recTHtBQqjc78W6XA",
+      "nombre": "Dia del medio-ambiente ",
+      "fecha": "2026-06-05",
+      "hora": "",
+      "dondePublicar": [
+        "Web"
+      ]
+    },
+    {
+      "id": "recDJrMI7W7BShZKz",
+      "nombre": "La adrada",
+      "fecha": "2026-06-12",
+      "hora": "17:00",
+      "dondePublicar": [
+        "Web"
+      ]
+    },
+    {
+      "id": "reci115HDoaTsJ7r1",
+      "nombre": "fiesta fin de curso",
+      "fecha": "2026-06-19",
+      "hora": "17:00",
+      "dondePublicar": [
+        "WhatsApp",
+        "Email",
+        "Web"
+      ]
+    }
+  ]
+}

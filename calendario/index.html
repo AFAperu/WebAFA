@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9P1NSDT8VG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9P1NSDT8VG');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendario de Actividades - AFA Colegio Público Perú</title>
+  <meta name="description" content="Calendario de actividades y eventos de la Asociación de Familias del Colegio Público Perú." />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Calendario de Actividades - AFA Colegio Público Perú" />
+  <meta property="og:description" content="Calendario de actividades y eventos de la Asociación de Familias del Colegio Público Perú." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://afaceipperu.es/calendario/" />
+  <meta property="og:image" content="https://afaceipperu.es/images/photos/afa-peru.jpg" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:site_name" content="AFA Colegio Público Perú" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Calendario de Actividades - AFA Colegio Público Perú" />
+  <meta name="twitter:description" content="Calendario de actividades y eventos de la Asociación de Familias del Colegio Público Perú." />
+  <meta name="twitter:image" content="https://afaceipperu.es/images/photos/afa-peru.jpg" />
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+  <link href="../css/style.css" rel="stylesheet">
+</head>
+
+<body x-data="{ page: 'calendario', 'darkMode': true, 'stickyMenu': false, 'navigationOpen': false, 'scrollTop': false }"
+  x-init="
+         darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => darkMode = e.matches)"
+  :class="{'b eh': darkMode === true}">
+
+  <div id="header-placeholder"></div>
+
+  <main>
+    <section class="hero-page" style="background-image: url('../images/photos/headers/hero-actividades.jpg')">
+      <img src="../images/shapes/shape-01.svg" alt="" aria-hidden="true" class="hero-shape hero-shape-01" />
+      <img src="../images/shapes/shape-03.svg" alt="" aria-hidden="true" class="hero-shape hero-shape-03" />
+      <img src="../images/shapes/shape-07.svg" alt="" aria-hidden="true" class="hero-shape hero-shape-07" />
+      <div class="hero-content animate_top">
+        <h1>Calendario de Actividades</h1>
+        <p class="hero-description">Próximos eventos y actividades del colegio</p>
+      </div>
+    </section>
+
+    <section class="i nj hj rp hr">
+      <!-- Bg Shapes -->
+      <img src="../images/shapes/shape-09.svg" alt="" aria-hidden="true" class="of h y z/2" style="z-index:0" />
+      <img src="../images/shapes/shape-10.svg" alt="" aria-hidden="true" class="h _ aa" style="z-index:0" />
+      <img src="../images/shapes/shape-11.svg" alt="" aria-hidden="true" class="of h m ba" style="z-index:0" />
+
+      <div class="bb ze ki xn 2xl:ud-px-0" style="position:relative;z-index:1">
+        <div id="eventos-container">
+          <p class="loading-msg">Cargando eventos...</p>
+        </div>
+      </div>
+    </section>
+
+    <div id="cta-community-placeholder"></div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="xc wf xf ie ld vg sr gh tr g sa ta _a" @click="window.scrollTo({top: 0, behavior: 'smooth'})"
+    @scroll.window="scrollTop = (window.pageYOffset > 50) ? true : false" :class="{ 'uc' : scrollTop }">
+    <svg class="uh se qd" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z" />
+    </svg>
+  </button>
+
+  <script type="module">
+    import ComponentLoader from '../js/component-loader.js';
+    await ComponentLoader.init({ componentsPath: '../components/', basePath: '../' });
+  </script>
+  <script defer src="../js/bundle.js"></script>
+  <script type="module" src="../js/calendario-eventos.js"></script>
+</body>
+
+</html>

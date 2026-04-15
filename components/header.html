@@ -1,0 +1,69 @@
+<header class="g s r vd ya cj hh sm _k dj bl ll"
+  @scroll.window="stickyMenu = (window.pageYOffset > 20) ? true : false">
+  <div class="bb ze ki xn 2xl:ud-px-0 oo wf yf i">
+    <div class="vd to/4 tc wf yf">
+      <a href="index.html">
+        <img class="om" src="images/logos/logo-light.svg" alt="Logo Light" />
+        <img class="xc nm" src="images/logos/logo-light.svg" alt="Logo Dark" />
+      </a>
+
+      <!-- Hamburger Toggle BTN -->
+      <button class="po rc" @click="navigationOpen = !navigationOpen">
+        <span class="rc i pf re pd">
+          <span class="du-block h q vd yc">
+            <span class="rc i r s eh um tg te rd eb ml jl dl" :class="{ 'ue el': !navigationOpen }"></span>
+            <span class="rc i r s eh um tg te rd eb ml jl fl" :class="{ 'ue qr': !navigationOpen }"></span>
+            <span class="rc i r s eh um tg te rd eb ml jl gl" :class="{ 'ue hl': !navigationOpen }"></span>
+          </span>
+          <span class="du-block h q vd yc lf">
+            <span class="rc eh um tg ml jl el h na r ve yc" :class="{ 'sd dl': !navigationOpen }"></span>
+            <span class="rc eh um tg ml jl qr h s pa vd rd" :class="{ 'sd rr': !navigationOpen }"></span>
+          </span>
+        </span>
+      </button>
+      <!-- Hamburger Toggle BTN -->
+    </div>
+
+    <div class="vd wo/4 sd qo f ho oo wf yf" :class="{ 'd hh rm sr td ud qg ug jc yh': navigationOpen }">
+      <nav>
+        <ul class="tc _o sf yo cg ep">
+          <li><a href="index.html" class="xl" :class="{ 'mk': page === 'home' }">Inicio</a></li>
+          <li><a href="quienes-somos/" class="xl" :class="{ 'mk': page === 'quienes-somos' }">Quiénes Somos</a></li>
+          <li class="c i" x-data="{ dropdown: false }">
+            <a href="#!" class="xl tc wf yf bg" @click.prevent="dropdown = !dropdown"
+              :class="{ 'mk': page === 'blog-grid' || page === 'blog-single' || page === 'signin' || page === 'signup' || page === '404' }">
+              Qué hacemos
+
+              <svg :class="{ 'wh': dropdown }" class="th mm we fd pf" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512">
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
+              </svg>
+            </a>
+
+            <!-- Dropdown Start -->
+            <ul class="a" :class="{ 'tc': dropdown }">
+              <li><a href="calendario/" class="xl" :class="{ 'mk': page === 'calendario' }">Calendario de actividades</a></li>
+              <li><a href="comisiones/" class="xl" :class="{ 'mk': page === 'blog-grid' }">Comisiones</a></li>
+              <li><a href="extraescolares/" class="xl" :class="{ 'mk': page === 'extraescolares' }">Extraescolares</a></li>
+              <li><a href="comedor/" class="xl" :class="{ 'mk': page === 'comedor' }">Comedor</a></li>
+              <li><a href="primeros-cole-amplicole/" class="xl" :class="{ 'mk': page === 'primeros-cole-amplicole' }">Primeros del cole / Amplicole</a></li>
+              <li><a href="fiestas/" class="xl" :class="{ 'mk': page === 'fiestas' }">Fiestas</a></li>
+              <li><a href="huerto/" class="xl" :class="{ 'mk': page === 'huerto' }">Huerto</a></li>
+              <li><a href="bicicletada/" class="xl" :class="{ 'mk': page === 'bicicletada' }">Bicicletada</a></li>
+              <li><a href="montana/" class="xl" :class="{ 'mk': page === 'montana' }">Montaña</a></li>
+              <li><a href="consejo-escolar/" class="xl" :class="{ 'mk': page === 'consejo-escolar' }">Consejo escolar</a></li>
+            </ul>
+            <!-- Dropdown End -->
+          </li>
+          <li><a href="preguntas-frecuentes/" class="xl" :class="{ 'mk': page === 'faq' }">Preguntas frecuentes</a></li>
+          <li><a href="contacto/" class="xl" :class="{ 'mk': page === 'contacto' }">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="tc wf ig pb no">
+        <a href="asociate/" class="lk gh dk rg tc wf xf _l gi hi">Asóciate</a>
+      </div>
+    </div>
+  </div>
+</header>

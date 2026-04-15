@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9P1NSDT8VG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9P1NSDT8VG');
+  </script>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Montaña - Rutas en la Naturaleza - Asociación de Familias - Colegio Público Perú</title>
+  <meta name="description" content="Rutas de montaña y senderismo en familia organizadas por la Asociación de Familias del Colegio Público Perú." />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Montaña - Rutas en la Naturaleza - AFA Colegio Público Perú" />
+  <meta property="og:description" content="Rutas de montaña y senderismo en familia organizadas por la Asociación de Familias del Colegio Público Perú." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://afaceipperu.es/montana/" />
+  <meta property="og:image" content="https://afaceipperu.es/images/photos/afa-peru.jpg" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:site_name" content="AFA Colegio Público Perú" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Montaña - Rutas en la Naturaleza - AFA Colegio Público Perú" />
+  <meta name="twitter:description" content="Rutas de montaña y senderismo en familia organizadas por la Asociación de Familias del Colegio Público Perú." />
+  <meta name="twitter:image" content="https://afaceipperu.es/images/photos/afa-peru.jpg" />
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+  <link href="../css/style.css" rel="stylesheet">
+</head>
+
+<body x-data="{ page: 'montana', 'darkMode': true, 'stickyMenu': false, 'navigationOpen': false, 'scrollTop': false }"
+  x-init="
+         darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => darkMode = e.matches)"
+  :class="{'b eh': darkMode === true}">
+  <!-- ===== Header Start ===== -->
+  <div id="header-placeholder"></div>
+  <!-- ===== Header End ===== -->
+
+  <main>
+    <!-- ===== Hero Section Start ===== -->
+    <section class="hero-page" style="background-image: url('../images/photos/headers/hero-montana.jpg')">
+      <img src="../images/shapes/shape-06.svg" alt="" aria-hidden="true" class="hero-shape hero-shape-01" />
+      <img src="../images/shapes/shape-01.svg" alt="" aria-hidden="true" class="hero-shape hero-shape-03" />
+      <img src="../images/shapes/shape-20.svg" alt="" aria-hidden="true" class="hero-shape hero-shape-07" />
+      <img src="../images/shapes/shape-14.svg" alt="" aria-hidden="true" class="hero-shape hero-shape-12" />
+      <img src="../images/shapes/shape-19.svg" alt="" aria-hidden="true" class="hero-shape hero-shape-13" />
+
+      <div class="hero-content animate_top">
+        <h1>Montaña</h1>
+        <p class="hero-description">
+          Cada trimestre salimos a disfrutar de la naturaleza con una ruta para toda la familia
+        </p>
+      </div>
+    </section>
+    <!-- ===== Hero Section End ===== -->
+
+    <!-- ===== Intro Section Start ===== -->
+    <section class="gj hj rp hr">
+      <div class="bb ze ki xn 2xl:ud-px-0">
+        <div class="tc wf xf kq">
+          <div class="animate_top rounded-md shadow-solid-13 bg-white dark:bg-blacksection border border-stroke dark:border-strokedark p-7.5 md:p-10 bb">
+            <div class="tc wf gg qq">
+              <!-- Texto -->
+              <div class="animate_left jn/2">
+                <p class="jk pk wb" style="font-size: 1.2rem;">
+                  Cada trimestre organizamos una jornada en la naturaleza para todas las familias del cole. Buscamos rutas circulares de entre 8 y 10 km, con poco desnivel, aptas para todos los niveles y edades.
+                </p>
+                <p class="jk pk wb" style="font-size: 1.1rem;">
+                  Comemos juntos en el camino y elegimos lugares accesibles en transporte público, para que ni siquiera haga falta coche. Una forma estupenda de desconectar, hacer comunidad y disfrutar del aire libre.
+                </p>
+              </div>
+
+              <!-- Imagen -->
+              <div class="animate_left xc gn gg jn/2 i">
+                <div>
+                  <img src="../images/shapes/shape-03.svg" alt="Shape" class="h -ud-left-5 x" />
+                  <img src="../images/photos/montana/montana-02.jpg" alt="Familias de ruta por la montaña" class="ib" />
+                </div>
+                <div>
+                  <img src="../images/shapes/shape-02.svg" alt="Shape" />
+                  <img src="../images/photos/montana/montana-03.jpg" alt="Ruta en la naturaleza" class="ob gb" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== Intro Section End ===== -->
+
+    <!-- ===== Rutas Anteriores Start ===== -->
+    <section class="ji gp uq 2xl:ud-py-35 pg fh b rm" :class="{'b': darkMode}">
+      <div class="bb ze ki xn wq">
+        <div class="animate_top bb ze rj ki xn vq _b">
+          <h2 class="fk vj pr kk wm on/5 gq/2 bb">Rutas anteriores</h2>
+          <p class="bb on/5 wo/5 hq">Descubre los recorridos que ya hemos hecho. Pulsa en cualquiera para ver el mapa de la ruta.</p>
+        </div>
+
+        <div class="route-cards">
+          <!-- Route 1 -->
+          <div class="route-card animate_top" x-data="{ open: false }">
+            <div class="route-card-header" @click="open = !open">
+              <div class="route-card-info">
+                <h4 class="route-card-title">Senda Puricelli</h4>
+              </div>
+              <svg class="route-card-chevron" :class="{ 'route-card-chevron--open': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
+                <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="route-card-body" x-show="open" x-transition>
+              <div class="route-card-map">
+                <template x-if="open">
+                  <iframe frameborder="0" scrolling="no" src="https://es.wikiloc.com/wikiloc/embedv2.do?id=10095260&elevation=off&images=off&maptype=H" width="100%" height="400" title="Mapa de la ruta Senda Puricelli"></iframe>
+                </template>
+              </div>
+            </div>
+          </div>
+
+          <!-- Route 2 -->
+          <div class="route-card animate_top" x-data="{ open: false }">
+            <div class="route-card-header" @click="open = !open">
+              <div class="route-card-info">
+                <h4 class="route-card-title">Puerto de Malagón</h4>
+              </div>
+              <svg class="route-card-chevron" :class="{ 'route-card-chevron--open': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
+                <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="route-card-body" x-show="open" x-transition>
+              <div class="route-card-map">
+                <template x-if="open">
+                  <iframe frameborder="0" scrolling="no" src="https://es.wikiloc.com/wikiloc/embedv2.do?id=4454437&elevation=off&images=off&maptype=H" width="100%" height="400" title="Mapa de la ruta Puerto de Malagón"></iframe>
+                </template>
+              </div>
+            </div>
+          </div>
+
+          <!-- Route 3 -->
+          <div class="route-card animate_top" x-data="{ open: false }">
+            <div class="route-card-header" @click="open = !open">
+              <div class="route-card-info">
+                <h4 class="route-card-title">Desembocadura del Manzanares en el Jarama</h4>
+              </div>
+              <svg class="route-card-chevron" :class="{ 'route-card-chevron--open': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
+                <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="route-card-body" x-show="open" x-transition>
+              <div class="route-card-map">
+                <template x-if="open">
+                  <iframe frameborder="0" scrolling="no" src="https://es.wikiloc.com/wikiloc/embedv2.do?id=145256521&elevation=off&images=off&maptype=H" width="100%" height="400" title="Mapa de la ruta Molinos de Navalagamella"></iframe>
+                </template>
+              </div>
+            </div>
+          </div>
+
+          <!-- Route 4 -->
+          <div class="route-card animate_top" x-data="{ open: false }">
+            <div class="route-card-header" @click="open = !open">
+              <div class="route-card-info">
+                <h4 class="route-card-title">Molinos de Navalagamella</h4>
+              </div>
+              <svg class="route-card-chevron" :class="{ 'route-card-chevron--open': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
+                <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="route-card-body" x-show="open" x-transition>
+              <div class="route-card-map">
+                <template x-if="open">
+                  <iframe frameborder="0" scrolling="no" src="https://es.wikiloc.com/wikiloc/embedv2.do?id=47325046&elevation=off&images=off&maptype=H" width="100%" height="400" title="Mapa de la ruta Desembocadura del Manzanares en el Jarama"></iframe>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== Rutas Anteriores End ===== -->
+
+    <!-- ===== Galería Start ===== -->
+    <section class="ji gp uq">
+      <div class="bb ze ki xn wq">
+        <div class="animate_top bb ze rj ki xn vq">
+          <h2 class="fk vj pr kk wm on/5 gq/2 bb">Nuestras rutas en imágenes</h2>
+          <p class="bb on/5 wo/5 hq">Momentos de naturaleza, aire libre y comunidad en cada salida</p>
+        </div>
+
+        <!-- Masonry Gallery -->
+        <div class="masonry-gallery">
+          <div class="masonry-item">
+            <img src="../images/photos/montana/montana-01.jpg" alt="Ruta de montaña con familias" class="masonry-image" loading="lazy">
+            <div class="masonry-overlay">
+              <h4>En marcha</h4>
+              <p>Arrancamos la ruta con energía y buen humor</p>
+            </div>
+          </div>          
+          
+
+          <div class="masonry-item">
+            <img src="../images/photos/montana/montana-04.jpg" alt="Comida en la montaña" class="masonry-image" loading="lazy">
+            <div class="masonry-overlay">
+              <h4>Juntos al aire libre</h4>
+              <p>Compartiendo el día en plena naturaleza</p>
+            </div>
+          </div>
+
+          <div class="masonry-item">
+            <img src="../images/photos/montana/montana-06.jpeg" alt="Familias en ruta por el campo" class="masonry-image" loading="lazy">
+            <div class="masonry-overlay">
+              <h4>Por el camino</h4>
+              <p>Avanzando juntos entre senderos y risas</p>
+            </div>
+          </div>
+
+          <div class="masonry-item">
+            <img src="../images/photos/montana/montana-07.jpeg" alt="Grupo de familias descansando en la ruta" class="masonry-image" loading="lazy">
+            <div class="masonry-overlay">
+              <h4>Parada y fonda</h4>
+              <p>Un descanso bien merecido en el camino</p>
+            </div>
+          </div>
+
+          <div class="masonry-item">
+            <img src="../images/photos/montana/montana-08.jpeg" alt="Niños explorando la naturaleza" class="masonry-image" loading="lazy">
+            <div class="masonry-overlay">
+              <h4>Pequeños exploradores</h4>
+              <p>Descubriendo la naturaleza paso a paso</p>
+            </div>
+          </div>
+
+          <div class="masonry-item">
+            <img src="../images/photos/montana/montana-09.jpeg" alt="Vista panorámica de la ruta" class="masonry-image" loading="lazy">
+            <div class="masonry-overlay">
+              <h4>Vistas que enamoran</h4>
+              <p>Paisajes increíbles en cada salida</p>
+            </div>
+          </div>
+
+          <div class="masonry-item">
+            <img src="../images/photos/montana/montana-10.jpeg" alt="Familias disfrutando al final de la ruta" class="masonry-image" loading="lazy">
+            <div class="masonry-overlay">
+              <h4>Meta cumplida</h4>
+              <p>La satisfacción de completar la ruta juntos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== Galería End ===== -->
+
+    <!-- ===== Vídeo Start ===== -->
+    <section class="ji gp uq">
+      <div class="bb ze ki xn wq">
+        <div class="animate_top bb ze rj ki xn vq">
+          <h2 class="fk vj pr kk wm on/5 gq/2 bb">Vídeo de nuestras rutas</h2>
+          <p class="bb on/5 wo/5 hq _b">Un resumen en imágenes de lo que vivimos en cada salida</p>
+        </div>
+
+        <div class="video-wrapper animate_top">
+          <iframe
+            src="https://www.youtube.com/embed/A50GY6YU0QA"
+            title="Vídeo de las rutas de montaña"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </section>
+    <!-- ===== Vídeo End ===== -->
+
+    <!-- ===== CTA Start ===== -->
+    <div id="cta-community-placeholder"></div>
+    <!-- ===== CTA End ===== -->
+  </main>
+
+  <!-- ===== Footer Start ===== -->
+  <div id="footer-placeholder"></div>
+  <!-- ===== Footer End ===== -->
+
+  <!-- ====== Back To Top Start ===== -->
+  <button class="xc wf xf ie ld vg sr gh tr g sa ta _a" @click="window.scrollTo({top: 0, behavior: 'smooth'})"
+    @scroll.window="scrollTop = (window.pageYOffset > 50) ? true : false" :class="{ 'uc' : scrollTop }">
+    <svg class="uh se qd" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <path
+        d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z" />
+    </svg>
+  </button>
+  <!-- ====== Back To Top End ===== -->
+
+  <script type="module">
+    import ComponentLoader from '../js/component-loader.js';
+    await ComponentLoader.init({ componentsPath: '../components/', basePath: '../' });
+  </script>
+
+  <script defer src="../js/bundle.js"></script>
+  <script defer src="../js/gallery-lightbox.js"></script>
+</body>
+
+</html>

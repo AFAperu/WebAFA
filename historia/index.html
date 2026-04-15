@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9P1NSDT8VG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9P1NSDT8VG');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historia del Colegio Perú</title>
+  <meta name="description" content="Historia del Colegio Público Perú de Madrid. Recorrido histórico desde sus orígenes hasta la actualidad." />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Historia del Colegio Perú" />
+  <meta property="og:description" content="Historia del Colegio Público Perú de Madrid. Recorrido histórico desde sus orígenes hasta la actualidad." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://afaceipperu.es/historia/" />
+  <meta property="og:image" content="https://afaceipperu.es/images/photos/afa-peru.jpg" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:site_name" content="AFA Colegio Público Perú" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Historia del Colegio Perú" />
+  <meta name="twitter:description" content="Historia del Colegio Público Perú de Madrid. Recorrido histórico desde sus orígenes hasta la actualidad." />
+  <meta name="twitter:image" content="https://afaceipperu.es/images/photos/afa-peru.jpg" />
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+
+    /* --- Parallax hero --- */
+    .hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10,10,10,0) 40%, #0a0a0a 100%);
+      z-index: 1;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('../images/photos/cole-peru/frontal-old.jpg') center/cover no-repeat;
+      will-change: transform;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 1.5rem;
+    }
+    .hero-content h1 {
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .hero-content .date {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      opacity: 0.6;
+      font-weight: 300;
+    }
+
+    /* --- Text section --- */
+    .text-section {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 6rem 1.5rem;
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      line-height: 1.8;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .text-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* --- Image comparison blocks --- */
+    .comparison {
+      position: relative;
+      height: 200vh; /* scroll distance for the transition */
+    }
+    .comparison-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .comparison-sticky .img-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .comparison-sticky img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .comparison-sticky .img-new {
+      position: absolute;
+      inset: 0;
+      clip-path: inset(0 100% 0 0);
+      will-change: clip-path;
+    }
+    .comparison-label {
+      position: absolute;
+      bottom: 2rem;
+      z-index: 3;
+      font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+      font-weight: 600;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2rem;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .label-old {
+      left: 2rem;
+      background: rgba(180, 120, 60, 0.7);
+      color: #fff;
+    }
+    .label-new {
+      right: 2rem;
+      background: rgba(60, 140, 80, 0.7);
+      color: #fff;
+    }
+    .img-wrapper .divider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: rgba(255,255,255,0.8);
+      z-index: 4;
+      box-shadow: 0 0 12px rgba(255,255,255,0.4);
+      will-change: left;
+    }
+
+    /* --- Multi-image sequence --- */
+    .sequence {
+      position: relative;
+      /* 13 transitions × 200vh each = 2600vh scroll distance */
+      height: 2600vh;
+    }
+    .sequence-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .sequence-sticky .img-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .sequence-sticky img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .sequence-sticky .seq-layer {
+      position: absolute;
+      inset: 0;
+      clip-path: inset(0 100% 0 0);
+      will-change: clip-path;
+    }
+    .sequence-sticky .seq-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .sequence .seq-divider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: rgba(255,255,255,0.8);
+      z-index: 4;
+      box-shadow: 0 0 12px rgba(255,255,255,0.4);
+      will-change: left;
+      display: none;
+    }
+    .sequence .seq-label {
+      position: absolute;
+      bottom: 2rem;
+      z-index: 5;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      font-weight: 700;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2rem;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      pointer-events: none;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: opacity 0.3s ease;
+    }
+
+    /* --- Year nav (right side) --- */
+    .seq-nav {
+      position: fixed;
+      right: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.15rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .seq-nav.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .seq-nav button {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.35);
+      font-family: inherit;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.25s ease, transform 0.25s ease;
+      white-space: nowrap;
+    }
+    .seq-nav button::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      flex-shrink: 0;
+      transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .seq-nav button:hover {
+      color: rgba(255,255,255,0.8);
+    }
+    .seq-nav button:hover::after {
+      background: rgba(255,255,255,0.6);
+      transform: scale(1.4);
+    }
+    .seq-nav button.active {
+      color: #fff;
+    }
+    .seq-nav button.active::after {
+      background: #6dd5a0;
+      transform: scale(1.6);
+      box-shadow: 0 0 6px rgba(109,213,160,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .seq-nav {
+        right: 0.4rem;
+        gap: 0;
+      }
+      .seq-nav button {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.3rem;
+      }
+    }
+
+    /* --- Spacer / outro --- */
+    .outro {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 6rem 1.5rem 8rem;
+      text-align: center;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      opacity: 0.5;
+    }
+    .outro a {
+      color: #8bb8f0;
+      text-decoration: none;
+    }
+    .outro a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- Hero with parallax -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-content">
+      <h1>Colegio Público Perú</h1>
+      <p class="date">15 de mayo de 1955</p>
+    </div>
+  </section>
+
+  <!-- Text block -->
+  <section class="text-section" id="textBlock">
+    Reportaje sobre la inauguración del grupo escolar de la «República de Perú», situado en Comillas, Carabanchel Bajo (actualmente distrito de Carabanchel). Asistieron a las inauguraciones Carmen Polo de Franco; el ministro de Educación Nacional, Joaquín Ruiz-Giménez Cortés; Juan Ricote Alonso, obispo auxiliar de Madrid-Alcalá; el embajador de Ecuador, el embajador de Perú y otras personalidades: llegada de las personalidades al centro a pie, discursos del ministro y de unas niñas del grupo escolar, recorrido por las instalaciones.
+  </section>
+
+  <!-- Comparison 1: Frontal -->
+  <section class="comparison" data-comparison>
+    <div class="comparison-sticky">
+      <div class="img-wrapper">
+        <img src="../images/photos/cole-peru/frontal-old.jpg" alt="Fachada frontal antigua" class="img-old">
+        <img src="../images/photos/cole-peru/frontal-new.jpg" alt="Fachada frontal actual" class="img-new">
+        <div class="divider"></div>
+        <span class="comparison-label label-old">1955</span>
+        <span class="comparison-label label-new">Hoy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison 2: Esquina -->
+  <section class="comparison" data-comparison>
+    <div class="comparison-sticky">
+      <div class="img-wrapper">
+        <img src="../images/photos/cole-peru/esquina-old.jpg" alt="Esquina antigua" class="img-old">
+        <img src="../images/photos/cole-peru/esquina-new.jpg" alt="Esquina actual" class="img-new">
+        <div class="divider"></div>
+        <span class="comparison-label label-old">1955</span>
+        <span class="comparison-label label-new">Hoy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Year navigation -->
+  <nav class="seq-nav" id="seqNav" aria-label="Navegación por años">
+    <button data-year-idx="0">1956</button>
+    <button data-year-idx="1">1961</button>
+    <button data-year-idx="2">1964</button>
+    <button data-year-idx="3">1972</button>
+    <button data-year-idx="4">1980</button>
+    <button data-year-idx="5">1991</button>
+    <button data-year-idx="6">2001</button>
+    <button data-year-idx="7">2006</button>
+    <button data-year-idx="8">2009</button>
+    <button data-year-idx="9">2011</button>
+    <button data-year-idx="10">2013</button>
+    <button data-year-idx="11">2017</button>
+    <button data-year-idx="12">2021</button>
+    <button data-year-idx="13">2025</button>
+  </nav>
+
+  <!-- Sequence: Evolución aérea (14 fotos, 13 transiciones) -->
+  <section class="sequence" id="sequence">
+    <div class="sequence-sticky">
+      <div class="img-wrapper">
+        <!-- Base layer (1956) -->
+        <img src="../images/photos/cole-peru/aerea-1956.jpg" alt="Vista aérea 1956" class="seq-base">
+        <!-- Layers 1-13 stacked on top, each wipes in sequence -->
+        <div class="seq-layer" data-seq="0"><img src="../images/photos/cole-peru/aerea-1961.jpg" alt="Vista aérea 1961" loading="lazy"></div>
+        <div class="seq-layer" data-seq="1"><img src="../images/photos/cole-peru/aerea-1964.jpg" alt="Vista aérea 1964" loading="lazy"></div>
+        <div class="seq-layer" data-seq="2"><img src="../images/photos/cole-peru/aerea-1972.jpg" alt="Vista aérea 1972" loading="lazy"></div>
+        <div class="seq-layer" data-seq="3"><img src="../images/photos/cole-peru/aerea-1980.jpg" alt="Vista aérea 1980" loading="lazy"></div>
+        <div class="seq-layer" data-seq="4"><img src="../images/photos/cole-peru/aerea-1991.jpg" alt="Vista aérea 1991" loading="lazy"></div>
+        <div class="seq-layer" data-seq="5"><img src="../images/photos/cole-peru/aerea-2001.jpg" alt="Vista aérea 2001" loading="lazy"></div>
+        <div class="seq-layer" data-seq="6"><img src="../images/photos/cole-peru/aerea-2006.jpg" alt="Vista aérea 2006" loading="lazy"></div>
+        <div class="seq-layer" data-seq="7"><img src="../images/photos/cole-peru/aerea-2009.jpg" alt="Vista aérea 2009" loading="lazy"></div>
+        <div class="seq-layer" data-seq="8"><img src="../images/photos/cole-peru/aerea-2011.jpg" alt="Vista aérea 2011" loading="lazy"></div>
+        <div class="seq-layer" data-seq="9"><img src="../images/photos/cole-peru/aerea-2013.jpg" alt="Vista aérea 2013" loading="lazy"></div>
+        <div class="seq-layer" data-seq="10"><img src="../images/photos/cole-peru/aerea-2017.jpg" alt="Vista aérea 2017" loading="lazy"></div>
+        <div class="seq-layer" data-seq="11"><img src="../images/photos/cole-peru/aerea-2021.jpg" alt="Vista aérea 2021" loading="lazy"></div>
+        <div class="seq-layer" data-seq="12"><img src="../images/photos/cole-peru/aerea-2025.jpg" alt="Vista aérea 2025" loading="lazy"></div>
+        <div class="seq-divider" id="seqDivider"></div>
+        <span class="seq-label" id="seqLabel">1955</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Outro -->
+  <section class="outro">
+    <p>Más de 70 años de historia educativa en Carabanchel.</p>
+    <p><a href="../" class="link mk">← Volver al inicio</a></p>
+  </section>
+
+  <script>
+    // --- Parallax hero ---
+    const heroBg = document.getElementById('heroBg');
+    // --- Text fade-in ---
+    const textBlock = document.getElementById('textBlock');
+    // --- Comparison sections ---
+    const comparisons = document.querySelectorAll('[data-comparison]');
+    // --- Sequence section ---
+    const sequence = document.getElementById('sequence');
+    const seqLayers = sequence.querySelectorAll('.seq-layer');
+    const seqDivider = document.getElementById('seqDivider');
+    const seqLabel = document.getElementById('seqLabel');
+    const seqNav = document.getElementById('seqNav');
+    const seqNavButtons = seqNav.querySelectorAll('button');
+    const seqYears = ['1956', '1961', '1964', '1972', '1980', '1991', '2001', '2006', '2009', '2011', '2013', '2017', '2021', '2025'];
+    const numTransitions = seqLayers.length; // 13
+
+    function onScroll() {
+      const scrollY = window.scrollY;
+      const vh = window.innerHeight;
+
+      // Parallax: move hero bg slower
+      heroBg.style.transform = `translateY(${scrollY * 0.4}px)`;
+
+      // Text block reveal
+      const tbRect = textBlock.getBoundingClientRect();
+      if (tbRect.top < vh * 0.8) {
+        textBlock.classList.add('visible');
+      }
+
+      // Comparison wipe (existing 2-image sections)
+      comparisons.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        const sectionHeight = section.offsetHeight;
+        const stickyHeight = vh;
+        const scrollableDistance = sectionHeight - stickyHeight;
+
+        // How far we've scrolled inside this section (0 → 1)
+        const rawProgress = (-rect.top) / scrollableDistance;
+        const progress = Math.max(0, Math.min(1, rawProgress));
+
+        const imgNew = section.querySelector('.img-new');
+        const divider = section.querySelector('.img-wrapper .divider');
+        const labelOld = section.querySelector('.label-old');
+        const labelNew = section.querySelector('.label-new');
+
+        // Wipe from left to right
+        const pct = progress * 100;
+        imgNew.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+        divider.style.left = `${pct}%`;
+
+        // Fade labels
+        labelOld.style.opacity = progress < 0.8 ? 1 : Math.max(0, (1 - progress) * 5);
+        labelNew.style.opacity = progress > 0.2 ? 1 : Math.max(0, progress * 5);
+      });
+
+      // Sequence wipe: chain 7 transitions across the scroll distance
+      const seqRect = sequence.getBoundingClientRect();
+      const seqHeight = sequence.offsetHeight;
+      const seqScrollable = seqHeight - vh;
+      const globalProgress = Math.max(0, Math.min(1, (-seqRect.top) / seqScrollable));
+
+      // Each transition gets an equal slice of the total progress
+      const sliceSize = 1 / numTransitions;
+
+      // Determine which transition is active and its local progress
+      const activeIndex = Math.min(Math.floor(globalProgress / sliceSize), numTransitions - 1);
+      const localProgress = Math.max(0, Math.min(1, (globalProgress - activeIndex * sliceSize) / sliceSize));
+
+      seqLayers.forEach((layer, i) => {
+        if (i < activeIndex) {
+          // Already fully revealed
+          layer.style.clipPath = 'inset(0 0% 0 0)';
+        } else if (i === activeIndex) {
+          // Currently wiping
+          const pct = localProgress * 100;
+          layer.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+          // Show divider during active wipe
+          seqDivider.style.display = 'block';
+          seqDivider.style.left = `${pct}%`;
+        } else {
+          // Not yet reached
+          layer.style.clipPath = 'inset(0 100% 0 0)';
+        }
+      });
+
+      // Hide divider at rest positions
+      if (localProgress <= 0.01 || localProgress >= 0.99) {
+        seqDivider.style.display = 'none';
+      }
+
+      // Update year label — show the "newer" year during a wipe, or the settled year
+      if (localProgress > 0.5) {
+        seqLabel.textContent = seqYears[activeIndex + 1];
+      } else {
+        seqLabel.textContent = seqYears[activeIndex];
+      }
+      // At the very end, show the last year
+      if (globalProgress >= 0.99) {
+        seqLabel.textContent = seqYears[seqYears.length - 1];
+      }
+
+      // --- Year nav: show/hide + active state ---
+      const seqInView = seqRect.top < vh && seqRect.bottom > 0;
+      seqNav.classList.toggle('visible', seqInView);
+
+      // Determine which year is "current"
+      let currentYearIdx;
+      if (localProgress > 0.5) {
+        currentYearIdx = Math.min(activeIndex + 1, seqYears.length - 1);
+      } else {
+        currentYearIdx = activeIndex;
+      }
+      if (globalProgress >= 0.99) currentYearIdx = seqYears.length - 1;
+      if (globalProgress <= 0.01) currentYearIdx = 0;
+
+      seqNavButtons.forEach((btn, i) => {
+        btn.classList.toggle('active', i === currentYearIdx);
+      });
+    }
+
+    // --- Click handler for year nav ---
+    seqNav.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-year-idx]');
+      if (!btn) return;
+      const idx = parseInt(btn.dataset.yearIdx, 10);
+      const seqTop = sequence.offsetTop;
+      const seqHeight = sequence.offsetHeight;
+      const vh = window.innerHeight;
+      const seqScrollable = seqHeight - vh;
+      // Target progress for this year: idx / (numYears - 1)
+      const targetProgress = idx / (seqYears.length - 1);
+      const targetScroll = seqTop + targetProgress * seqScrollable;
+      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /components/
+Disallow: /scripts/
+Disallow: /tests/
+Disallow: /data/
+Disallow: /js/
+Disallow: /node_modules/
+
+Sitemap: https://afaceipperu.es/sitemap.xml

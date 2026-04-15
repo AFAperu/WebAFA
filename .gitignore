@@ -1,0 +1,12 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+
+# Node (for local script runs)
+node_modules/
+
+# Local secrets
+.env

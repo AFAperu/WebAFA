@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9P1NSDT8VG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9P1NSDT8VG');
+  </script>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aviso Legal - Asociación de Familias - Colegio Público Perú</title>
+  <meta name="description" content="Aviso legal y condiciones de uso del sitio web de la Asociación de Familias del Colegio Público Perú." />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Aviso Legal - AFA Colegio Público Perú" />
+  <meta property="og:description" content="Aviso legal y condiciones de uso del sitio web de la Asociación de Familias del Colegio Público Perú." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://afaceipperu.es/aviso-legal/" />
+  <meta property="og:image" content="https://afaceipperu.es/images/photos/afa-peru.jpg" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:site_name" content="AFA Colegio Público Perú" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Aviso Legal - AFA Colegio Público Perú" />
+  <meta name="twitter:description" content="Aviso legal y condiciones de uso del sitio web de la Asociación de Familias del Colegio Público Perú." />
+  <meta name="twitter:image" content="https://afaceipperu.es/images/photos/afa-peru.jpg" />
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+  <link href="../css/style.css" rel="stylesheet">
+</head>
+
+<body x-data="{ page: 'aviso-legal', 'darkMode': true, 'stickyMenu': false, 'navigationOpen': false, 'scrollTop': false }"
+  x-init="
+         darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => darkMode = e.matches)"
+  :class="{'b eh': darkMode === true}">
+
+  <div id="header-placeholder"></div>
+
+  <main>
+    <div class="legal-page">
+      <h1>Aviso Legal</h1>
+      <p class="legal-updated">Última actualización: abril 2026</p>
+
+      <h2>1. Datos identificativos</h2>
+      <p>En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa al usuario de los datos del titular de este sitio web:</p>
+      <ul>
+        <li><strong>Denominación:</strong> Asociación de Familias del Colegio Público Perú (AFA CEIP Perú)</li>
+        <li><strong>Domicilio:</strong> [Dirección del colegio]</li>
+        <li><strong>CIF:</strong> [CIF de la asociación]</li>
+        <li><strong>Email de contacto:</strong> [email de contacto]</li>
+      </ul>
+
+      <h2>2. Objeto</h2>
+      <p>Este sitio web tiene como finalidad informar a las familias asociadas y a la comunidad educativa sobre las actividades, servicios y novedades de la Asociación de Familias del CEIP Perú.</p>
+
+      <h2>3. Propiedad intelectual e industrial</h2>
+      <p>Los contenidos de este sitio web, incluyendo textos, fotografías, gráficos, imágenes, iconos, tecnología, software, así como su diseño gráfico y códigos fuente, constituyen una obra cuya propiedad pertenece a la Asociación de Familias del CEIP Perú, sin que puedan entenderse cedidos al usuario ninguno de los derechos de explotación sobre los mismos más allá de lo estrictamente necesario para el correcto uso de la web.</p>
+
+      <h2>4. Condiciones de uso</h2>
+      <p>El usuario se compromete a hacer un uso adecuado de los contenidos y servicios que se ofrecen a través de este sitio web y a no emplearlos para:</p>
+      <ul>
+        <li>Realizar actividades ilícitas o contrarias a la buena fe y al orden público.</li>
+        <li>Difundir contenidos o propaganda de carácter racista, xenófobo, o que atente contra los derechos humanos.</li>
+        <li>Provocar daños en los sistemas físicos y lógicos del sitio web o de terceros.</li>
+      </ul>
+
+      <h2>5. Protección de datos</h2>
+      <p>De conformidad con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD), le informamos de que los datos personales que nos facilite serán tratados con la finalidad de gestionar su relación con la asociación. Para más información, puede contactarnos en la dirección de email indicada.</p>
+
+      <h2>6. Cookies</h2>
+      <p>Este sitio web utiliza cookies. Para más información, consulte nuestra <a href="../politica-cookies/">Política de Cookies</a>.</p>
+
+      <h2>7. Enlaces a terceros</h2>
+      <p>Este sitio web puede contener enlaces a sitios de terceros. La Asociación no se hace responsable del contenido ni de las políticas de privacidad de dichos sitios.</p>
+
+      <h2>8. Legislación aplicable y jurisdicción</h2>
+      <p>Las presentes condiciones se rigen por la legislación española. Para la resolución de cualquier controversia, las partes se someten a los Juzgados y Tribunales de Madrid.</p>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script type="module">
+    import ComponentLoader from '../js/component-loader.js';
+    await ComponentLoader.init({ componentsPath: '../components/', basePath: '../' });
+  </script>
+  <script defer src="../js/bundle.js"></script>
+</body>
+
+</html>
