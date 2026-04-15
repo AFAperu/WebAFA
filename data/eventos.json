@@ -1,16 +1,7 @@
 {
-  "lastUpdated": "2026-04-10T08:36:07.494Z",
-  "count": 11,
+  "lastUpdated": "2026-04-15T21:50:18.832Z",
+  "count": 10,
   "eventos": [
-    {
-      "id": "recy7BwkaPBWmWnzK",
-      "nombre": "Risoterapia",
-      "fecha": "2026-04-17",
-      "hora": "17:15",
-      "dondePublicar": [
-        "Web"
-      ]
-    },
     {
       "id": "recqb9qCzXp7N7S0X",
       "nombre": "Concurso relatos",
@@ -26,7 +17,7 @@
       "id": "recyhz9M5eCv1UiYK",
       "nombre": "Noche de sacos",
       "fecha": "2026-05-08",
-      "hora": "19:30",
+      "hora": "18:30",
       "dondePublicar": [
         "WhatsApp",
         "Instagram",
