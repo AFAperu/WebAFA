@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 /**
- * Fetches events from Airtable ("Eventos colegio Perú" table) and writes to data/eventos.json.
- * Only includes records where "Dónde publicar" contains "Web".
- *
+ * Fetches eventos (calendar) data from Airtable and writes it to data/eventos.json.
+ * 
  * Usage:
- *   AIRTABLE_TOKEN=pat... AIRTABLE_BASE_ID=app... node scripts/fetch-eventos.js
+ *   AIRTABLE_TOKEN=pat... AIRTABLE_EVENTOS_BASE_ID=app... node scripts/fetch-eventos.js
+ * 
+ * Environment variables:
+ *   AIRTABLE_TOKEN            — Personal Access Token (read-only scope)
+ *   AIRTABLE_EVENTOS_BASE_ID  — Base ID for eventos (starts with "app...")
  */
 
 import fs from 'fs';
@@ -60,6 +63,8 @@ function transformRecord(record) {
     fecha: f['Fecha evento'] || '',
     hora: f['Hora (hh:mm)'] || '',
     dondePublicar: f['Dónde publicar'] || [],
+    descripcion: f['Descripción o info extra'] || '',
+    status: f['Status'] || '',
   };
 }
 
@@ -69,7 +74,7 @@ async function main() {
   const records = await fetchAllRecords();
   const eventos = records
     .map(transformRecord)
-    .filter(e => e.nombre && Array.isArray(e.dondePublicar) && e.dondePublicar.includes('Web'));
+    .filter(e => e.nombre && e.dondePublicar.includes('Web'));
 
   const dataDir = path.dirname(OUTPUT_PATH);
   if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });

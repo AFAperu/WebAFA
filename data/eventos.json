@@ -1,16 +1,7 @@
 {
-  "lastUpdated": "2026-04-10T08:36:07.494Z",
-  "count": 11,
+  "lastUpdated": "2026-04-15T21:54:17.812Z",
+  "count": 10,
   "eventos": [
-    {
-      "id": "recy7BwkaPBWmWnzK",
-      "nombre": "Risoterapia",
-      "fecha": "2026-04-17",
-      "hora": "17:15",
-      "dondePublicar": [
-        "Web"
-      ]
-    },
     {
       "id": "recqb9qCzXp7N7S0X",
       "nombre": "Concurso relatos",
@@ -20,19 +11,23 @@
         "WhatsApp",
         "Email",
         "Web"
-      ]
+      ],
+      "descripcion": "Las bases las tiene Lucía - Comisión Educación",
+      "status": "Pendiente"
     },
     {
       "id": "recyhz9M5eCv1UiYK",
       "nombre": "Noche de sacos",
       "fecha": "2026-05-08",
-      "hora": "19:30",
+      "hora": "18:30",
       "dondePublicar": [
         "WhatsApp",
         "Instagram",
         "Email",
         "Web"
-      ]
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
     },
     {
       "id": "recpWcyR4B6txJH08",
@@ -41,7 +36,9 @@
       "hora": "",
       "dondePublicar": [
         "Web"
-      ]
+      ],
+      "descripcion": "Pedir voluntarios para participar en la caseta de SanIsidro; camareros, logistica...\n\nLa asociación de vecinos pone la parte administrativa y caseta. Caseta abierta de 17:00 a 02:00. del 8 al 17 de mayo. Nos piden participar de voluntarios. (El tercio, Asociación vecinos  Comillas y Nosotros). No hay que adelantar dinero. El apoyo piden es estar ahí de camareros, unas dos o tres personas voluntarias aunk se contratará quizá a alguien. \nA la asociación de vecinos le dan dos casetas, nosotros estaríamos en la de mujeres con ElTercio.\n\nDetalles: Gilberto\n",
+      "status": "Pendiente"
     },
     {
       "id": "recj9j8XJ8U3aqjpZ",
@@ -50,7 +47,9 @@
       "hora": "16:00",
       "dondePublicar": [
         "Web"
-      ]
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
     },
     {
       "id": "reckLBF9pmiMLuSId",
@@ -59,7 +58,9 @@
       "hora": "",
       "dondePublicar": [
         "Web"
-      ]
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
     },
     {
       "id": "reca4RLRPXIuB1Iml",
@@ -68,7 +69,9 @@
       "hora": "16:00",
       "dondePublicar": [
         "Web"
-      ]
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
     },
     {
       "id": "recSYoE5yGiyH6xLX",
@@ -77,7 +80,9 @@
       "hora": "16:00",
       "dondePublicar": [
         "Web"
-      ]
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
     },
     {
       "id": "recTHtBQqjc78W6XA",
@@ -86,7 +91,9 @@
       "hora": "",
       "dondePublicar": [
         "Web"
-      ]
+      ],
+      "descripcion": "Abrir la propuesta por si alguien tira del carro para organizar y demas.\n\nCorreo del Lope:\n\"Soy Ornella, he aterrizado este año en el Lope de Vega y en la comisión de exteriores del AFA del cole. Os contacto porque quería haceros una propuesta de acción conjunta con ocasión del día mundial del medio ambiente (5 de junio). Como idea general, me parecía interesante actuar en sinergia con otros coles y aavv para hacer visibles las acciones fuera de los centro escolares, y así involucrar y sensibilizar la gente de los barrios aledaños.\nDejo la propuesta por aquí y ya me decís si estáis interesadxs, y, en el caso de que sí, cómo podríamos empezar a coordinarnos. \nEn el período entre finales de mayo/principios de junio, cerca de los días mundiales de la bicicleta (3/6) y del medio ambiente (5/ 6) se podría organizar una acción que contemple el cierre de un pequeño tramo de General Ricardos. Creo que puede tener un buen impacto porque:\n    se trata de una calle de alto tránsito de vehículos \n    es una calle cercana a varios coles (Lope, Perú, Concepción Arenal, etc.)\n    es una acción que no implica solo a la colectividad de los coles, sino que invita a la participación de toda la ciudadanía de los barrios aledaños\n    se trata de visibilizar la reapropiación del espacio público por parte de la ciudadanía y mostrar lo que puede ser una calle normalmente muy transitada por vehículos contaminantes (a nivel medioambiental y acústico) que durante unas horas se corta al tráfico. \nActividades imaginadas/ fantaseadas/ deseadas:\n    Actividades infantiles: pintar sobre cartones reciclados, instrumentos musicales caseros, pintacaras\n    Recorrido para bicis (conos de colores y cuerdas para delimitar el espacio) para peques y personas adultas \n    Otras actividades de bajo impacto económico acordes con la iniciativa \nCon respecto a la modalidad de petición a la administración del cierre de la calle, se ha planteado la posibilidad de pedirlo como manifestación, para que haya menos trabas burocráticas.\nSi estáis interesadxs, podemos reunirnos un día y empezar a mover el asunto.\"",
+      "status": "Pendiente"
     },
     {
       "id": "recDJrMI7W7BShZKz",
@@ -95,7 +102,9 @@
       "hora": "17:00",
       "dondePublicar": [
         "Web"
-      ]
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
     },
     {
       "id": "reci115HDoaTsJ7r1",
@@ -106,7 +115,9 @@
         "WhatsApp",
         "Email",
         "Web"
-      ]
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
     }
   ]
 }
