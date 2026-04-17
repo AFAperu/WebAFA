@@ -1,11 +1,18 @@
 {
-<<<<<<< HEAD
-  "lastUpdated": "2026-04-15T21:54:17.812Z",
-=======
-  "lastUpdated": "2026-04-16T08:24:30.460Z",
->>>>>>> 3d2a80285214949da57921c18364b8f4f26e1690
-  "count": 10,
+  "lastUpdated": "2026-04-17T08:23:25.234Z",
+  "count": 11,
   "eventos": [
+    {
+      "id": "recKBl38AGlqlcaOq",
+      "nombre": "Día del libro",
+      "fecha": "2026-04-22",
+      "hora": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
+    },
     {
       "id": "recqb9qCzXp7N7S0X",
       "nombre": "Concurso relatos",
@@ -57,7 +64,7 @@
     },
     {
       "id": "reckLBF9pmiMLuSId",
-      "nombre": "exhibición capoeira ",
+      "nombre": "Exhibición capoeira ",
       "fecha": "2026-05-30",
       "hora": "",
       "dondePublicar": [
@@ -90,7 +97,7 @@
     },
     {
       "id": "recTHtBQqjc78W6XA",
-      "nombre": "Dia del medio-ambiente ",
+      "nombre": "Dia del Medio Ambiente ",
       "fecha": "2026-06-05",
       "hora": "",
       "dondePublicar": [
@@ -101,7 +108,7 @@
     },
     {
       "id": "recDJrMI7W7BShZKz",
-      "nombre": "La adrada",
+      "nombre": "La Adrada",
       "fecha": "2026-06-12",
       "hora": "17:00",
       "dondePublicar": [
@@ -112,7 +119,7 @@
     },
     {
       "id": "reci115HDoaTsJ7r1",
-      "nombre": "fiesta fin de curso",
+      "nombre": "Fiesta fin de curso",
       "fecha": "2026-06-19",
       "hora": "17:00",
       "dondePublicar": [
