@@ -32,12 +32,21 @@
  * ║                          [shape-21]     ║
  * ╚══════════════════════════════════════════╝
  *
+ * Height is DYNAMIC — computed from the number of
+ * event lines. Minimum 700px.
+ *
  * Edit this file to tweak layout, colors, fonts,
  * shape positions, or static content.
  */
 
 const POSTER_W = 800;
-const POSTER_H = 1000;
+const POSTER_MIN_H = 550;
+
+// Fixed layout heights (used to compute dynamic poster height)
+const TITLE_AREA_H = 135;       // top border + title + month
+const EVENTS_PAD_TOP = 100;      // space between title and events
+const EVENTS_PAD_BOTTOM = 120;   // space between events and bottom section
+const BOTTOM_SECTION_H = 300;   // "Durante todo el curso" title + 2 rows + contact bar + logo
 
 // Brand colors
 const BRAND_TEAL = '#03B5B2';
@@ -181,12 +190,29 @@ function measureEventsHeight(ctx, eventLines, maxTextWidth) {
 // MAIN POSTER GENERATOR
 // ──────────────────────────────────────────
 async function generatePoster(monthKey, eventos, basePath) {
+  await document.fonts.ready;
+
+  // ── 1. Measure events height on a temp canvas ──
+  const EVENTS_CONTAINER_W = 500;
+  const maxTextWidth = EVENTS_CONTAINER_W - 30;
+  const eventLines = groupEventsByName(eventos);
+
+  const tmpCanvas = document.createElement('canvas');
+  tmpCanvas.width = POSTER_W;
+  tmpCanvas.height = 100;
+  const tmpCtx = tmpCanvas.getContext('2d');
+  const eventsH = measureEventsHeight(tmpCtx, eventLines, maxTextWidth);
+
+  // ── 2. Compute dynamic poster height ──
+  const contentH = TITLE_AREA_H + EVENTS_PAD_TOP + eventsH + EVENTS_PAD_BOTTOM + BOTTOM_SECTION_H;
+  const POSTER_H = Math.max(POSTER_MIN_H, contentH);
+  console.log(`[PosterGenerator] eventsH=${eventsH}, contentH=${contentH}, POSTER_H=${POSTER_H}`);
+
+  // ── 3. Create final canvas ──
   const canvas = document.createElement('canvas');
   canvas.width = POSTER_W;
   canvas.height = POSTER_H;
   const ctx = canvas.getContext('2d');
-
-  await document.fonts.ready;
 
   // White background
   ctx.fillStyle = '#ffffff';
@@ -208,63 +234,53 @@ async function generatePoster(monthKey, eventos, basePath) {
   ]);
 
   // ════════════════════════════════════════
-  // DECORATIVE SHAPES
+  // DECORATIVE SHAPES (positioned relative to POSTER_H)
   // ════════════════════════════════════════
 
-  // ── Shape-06: rotated 90°, half native size, 33% visible, tiled across top ──
-  // Native: 86×145. Half size → 43×72.5. Rotated 90° → footprint 72.5w × 43h.
-  // Only 33% of the height (43h) visible → ~14px showing, rest above canvas.
+  // ── Shape-06: rotated 90°, tiled across top ──
   {
-    const s06HalfW = 43;    // half native width
-    const s06HalfH = 72.5;  // half native height
-    // After 90° rotation: each tile is 72.5px wide, 43px tall
+    const s06HalfW = 43;
+    const s06HalfH = 72.5;
     const tileW = s06HalfH;
     const tilesNeeded = Math.ceil(POSTER_W / tileW) + 1;
-    const tileCenterY = -(s06HalfW * 0.67) / 2 + 4; // nudged a few px lower
+    const tileCenterY = -(s06HalfW * 0.67) / 2 + 4;
     for (let i = 0; i < tilesNeeded; i++) {
       ctx.save();
       const cx = i * tileW + tileW / 2;
       ctx.translate(cx, tileCenterY);
-      ctx.rotate(Math.PI / 2);
+      ctx.rotate(Math.PI * 3 / 2);
       ctx.drawImage(shape06, -s06HalfW / 2, -s06HalfH / 2, s06HalfW, s06HalfH);
       ctx.restore();
     }
   }
 
-  // ── Shape-24: left side, 40% visible, lowered (centered around 35% mark) ──
-  // Native: 569×550. Rendered at ~280×270.
-  // 40% visible → 60% overflows left.
+  // ── Shape-24: left side, 40% visible ──
   const s24W = 280;
   const s24H = 270;
-  const s24X = -s24W * 0.6;                    // -168, so 40% shows
-  const s24Y = POSTER_H * 0.35 - s24H / 2;     // centered around 35% height (lowered)
+  const s24X = -s24W * 0.6;
+  const s24Y = POSTER_H * 0.35 - s24H / 2;
   ctx.drawImage(shape24, s24X, s24Y, s24W, s24H);
 
-  // ── Shape-22 (flower): right side, below middle, half visible ──
+  // ── Shape-22 (flower): right side, below middle ──
   const s22W = 240;
   const s22H = 230;
   ctx.drawImage(shape22, POSTER_W - 100, POSTER_H / 2 + 40, s22W, s22H);
 
   // ── Shape-01 (diamond): right of month title ──
-  ctx.drawImage(shape01, POSTER_W - 140, 100, 55, 55);
+  ctx.drawImage(shape01, POSTER_W - 80, 100, 55, 55);
 
-  // ── Shape-11 (star): left side, above bottom section ──
+  // ── Shape-11 (star): above bottom section ──
   ctx.drawImage(shape11, 100, POSTER_H - 240, 40, 40);
 
-  // ── Shape-23 (wavy): bottom-left corner, large, NO rotation ──
-  const s23W = 500;
-  const s23H = 62;
-  ctx.drawImage(shape23, -230, POSTER_H - 80, s23W, s23H);
+  // ── Shape-23 (wavy): bottom-left corner ──
+  ctx.drawImage(shape23, -310, POSTER_H - 80, 500, 62);
 
-  // ── Shape-21 (flag/banner): bottom-right corner, correct aspect ratio, rotated 90° ──
-  // Native: 86×145. We render at 35×59 (half-ish) to keep proportion, then rotate 90°.
+  // ── Shape-21 (flag/banner): bottom-right corner, rotated 90° ──
   {
-    const s21W = 35;
-    const s21H = 59;
-    const s21X = POSTER_W - 50;
-    const s21Y = POSTER_H - 50;
+    const s21W = 42;
+    const s21H = 70.8;
     ctx.save();
-    ctx.translate(s21X, s21Y);
+    ctx.translate(POSTER_W - 50, POSTER_H - 30);
     ctx.rotate(Math.PI / 2);
     ctx.drawImage(shape21, -s21W / 2, -s21H / 2, s21W, s21H);
     ctx.restore();
@@ -306,7 +322,7 @@ async function generatePoster(monthKey, eventos, basePath) {
   ctx.textAlign = 'center';
   ctx.fillText('Dudas: ' + CONTACT_EMAIL, POSTER_W / 2, barY + 24);
 
-  // "Durante todo el curso" — 30px higher
+  // "Durante todo el curso"
   const LIFT = 30;
 
   // Row 2 (2 items)
@@ -324,7 +340,7 @@ async function generatePoster(monthKey, eventos, basePath) {
   }
 
   // Row 1 (3 items)
-  const row1Y = row2Y - 52;
+  const row1Y = row2Y - 62;
   const colWidth = (POSTER_W - 120) / 3;
   for (let i = 0; i < 3; i++) {
     const x = 60 + colWidth * i + colWidth / 2;
@@ -337,32 +353,23 @@ async function generatePoster(monthKey, eventos, basePath) {
   }
 
   // Section title
-  const sectionTitleY = row1Y - 32;
+  const sectionTitleY = row1Y - 48;
   ctx.fillStyle = BRAND_DARK;
   ctx.font = 'bold 23px Outfit, sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('DURANTE TODO EL CURSO', POSTER_W / 2, sectionTitleY);
 
   // ════════════════════════════════════════
-  // EVENTS LIST — 500px wide, horizontally
-  // centered, vertically centered between
-  // title and section title
+  // EVENTS LIST — vertically centered in
+  // the space between title and bottom section
   // ════════════════════════════════════════
-  const EVENTS_CONTAINER_W = 500;
-  const eventsLeftEdge = (POSTER_W - EVENTS_CONTAINER_W) / 2; // 150
-  const leftMargin = eventsLeftEdge + 20; // 20px padding for bullet
-  const maxTextWidth = EVENTS_CONTAINER_W - 30;
+  const eventsLeftEdge = (POSTER_W - EVENTS_CONTAINER_W) / 2;
+  const leftMargin = eventsLeftEdge + 20;
 
-  const titleBottom = 135;
-  const availableTop = titleBottom;
-  const availableBottom = sectionTitleY - 30;
-  const availableH = availableBottom - availableTop;
+  const titleBottom = TITLE_AREA_H;
+  const availableTop = titleBottom + EVENTS_PAD_TOP;
 
-  const eventLines = groupEventsByName(eventos);
-  const eventsH = measureEventsHeight(ctx, eventLines, maxTextWidth);
-
-  let y = availableTop + (availableH - eventsH) / 2;
-  if (y < availableTop) y = availableTop;
+  let y = availableTop;
 
   ctx.textAlign = 'left';
   for (const line of eventLines) {
