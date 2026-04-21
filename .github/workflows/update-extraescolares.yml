@@ -18,7 +18,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Fetch data from Airtable
         env:
@@ -30,5 +30,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/extraescolares.json
+          git add data/extraescolares.json images/photos/extraescolares/
           git diff --staged --quiet || (git commit -m "chore: update extraescolares data from Airtable" && git push)
