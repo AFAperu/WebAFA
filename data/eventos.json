@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-05-01T08:55:01.137Z",
-  "count": 11,
+  "lastUpdated": "2026-05-01T13:32:00.238Z",
+  "count": 19,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -52,11 +52,96 @@
       "status": "Pendiente"
     },
     {
+      "id": "recTp0AoWR8mUraho",
+      "nombre": "Fiesta de las culturas ",
+      "fecha": "2026-05-22",
+      "hora": "",
+      "dondePublicar": [
+        "Instagram",
+        "Web",
+        "WhatsApp"
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
+    },
+    {
+      "id": "recId9QufGcew9UAF",
+      "nombre": "Clases abiertas: Patinaje, Baloncesto",
+      "fecha": "2026-05-26",
+      "hora": "16:00",
+      "dondePublicar": [
+        "WhatsApp",
+        "Web"
+      ],
+      "descripcion": "Clases abiertas: Patinaje, Baloncesto",
+      "status": "Pendiente"
+    },
+    {
+      "id": "recoMcZqPP2KBGDYG",
+      "nombre": "Clases abiertas: Tenis, Judo primer turno, Música y movimiento, Fútbol, Inglés (Grupos LX) y Artes plásticas",
+      "fecha": "2026-05-27",
+      "hora": "16:00",
+      "dondePublicar": [
+        "WhatsApp",
+        "Web"
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
+    },
+    {
+      "id": "recMIpCMLve327wUm",
+      "nombre": "Clases abiertas: Club de cuentistas",
+      "fecha": "2026-05-27",
+      "hora": "18:00",
+      "dondePublicar": [
+        "WhatsApp",
+        "Web"
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
+    },
+    {
+      "id": "recSE3192zg4RLZ9x",
+      "nombre": "Clases abiertas: Judo segundo turno",
+      "fecha": "2026-05-27",
+      "hora": "17:00",
+      "dondePublicar": [
+        "WhatsApp",
+        "Web"
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
+    },
+    {
+      "id": "recVwXgKnZt8i5Y2J",
+      "nombre": "Clases abiertas: Teatro, Voleibol, Esgrima, Capoeira, Madrid Concilia",
+      "fecha": "2026-05-28",
+      "hora": "16:00",
+      "dondePublicar": [
+        "WhatsApp",
+        "Web"
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
+    },
+    {
       "id": "recj9j8XJ8U3aqjpZ",
       "nombre": "Club lectura infantil",
       "fecha": "2026-05-29",
       "hora": "16:00",
       "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
+    },
+    {
+      "id": "recJTb5ebnXDXjnoK",
+      "nombre": "Clase abierta: Inglés (Grupos V), Ajedrez y Ludoteca",
+      "fecha": "2026-05-29",
+      "hora": "16:00",
+      "dondePublicar": [
+        "WhatsApp",
         "Web"
       ],
       "descripcion": "",
@@ -112,6 +197,18 @@
       "fecha": "2026-06-12",
       "hora": "17:00",
       "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": "Pendiente"
+    },
+    {
+      "id": "rec5aH2oDHyjYNZms",
+      "nombre": "Exhibición de gimnasia",
+      "fecha": "2026-06-18",
+      "hora": "16:00",
+      "dondePublicar": [
+        "WhatsApp",
         "Web"
       ],
       "descripcion": "",
