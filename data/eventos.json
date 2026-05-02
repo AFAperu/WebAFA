@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-05-01T13:32:00.238Z",
-  "count": 19,
+  "lastUpdated": "2026-05-02T08:18:30.450Z",
+  "count": 20,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -50,6 +50,18 @@
       ],
       "descripcion": "Pedir voluntarios para participar en la caseta de SanIsidro; camareros, logistica...\n\nLa asociación de vecinos pone la parte administrativa y caseta. Caseta abierta de 17:00 a 02:00. del 8 al 17 de mayo. Nos piden participar de voluntarios. (El tercio, Asociación vecinos  Comillas y Nosotros). No hay que adelantar dinero. El apoyo piden es estar ahí de camareros, unas dos o tres personas voluntarias aunk se contratará quizá a alguien. \nA la asociación de vecinos le dan dos casetas, nosotros estaríamos en la de mujeres con ElTercio.\n\nDetalles: Gilberto\n",
       "status": "Pendiente"
+    },
+    {
+      "id": "rectrNU6rWdDdzwYJ",
+      "nombre": "Día de las familias (organizado por el colegio)",
+      "fecha": "2026-05-14",
+      "hora": "Por definir ",
+      "dondePublicar": [
+        "Web",
+        "WhatsApp"
+      ],
+      "descripcion": "",
+      "status": ""
     },
     {
       "id": "recTp0AoWR8mUraho",
