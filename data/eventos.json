@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-03T08:29:59.907Z",
+  "lastUpdated": "2026-05-04T07:41:11.143Z",
   "count": 20,
   "eventos": [
     {
@@ -11,7 +11,7 @@
         "Web"
       ],
       "descripcion": "",
-      "status": "Pendiente"
+      "status": "Completado"
     },
     {
       "id": "recqb9qCzXp7N7S0X",
@@ -24,7 +24,7 @@
         "Web"
       ],
       "descripcion": "Las bases las tiene Lucía - Comisión Educación",
-      "status": "Pendiente"
+      "status": "Completado"
     },
     {
       "id": "recyhz9M5eCv1UiYK",
@@ -42,7 +42,7 @@
     },
     {
       "id": "recpWcyR4B6txJH08",
-      "nombre": "Caseta San Isidro",
+      "nombre": "(8 al 17 de mayo) Caseta San Isidro",
       "fecha": "2026-05-08",
       "hora": "",
       "dondePublicar": [
@@ -90,7 +90,7 @@
     },
     {
       "id": "recoMcZqPP2KBGDYG",
-      "nombre": "Clases abiertas: Tenis, Judo primer turno, Música y movimiento, Fútbol, Inglés (Grupos LX) y Artes plásticas",
+      "nombre": "Clases abiertas: Tenis, Judo turno 1, Música y movimiento, Fútbol, Inglés (Grupos LX) y Artes plásticas",
       "fecha": "2026-05-27",
       "hora": "16:00",
       "dondePublicar": [
