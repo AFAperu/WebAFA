@@ -1,12 +1,14 @@
 {
-  "lastUpdated": "2026-05-04T09:12:41.491Z",
+  "lastUpdated": "2026-05-05T16:49:25.333Z",
   "count": 20,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
       "nombre": "Día del libro",
       "fecha": "2026-04-22",
+      "fechaFin": "",
       "hora": "",
+      "horaFin": "",
       "dondePublicar": [
         "Web"
       ],
@@ -17,7 +19,9 @@
       "id": "recqb9qCzXp7N7S0X",
       "nombre": "Concurso relatos",
       "fecha": "2026-04-22",
+      "fechaFin": "",
       "hora": "",
+      "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
         "Email",
@@ -30,7 +34,9 @@
       "id": "recyhz9M5eCv1UiYK",
       "nombre": "Noche de sacos",
       "fecha": "2026-05-08",
+      "fechaFin": "",
       "hora": "18:30",
+      "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
         "Instagram",
@@ -44,7 +50,9 @@
       "id": "recpWcyR4B6txJH08",
       "nombre": "(8 al 17 de mayo) Caseta San Isidro",
       "fecha": "2026-05-08",
+      "fechaFin": "2026-05-17",
       "hora": "",
+      "horaFin": "",
       "dondePublicar": [
         "Web"
       ],
@@ -55,7 +63,9 @@
       "id": "rectrNU6rWdDdzwYJ",
       "nombre": "Día de las familias (organizado por el colegio)",
       "fecha": "2026-05-14",
+      "fechaFin": "",
       "hora": "",
+      "horaFin": "",
       "dondePublicar": [
         "Web",
         "WhatsApp"
@@ -67,7 +77,9 @@
       "id": "recTp0AoWR8mUraho",
       "nombre": "Fiesta de las culturas ",
       "fecha": "2026-05-22",
+      "fechaFin": "",
       "hora": "",
+      "horaFin": "",
       "dondePublicar": [
         "Instagram",
         "Web",
@@ -80,7 +92,9 @@
       "id": "recId9QufGcew9UAF",
       "nombre": "Clases abiertas: Patinaje, Baloncesto",
       "fecha": "2026-05-26",
+      "fechaFin": "",
       "hora": "16:00",
+      "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -92,7 +106,9 @@
       "id": "recoMcZqPP2KBGDYG",
       "nombre": "Clases abiertas: Tenis, Judo turno 1, Música y movimiento, Fútbol, Inglés (Grupos LX) y Artes",
       "fecha": "2026-05-27",
+      "fechaFin": "",
       "hora": "16:00",
+      "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -104,7 +120,9 @@
       "id": "recMIpCMLve327wUm",
       "nombre": "Clases abiertas: Club de cuentistas",
       "fecha": "2026-05-27",
+      "fechaFin": "",
       "hora": "18:00",
+      "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -116,7 +134,9 @@
       "id": "recSE3192zg4RLZ9x",
       "nombre": "Clases abiertas: Judo segundo turno",
       "fecha": "2026-05-27",
+      "fechaFin": "",
       "hora": "17:00",
+      "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -128,7 +148,9 @@
       "id": "recVwXgKnZt8i5Y2J",
       "nombre": "Clases abiertas: Teatro, Voleibol, Esgrima, Capoeira, Madrid Concilia",
       "fecha": "2026-05-28",
+      "fechaFin": "",
       "hora": "16:00",
+      "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -140,7 +162,9 @@
       "id": "recj9j8XJ8U3aqjpZ",
       "nombre": "Club lectura infantil",
       "fecha": "2026-05-29",
+      "fechaFin": "",
       "hora": "16:00",
+      "horaFin": "",
       "dondePublicar": [
         "Web"
       ],
@@ -151,7 +175,9 @@
       "id": "recJTb5ebnXDXjnoK",
       "nombre": "Clase abierta: Inglés (Grupos V), Ajedrez y Ludoteca",
       "fecha": "2026-05-29",
+      "fechaFin": "",
       "hora": "16:00",
+      "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -163,7 +189,9 @@
       "id": "reckLBF9pmiMLuSId",
       "nombre": "Exhibición capoeira ",
       "fecha": "2026-05-30",
+      "fechaFin": "",
       "hora": "",
+      "horaFin": "",
       "dondePublicar": [
         "Web"
       ],
@@ -174,7 +202,9 @@
       "id": "reca4RLRPXIuB1Iml",
       "nombre": "Asamblea AFA",
       "fecha": "2026-06-05",
+      "fechaFin": "",
       "hora": "16:00",
+      "horaFin": "",
       "dondePublicar": [
         "Web"
       ],
@@ -185,7 +215,9 @@
       "id": "recSYoE5yGiyH6xLX",
       "nombre": "Club lectura infantil",
       "fecha": "2026-06-05",
+      "fechaFin": "",
       "hora": "16:00",
+      "horaFin": "",
       "dondePublicar": [
         "Web"
       ],
@@ -196,7 +228,9 @@
       "id": "recTHtBQqjc78W6XA",
       "nombre": "Dia del Medio Ambiente ",
       "fecha": "2026-06-05",
+      "fechaFin": "",
       "hora": "",
+      "horaFin": "",
       "dondePublicar": [
         "Web"
       ],
@@ -207,7 +241,9 @@
       "id": "recDJrMI7W7BShZKz",
       "nombre": "La Adrada",
       "fecha": "2026-06-12",
+      "fechaFin": "",
       "hora": "17:00",
+      "horaFin": "",
       "dondePublicar": [
         "Web"
       ],
@@ -218,7 +254,9 @@
       "id": "rec5aH2oDHyjYNZms",
       "nombre": "Exhibición de gimnasia",
       "fecha": "2026-06-18",
+      "fechaFin": "",
       "hora": "16:00",
+      "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -230,7 +268,9 @@
       "id": "reci115HDoaTsJ7r1",
       "nombre": "Fiesta fin de curso",
       "fecha": "2026-06-19",
+      "fechaFin": "",
       "hora": "17:00",
+      "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
         "Email",
