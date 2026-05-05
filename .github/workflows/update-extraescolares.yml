@@ -26,6 +26,12 @@ jobs:
           AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
         run: node scripts/fetch-airtable.js
 
+      - name: Verify images downloaded
+        run: |
+          echo "Images in extraescolares folder:"
+          ls -la images/photos/extraescolares/ 2>/dev/null || echo "No images directory found!"
+          echo "Total files: $(find images/photos/extraescolares -type f ! -name '.*' 2>/dev/null | wc -l)"
+
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"

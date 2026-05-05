@@ -3932,9 +3932,12 @@ h1,  h2,  h3,  h4,  h5,  h6{
   color: #1e293b;
   flex: 1;
   min-width: 0;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.4;
 }
 
 .evento-detalle {
@@ -3969,7 +3972,6 @@ h1,  h2,  h3,  h4,  h5,  h6{
   }
   .evento-nombre {
     flex-basis: calc(100% - 60px);
-    white-space: normal;
   }
   .evento-detalle {
     margin-left: 60px;

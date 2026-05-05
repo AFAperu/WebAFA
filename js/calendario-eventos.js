@@ -21,9 +21,25 @@ function formatDate(isoDate) {
     d.toLocaleDateString('es-ES', { month: 'long' });
 }
 
+function formatDateRange(fechaInicio, fechaFin) {
+  if (!fechaInicio) return '';
+  const startStr = formatDate(fechaInicio);
+  if (!fechaFin || fechaFin === fechaInicio) return startStr;
+  const endStr = formatDate(fechaFin);
+  return `${startStr} - ${endStr}`;
+}
+
 function formatTime(time) {
   if (!time) return '';
   return time.substring(0, 5) + 'h';
+}
+
+function formatTimeRange(horaInicio, horaFin) {
+  if (!horaInicio) return '';
+  const start = horaInicio.substring(0, 5);
+  if (!horaFin) return start + 'h';
+  const end = horaFin.substring(0, 5);
+  return `${start} - ${end}h`;
 }
 
 function isPast(isoDate) {
@@ -44,12 +60,12 @@ function getMonthLabel(isoDate) {
 }
 
 function renderEvent(evento) {
-  const past = isPast(evento.fecha);
+  const past = isPast(evento.fechaFin || evento.fecha);
   const d = evento.fecha ? new Date(evento.fecha + 'T00:00:00') : null;
   const day = d ? d.getDate() : '';
   const monthShort = d ? d.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase() : '';
-  const dateStr = formatDate(evento.fecha);
-  const timeStr = formatTime(evento.hora);
+  const dateStr = formatDateRange(evento.fecha, evento.fechaFin);
+  const timeStr = formatTimeRange(evento.hora, evento.horaFin);
 
   return `
     <div class="evento-row ${past ? 'evento-past' : ''}">

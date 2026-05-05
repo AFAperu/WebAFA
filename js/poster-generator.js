@@ -121,20 +121,43 @@ function groupEventsByName(eventos) {
   for (const e of eventos) {
     const name = e.nombre;
     if (!grouped.has(name)) grouped.set(name, []);
-    grouped.get(name).push({ fecha: e.fecha, hora: e.hora || '' });
+    grouped.get(name).push({ fecha: e.fecha, fechaFin: e.fechaFin || '', hora: e.hora || '', horaFin: e.horaFin || '' });
   }
 
   for (const [name, entries] of grouped) {
     const d = new Date(entries[0].fecha + 'T00:00:00');
     const monthName = d.toLocaleDateString('es-ES', { month: 'long' });
 
-    // Collect unique non-empty times
+    // Collect unique non-empty start times
     const times = [...new Set(entries.map(e => e.hora).filter(Boolean))];
-    const timePart = times.length === 1 ? ` (${times[0].substring(0, 5)}h)` : '';
+    const endTimes = [...new Set(entries.map(e => e.horaFin).filter(Boolean))];
+
+    let timePart = '';
+    if (times.length === 1) {
+      const startTime = times[0].substring(0, 5);
+      if (endTimes.length === 1) {
+        timePart = ` (${startTime} - ${endTimes[0].substring(0, 5)}h)`;
+      } else {
+        timePart = ` (${startTime}h)`;
+      }
+    }
 
     if (entries.length === 1) {
       const day = d.getDate();
-      lines.push({ bold: `${day} de ${monthName}${timePart}`, text: ` - ${name}` });
+      const entry = entries[0];
+      // Check for date range (fechaFin different from fecha)
+      if (entry.fechaFin && entry.fechaFin !== entry.fecha) {
+        const dEnd = new Date(entry.fechaFin + 'T00:00:00');
+        const endDay = dEnd.getDate();
+        const endMonthName = dEnd.toLocaleDateString('es-ES', { month: 'long' });
+        if (endMonthName === monthName) {
+          lines.push({ bold: `${day} a ${endDay} de ${monthName}${timePart}`, text: ` - ${name}` });
+        } else {
+          lines.push({ bold: `${day} de ${monthName} a ${endDay} de ${endMonthName}${timePart}`, text: ` - ${name}` });
+        }
+      } else {
+        lines.push({ bold: `${day} de ${monthName}${timePart}`, text: ` - ${name}` });
+      }
     } else {
       const days = entries.map(e => new Date(e.fecha + 'T00:00:00').getDate());
       const dayStr = days.slice(0, -1).join(', ') + ' y ' + days[days.length - 1];
@@ -157,18 +180,37 @@ function wrapText(ctx, boldPart, normalPart, maxWidth) {
     return [{ bold: boldPart, text: normalPart }];
   }
 
-  const words = normalPart.trim().split(' ');
-  let firstLine = '';
+  // First line: bold part + as much of normalPart as fits
+  const separator = ' - ';
+  const nameText = normalPart.startsWith(separator) ? normalPart.substring(separator.length) : normalPart.trim();
+  const words = nameText.split(' ');
+  let firstLineText = '';
   let i = 0;
+
   for (; i < words.length; i++) {
-    const test = firstLine + (firstLine ? ' ' : ' - ') + words[i];
+    const test = firstLineText + (firstLineText ? ' ' : '') + words[i];
     ctx.font = '20px Outfit, sans-serif';
-    if (boldW + ctx.measureText(test).width > maxWidth && firstLine) break;
-    firstLine = test;
+    if (boldW + ctx.measureText(separator + test).width > maxWidth && firstLineText) break;
+    firstLineText = test;
   }
-  const secondLine = words.slice(i).join(' ');
-  const result = [{ bold: boldPart, text: firstLine }];
-  if (secondLine) result.push({ bold: '', text: '  ' + secondLine });
+
+  const result = [{ bold: boldPart, text: separator + firstLineText }];
+
+  // Remaining words: wrap into as many continuation lines as needed
+  let remaining = words.slice(i);
+  while (remaining.length > 0) {
+    let line = '';
+    let j = 0;
+    for (; j < remaining.length; j++) {
+      const test = line + (line ? ' ' : '') + remaining[j];
+      ctx.font = '20px Outfit, sans-serif';
+      if (ctx.measureText('  ' + test).width > maxWidth && line) break;
+      line = test;
+    }
+    result.push({ bold: '', text: '  ' + line });
+    remaining = remaining.slice(j);
+  }
+
   return result;
 }
 
