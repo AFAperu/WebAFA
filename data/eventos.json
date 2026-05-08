@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-05-08T09:23:17.039Z",
-  "count": 21,
+  "lastUpdated": "2026-05-08T09:35:15.430Z",
+  "count": 23,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -29,6 +29,19 @@
       ],
       "descripcion": "Las bases las tiene Lucía - Comisión Educación",
       "status": "Completado"
+    },
+    {
+      "id": "recf5s3qa847aZvey",
+      "nombre": "Club de lectura de 1º",
+      "fecha": "2026-05-04",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
     },
     {
       "id": "recyhz9M5eCv1UiYK",
@@ -69,6 +82,19 @@
       "dondePublicar": [
         "Web",
         "WhatsApp"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "rec8mBVb0Cd3Pbrfx",
+      "nombre": "Club de lectura de 1º",
+      "fecha": "2026-05-18",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
       ],
       "descripcion": "",
       "status": ""
@@ -190,13 +216,13 @@
       "nombre": "Club de lectura de 4º",
       "fecha": "2026-05-29",
       "fechaFin": "",
-      "hora": "",
+      "hora": "17:00",
       "horaFin": "",
       "dondePublicar": [
         "Web"
       ],
       "descripcion": "",
-      "status": ""
+      "status": "Pendiente"
     },
     {
       "id": "reckLBF9pmiMLuSId",
