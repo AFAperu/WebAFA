@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-05-08T08:18:32.395Z",
-  "count": 20,
+  "lastUpdated": "2026-05-08T09:23:17.039Z",
+  "count": 21,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -184,6 +184,19 @@
       ],
       "descripcion": "",
       "status": "Pendiente"
+    },
+    {
+      "id": "recprwQWWfyHzAKJF",
+      "nombre": "Club de lectura de 4º",
+      "fecha": "2026-05-29",
+      "fechaFin": "",
+      "hora": "",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
     },
     {
       "id": "reckLBF9pmiMLuSId",
