@@ -113,8 +113,16 @@ async function init() {
     eventos.sort((a, b) => (a.fecha || '').localeCompare(b.fecha || ''));
 
     const months = groupByMonth(eventos);
+
+    // Skip months where all events are in the past
+    const now = new Date();
+    const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
     let html = '';
     for (const [key, group] of months) {
+      // If the month is before the current month, skip it entirely
+      if (key < currentMonthKey) continue;
+
       html += `<div class="eventos-month-header-row">
         <h3 class="eventos-month-header">${group.label}</h3>
         <button class="btn-descargar-poster" data-month="${key}" aria-label="Descargar actividades de ${group.label}">
