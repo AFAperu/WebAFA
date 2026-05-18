@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Fetches today's events from Airtable where "Dónde publicar" includes "WhatsApp",
- * and sends the "Texto para redes" content to a WhatsApp group via Green-api.
+ * and sends the "Texto para redes" content (with optional image) to a WhatsApp group via Green-api.
  *
  * Environment variables:
  *   AIRTABLE_TOKEN            — Personal Access Token
@@ -39,7 +39,6 @@ function getTodayMadrid() {
 async function fetchWhatsAppEvents() {
   const today = getTodayMadrid();
 
-  // Use filterByFormula to get only today's events marked for WhatsApp
   const formula = `AND(
     FIND("WhatsApp", ARRAYJOIN({Dónde publicar}, ",")),
     IS_SAME({Fecha evento}, "${today}", "day")
@@ -62,7 +61,7 @@ async function fetchWhatsAppEvents() {
 }
 
 /**
- * Send a message to the WhatsApp group via Green-api
+ * Send a text-only message to the WhatsApp group
  */
 async function sendWhatsAppMessage(message) {
   const url = `${GREEN_API}/sendMessage/${GREEN_TOKEN}`;
@@ -78,11 +77,38 @@ async function sendWhatsAppMessage(message) {
 
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(`Green-api ${res.status}: ${err}`);
+    throw new Error(`Green-api sendMessage ${res.status}: ${err}`);
   }
 
   const result = await res.json();
-  console.log(`Message sent. ID: ${result.idMessage}`);
+  console.log(`  Text message sent. ID: ${result.idMessage}`);
+  return result;
+}
+
+/**
+ * Send an image (by URL) with caption to the WhatsApp group
+ */
+async function sendWhatsAppImage(imageUrl, fileName, caption) {
+  const url = `${GREEN_API}/sendFileByUrl/${GREEN_TOKEN}`;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chatId: GROUP_ID,
+      urlFile: imageUrl,
+      fileName: fileName || 'image.jpg',
+      caption: caption || '',
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Green-api sendFileByUrl ${res.status}: ${err}`);
+  }
+
+  const result = await res.json();
+  console.log(`  Image sent. ID: ${result.idMessage}`);
   return result;
 }
 
@@ -100,19 +126,34 @@ async function main() {
 
   for (const record of records) {
     const fields = record.fields;
-    const texto = fields['Texto para redes'];
+    const texto = (fields['Texto para redes'] || '').trim();
+    const imagenes = fields['Imagen para redes'] || [];
 
-    if (!texto || texto.trim() === '') {
-      console.log(`Skipping "${fields['Name']}" — no "Texto para redes" content.`);
+    if (!texto && imagenes.length === 0) {
+      console.log(`Skipping "${fields['Name']}" — no text or image.`);
       continue;
     }
 
     console.log(`Sending: "${fields['Name']}"...`);
-    await sendWhatsAppMessage(texto.trim());
 
-    // Small delay between messages to avoid rate limiting
+    if (imagenes.length > 0) {
+      // Send first image with the text as caption
+      const firstImage = imagenes[0];
+      await sendWhatsAppImage(firstImage.url, firstImage.filename, texto);
+
+      // Send additional images without caption (if any)
+      for (let i = 1; i < imagenes.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await sendWhatsAppImage(imagenes[i].url, imagenes[i].filename, '');
+      }
+    } else {
+      // No image, send text only
+      await sendWhatsAppMessage(texto);
+    }
+
+    // Delay between events to avoid rate limiting
     if (records.length > 1) {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 3000));
     }
   }
 
