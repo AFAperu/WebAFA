@@ -1,0 +1,27 @@
+name: Send WhatsApp Events
+
+on:
+  # Run daily at 8:00 UTC (10:00 Madrid time, both CET and CEST)
+  schedule:
+    - cron: '0 8 * * *'
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+jobs:
+  send-whatsapp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Send today's events to WhatsApp
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          AIRTABLE_EVENTOS_BASE_ID: ${{ secrets.AIRTABLE_EVENTOS_BASE_ID }}
+          GREENAPI_INSTANCE_ID: ${{ secrets.GREENAPI_INSTANCE_ID }}
+          GREENAPI_TOKEN: ${{ secrets.GREENAPI_TOKEN }}
+          GREENAPI_GROUP_ID: ${{ secrets.GREENAPI_GROUP_ID }}
+        run: node scripts/send-whatsapp-eventos.js
