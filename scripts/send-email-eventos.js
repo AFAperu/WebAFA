@@ -124,21 +124,36 @@ function getAudience(dondePublicar) {
 }
 
 /**
- * Send email to a list of recipients using BCC
+ * Send email to a list of recipients using BCC (in batches of 90 to stay under Gmail's limit)
  */
 async function sendEmail(subject, textBody, recipients, imageAttachments) {
-  const mailOptions = {
-    from: `AFA Perú <${GMAIL_USER}>`,
-    bcc: recipients.join(', '),
-    subject,
-    text: textBody,
-    attachments: imageAttachments,
-  };
+  const BATCH_SIZE = 90;
+  const batches = [];
 
-  const info = await transporter.sendMail(mailOptions);
-  console.log(`  Email sent. Message ID: ${info.messageId}`);
-  console.log(`  Recipients (BCC): ${recipients.length} addresses`);
-  return info;
+  for (let i = 0; i < recipients.length; i += BATCH_SIZE) {
+    batches.push(recipients.slice(i, i + BATCH_SIZE));
+  }
+
+  console.log(`  Sending to ${recipients.length} addresses in ${batches.length} batch(es)...`);
+
+  for (let i = 0; i < batches.length; i++) {
+    const batch = batches[i];
+    const mailOptions = {
+      from: `AFA Perú <${GMAIL_USER}>`,
+      bcc: batch.join(', '),
+      subject,
+      text: textBody,
+      attachments: imageAttachments,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`  Batch ${i + 1}/${batches.length} sent (${batch.length} recipients). Message ID: ${info.messageId}`);
+
+    // Delay between batches to avoid rate limiting
+    if (i < batches.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+  }
 }
 
 async function main() {
