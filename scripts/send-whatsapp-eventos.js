@@ -41,7 +41,7 @@ async function fetchWhatsAppEvents() {
 
   const formula = `AND(
     FIND("WhatsApp", ARRAYJOIN({Dónde publicar}, ",")),
-    IS_SAME({Fecha evento}, "${today}", "day")
+    IS_SAME({Fecha comunicación}, "${today}", "day")
   )`;
 
   const url = new URL(`${AIRTABLE_API}/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`);
