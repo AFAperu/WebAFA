@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-05-20T10:20:58.511Z",
-  "count": 23,
+  "lastUpdated": "2026-05-21T10:34:20.498Z",
+  "count": 22,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -107,7 +107,6 @@
       "hora": "",
       "horaFin": "",
       "dondePublicar": [
-        "Instagram",
         "Web",
         "WhatsApp"
       ],
@@ -185,7 +184,7 @@
       "status": "Pendiente"
     },
     {
-      "id": "recj9j8XJ8U3aqjpZ",
+      "id": "recSYoE5yGiyH6xLX",
       "nombre": "Club lectura infantil",
       "fecha": "2026-05-29",
       "fechaFin": "",
@@ -240,19 +239,6 @@
     {
       "id": "reca4RLRPXIuB1Iml",
       "nombre": "Asamblea AFA",
-      "fecha": "2026-06-05",
-      "fechaFin": "",
-      "hora": "16:00",
-      "horaFin": "",
-      "dondePublicar": [
-        "Web"
-      ],
-      "descripcion": "",
-      "status": "Pendiente"
-    },
-    {
-      "id": "recSYoE5yGiyH6xLX",
-      "nombre": "Club lectura infantil",
       "fecha": "2026-06-05",
       "fechaFin": "",
       "hora": "16:00",
