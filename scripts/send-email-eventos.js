@@ -16,6 +16,7 @@
  */
 
 import nodemailer from 'nodemailer';
+import { marked } from 'marked';
 
 const TOKEN = process.env.AIRTABLE_TOKEN;
 const BASE_ID = process.env.AIRTABLE_EVENTOS_BASE_ID;
@@ -124,6 +125,37 @@ function getAudience(dondePublicar) {
 }
 
 /**
+ * Convert Markdown text to a styled HTML email body
+ */
+function markdownToHtmlEmail(markdownText) {
+  const htmlContent = marked.parse(markdownText);
+
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+    h1, h2, h3 { color: #2c3e50; }
+    a { color: #3498db; }
+    ul, ol { padding-left: 20px; }
+    p { margin: 0.8em 0; }
+    blockquote { border-left: 4px solid #3498db; margin: 1em 0; padding: 0.5em 1em; background: #f8f9fa; }
+    code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+    pre { background: #f4f4f4; padding: 12px; border-radius: 6px; overflow-x: auto; }
+    hr { border: none; border-top: 1px solid #eee; margin: 1.5em 0; }
+  </style>
+</head>
+<body>
+  ${htmlContent}
+  <hr>
+  <p style="font-size: 0.85em; color: #888;">AFA CEIP Perú</p>
+</body>
+</html>`;
+}
+
+/**
  * Send email to a list of recipients using BCC (in batches of 90 to stay under Gmail's limit)
  */
 async function sendEmail(subject, textBody, recipients, imageAttachments) {
@@ -136,6 +168,8 @@ async function sendEmail(subject, textBody, recipients, imageAttachments) {
 
   console.log(`  Sending to ${recipients.length} addresses in ${batches.length} batch(es)...`);
 
+  const htmlBody = markdownToHtmlEmail(textBody);
+
   for (let i = 0; i < batches.length; i++) {
     const batch = batches[i];
     const mailOptions = {
@@ -143,6 +177,7 @@ async function sendEmail(subject, textBody, recipients, imageAttachments) {
       bcc: batch.join(', '),
       subject,
       text: textBody,
+      html: htmlBody,
       attachments: imageAttachments,
     };
 

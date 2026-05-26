@@ -27,6 +27,45 @@ if (!TOKEN || !BASE_ID || !GREEN_INSTANCE || !GREEN_TOKEN || !GROUP_ID) {
 }
 
 /**
+ * Convert Markdown formatting to WhatsApp formatting
+ * Markdown: **bold**, *italic*, ~~strike~~, `code`, # headings
+ * WhatsApp: *bold*, _italic_, ~strike~, ```code```, *HEADING*
+ */
+function markdownToWhatsApp(text) {
+  if (!text) return text;
+
+  let result = text;
+
+  // Convert headings (# Heading) → *HEADING* (bold, uppercase-ish emphasis)
+  result = result.replace(/^#{1,6}\s+(.+)$/gm, '*$1*');
+
+  // Convert bold: **text** or __text__ → *text*
+  result = result.replace(/\*\*(.+?)\*\*/g, '*$1*');
+  result = result.replace(/__(.+?)__/g, '*$1*');
+
+  // Convert italic: *text* or _text_ → _text_
+  // Be careful not to touch already-converted *bold* — only match single * not preceded/followed by *
+  result = result.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '_$1_');
+
+  // Convert strikethrough: ~~text~~ → ~text~
+  result = result.replace(/~~(.+?)~~/g, '~$1~');
+
+  // Convert inline code: `text` → ```text```
+  result = result.replace(/`([^`]+)`/g, '```$1```');
+
+  // Convert links: [text](url) → text (url)
+  result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1 ($2)');
+
+  // Convert bullet lists: - item or * item → • item
+  result = result.replace(/^[\-\*]\s+/gm, '• ');
+
+  // Remove horizontal rules
+  result = result.replace(/^---+$/gm, '');
+
+  return result.trim();
+}
+
+/**
  * Get today's date in YYYY-MM-DD format (Madrid timezone)
  */
 function getTodayMadrid() {
@@ -136,10 +175,13 @@ async function main() {
 
     console.log(`Sending: "${fields['Name']}"...`);
 
+    // Convert Markdown to WhatsApp formatting
+    const whatsappText = markdownToWhatsApp(texto);
+
     if (imagenes.length > 0) {
       // Send first image with the text as caption
       const firstImage = imagenes[0];
-      await sendWhatsAppImage(firstImage.url, firstImage.filename, texto);
+      await sendWhatsAppImage(firstImage.url, firstImage.filename, whatsappText);
 
       // Send additional images without caption (if any)
       for (let i = 1; i < imagenes.length; i++) {
@@ -148,7 +190,7 @@ async function main() {
       }
     } else {
       // No image, send text only
-      await sendWhatsAppMessage(texto);
+      await sendWhatsAppMessage(whatsappText);
     }
 
     // Delay between events to avoid rate limiting
