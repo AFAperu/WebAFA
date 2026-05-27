@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-25T11:05:34.784Z",
+  "lastUpdated": "2026-05-27T10:51:24.367Z",
   "count": 22,
   "eventos": [
     {
@@ -188,10 +188,11 @@
       "nombre": "Club lectura infantil",
       "fecha": "2026-05-29",
       "fechaFin": "",
-      "hora": "16:00",
+      "hora": "10:00",
       "horaFin": "",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "WhatsApp"
       ],
       "descripcion": "",
       "status": "Pendiente"
@@ -241,10 +242,11 @@
       "nombre": "Asamblea AFA",
       "fecha": "2026-06-05",
       "fechaFin": "",
-      "hora": "16:00",
+      "hora": "9:00",
       "horaFin": "",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "WhatsApp"
       ],
       "descripcion": "",
       "status": "Pendiente"
@@ -270,7 +272,8 @@
       "hora": "17:00",
       "horaFin": "",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "Email socios y no socios"
       ],
       "descripcion": "",
       "status": "Pendiente"
