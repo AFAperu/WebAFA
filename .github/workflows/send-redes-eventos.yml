@@ -1,10 +1,8 @@
 name: Send Events to Social Media
 
 on:
-  # Run daily at 8:00 UTC (10:00 Madrid summer time)
-  schedule:
-    - cron: '0 8 * * *'
-  # Allow manual trigger for testing
+  # Triggered by cron-job.org at 10:00 Madrid time
+  # Manual trigger also available from GitHub Actions tab
   workflow_dispatch:
 
 jobs:
