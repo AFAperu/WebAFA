@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-01T08:38:49.865Z",
+  "lastUpdated": "2026-06-01T08:57:53.237Z",
   "count": 22,
   "eventos": [
     {
@@ -242,7 +242,7 @@
       "nombre": "Asamblea AFA",
       "fecha": "2026-06-05",
       "fechaFin": "",
-      "hora": "9:00",
+      "hora": "17:00",
       "horaFin": "",
       "dondePublicar": [
         "Web",
