@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-01T12:30:32.617Z",
+  "lastUpdated": "2026-06-02T07:15:32.253Z",
   "count": 22,
   "eventos": [
     {
@@ -256,13 +256,13 @@
       "nombre": "Bicicletada",
       "fecha": "2026-06-06",
       "fechaFin": "",
-      "hora": "10.30",
+      "hora": "10.00",
       "horaFin": "",
       "dondePublicar": [
         "Web"
       ],
       "descripcion": "9 km de ida y 9 de vuelta para ir al parque de las tirolinas en la casa de campo: \nhttps://maps.app.goo.gl/8qtuiThGDG2NNkoD7?g_st=aw",
-      "status": ""
+      "status": "En progreso"
     },
     {
       "id": "recDJrMI7W7BShZKz",
