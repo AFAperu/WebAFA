@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-25T11:05:34.784Z",
+  "lastUpdated": "2026-06-02T11:13:12.112Z",
   "count": 22,
   "eventos": [
     {
@@ -188,10 +188,11 @@
       "nombre": "Club lectura infantil",
       "fecha": "2026-05-29",
       "fechaFin": "",
-      "hora": "16:00",
+      "hora": "10:00",
       "horaFin": "",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "WhatsApp"
       ],
       "descripcion": "",
       "status": "Pendiente"
@@ -241,26 +242,28 @@
       "nombre": "Asamblea AFA",
       "fecha": "2026-06-05",
       "fechaFin": "",
-      "hora": "16:00",
+      "hora": "17:00",
       "horaFin": "",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "WhatsApp"
       ],
       "descripcion": "",
       "status": "Pendiente"
     },
     {
-      "id": "recTHtBQqjc78W6XA",
-      "nombre": "Dia del Medio Ambiente ",
-      "fecha": "2026-06-05",
+      "id": "recu5bVqt8RHMIvWn",
+      "nombre": "Bicicletada",
+      "fecha": "2026-06-06",
       "fechaFin": "",
-      "hora": "",
+      "hora": "10.00",
       "horaFin": "",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "WhatsApp"
       ],
-      "descripcion": "Abrir la propuesta por si alguien tira del carro para organizar y demas.\n\nCorreo del Lope:\n\"Soy Ornella, he aterrizado este año en el Lope de Vega y en la comisión de exteriores del AFA del cole. Os contacto porque quería haceros una propuesta de acción conjunta con ocasión del día mundial del medio ambiente (5 de junio). Como idea general, me parecía interesante actuar en sinergia con otros coles y aavv para hacer visibles las acciones fuera de los centro escolares, y así involucrar y sensibilizar la gente de los barrios aledaños.\nDejo la propuesta por aquí y ya me decís si estáis interesadxs, y, en el caso de que sí, cómo podríamos empezar a coordinarnos. \nEn el período entre finales de mayo/principios de junio, cerca de los días mundiales de la bicicleta (3/6) y del medio ambiente (5/ 6) se podría organizar una acción que contemple el cierre de un pequeño tramo de General Ricardos. Creo que puede tener un buen impacto porque:\n    se trata de una calle de alto tránsito de vehículos \n    es una calle cercana a varios coles (Lope, Perú, Concepción Arenal, etc.)\n    es una acción que no implica solo a la colectividad de los coles, sino que invita a la participación de toda la ciudadanía de los barrios aledaños\n    se trata de visibilizar la reapropiación del espacio público por parte de la ciudadanía y mostrar lo que puede ser una calle normalmente muy transitada por vehículos contaminantes (a nivel medioambiental y acústico) que durante unas horas se corta al tráfico. \nActividades imaginadas/ fantaseadas/ deseadas:\n    Actividades infantiles: pintar sobre cartones reciclados, instrumentos musicales caseros, pintacaras\n    Recorrido para bicis (conos de colores y cuerdas para delimitar el espacio) para peques y personas adultas \n    Otras actividades de bajo impacto económico acordes con la iniciativa \nCon respecto a la modalidad de petición a la administración del cierre de la calle, se ha planteado la posibilidad de pedirlo como manifestación, para que haya menos trabas burocráticas.\nSi estáis interesadxs, podemos reunirnos un día y empezar a mover el asunto.\"",
-      "status": "Pendiente"
+      "descripcion": "9 km de ida y 9 de vuelta para ir al parque de las tirolinas en la casa de campo: \nhttps://maps.app.goo.gl/8qtuiThGDG2NNkoD7?g_st=aw",
+      "status": "En progreso"
     },
     {
       "id": "recDJrMI7W7BShZKz",
@@ -270,7 +273,8 @@
       "hora": "17:00",
       "horaFin": "",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "Email socios y no socios"
       ],
       "descripcion": "",
       "status": "Pendiente"
