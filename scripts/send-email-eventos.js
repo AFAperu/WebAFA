@@ -78,17 +78,29 @@ async function fetchAirtableRecords(tableName, filterFormula) {
 
 /**
  * Fetch today's events marked for email
+ * Filters by "Hora publicación" matching the PUBLISH_SLOT env var (Mañana/Tarde)
  */
 async function fetchEmailEvents() {
   const today = getTodayMadrid();
+  const slot = process.env.PUBLISH_SLOT || 'Mañana';
 
-  const formula = `AND(
-    OR(
-      FIND("Email socios", ARRAYJOIN({Dónde publicar}, ",")),
-      FIND("Email socios y no socios", ARRAYJOIN({Dónde publicar}, ","))
-    ),
-    IS_SAME({Fecha comunicación}, "${today}", "day")
-  )`;
+  const formula = slot === 'Mañana'
+    ? `AND(
+      OR(
+        FIND("Email socios", ARRAYJOIN({Dónde publicar}, ",")),
+        FIND("Email socios y no socios", ARRAYJOIN({Dónde publicar}, ","))
+      ),
+      IS_SAME({Fecha comunicación}, "${today}", "day"),
+      OR({Hora publicación} = "Mañana", {Hora publicación} = BLANK())
+    )`
+    : `AND(
+      OR(
+        FIND("Email socios", ARRAYJOIN({Dónde publicar}, ",")),
+        FIND("Email socios y no socios", ARRAYJOIN({Dónde publicar}, ","))
+      ),
+      IS_SAME({Fecha comunicación}, "${today}", "day"),
+      {Hora publicación} = "Tarde"
+    )`;
 
   return fetchAirtableRecords(EVENTOS_TABLE, formula);
 }

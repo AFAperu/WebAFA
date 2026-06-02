@@ -35,14 +35,23 @@ function getTodayMadrid() {
 
 /**
  * Fetch events from Airtable that should be published to Instagram today
+ * Filters by "Hora publicación" matching the PUBLISH_SLOT env var (Mañana/Tarde)
  */
 async function fetchInstagramEvents() {
   const today = getTodayMadrid();
+  const slot = process.env.PUBLISH_SLOT || 'Mañana';
 
-  const formula = `AND(
-    FIND("Instagram", ARRAYJOIN({Dónde publicar}, ",")),
-    IS_SAME({Fecha comunicación}, "${today}", "day")
-  )`;
+  const formula = slot === 'Mañana'
+    ? `AND(
+      FIND("Instagram", ARRAYJOIN({Dónde publicar}, ",")),
+      IS_SAME({Fecha comunicación}, "${today}", "day"),
+      OR({Hora publicación} = "Mañana", {Hora publicación} = BLANK())
+    )`
+    : `AND(
+      FIND("Instagram", ARRAYJOIN({Dónde publicar}, ",")),
+      IS_SAME({Fecha comunicación}, "${today}", "day"),
+      {Hora publicación} = "Tarde"
+    )`;
 
   const url = new URL(`${AIRTABLE_API}/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`);
   url.searchParams.set('filterByFormula', formula);

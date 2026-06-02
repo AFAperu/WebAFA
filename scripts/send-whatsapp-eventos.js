@@ -37,15 +37,25 @@ function markdownToWhatsApp(text) {
   let result = text;
 
   // Convert headings (# Heading) → *HEADING* (bold, uppercase-ish emphasis)
-  result = result.replace(/^#{1,6}\s+(.+)$/gm, '*$1*');
+  result = result.replace(/^#{1,6}\s+(.+)$/gm, '**$1**');
 
-  // Convert bold: **text** or __text__ → *text*
-  result = result.replace(/\*\*(.+?)\*\*/g, '*$1*');
-  result = result.replace(/__(.+?)__/g, '*$1*');
+  // Step 1: Convert bold **text** → WhatsApp *text*
+  // Use a placeholder to protect bold from the italic pass
+  const boldMatches = [];
+  result = result.replace(/\*\*(.+?)\*\*/g, (_, content) => {
+    boldMatches.push(content);
+    return `\x01BOLD${boldMatches.length - 1}\x01`;
+  });
+  result = result.replace(/__(.+?)__/g, (_, content) => {
+    boldMatches.push(content);
+    return `\x01BOLD${boldMatches.length - 1}\x01`;
+  });
 
-  // Convert italic: *text* or _text_ → _text_
-  // Be careful not to touch already-converted *bold* — only match single * not preceded/followed by *
-  result = result.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '_$1_');
+  // Step 2: Convert italic *text* or _text_ → WhatsApp _text_
+  result = result.replace(/\*(.+?)\*/g, '_$1_');
+
+  // Step 3: Restore bold placeholders as WhatsApp bold *text*
+  result = result.replace(/\x01BOLD(\d+)\x01/g, (_, idx) => `*${boldMatches[parseInt(idx)]}*`);
 
   // Convert strikethrough: ~~text~~ → ~text~
   result = result.replace(/~~(.+?)~~/g, '~$1~');
@@ -74,14 +84,23 @@ function getTodayMadrid() {
 
 /**
  * Fetch events from Airtable that should be published to WhatsApp today
+ * Filters by "Hora publicación" matching the PUBLISH_SLOT env var (Mañana/Tarde)
  */
 async function fetchWhatsAppEvents() {
   const today = getTodayMadrid();
+  const slot = process.env.PUBLISH_SLOT || 'Mañana';
 
-  const formula = `AND(
-    FIND("WhatsApp", ARRAYJOIN({Dónde publicar}, ",")),
-    IS_SAME({Fecha comunicación}, "${today}", "day")
-  )`;
+  const formula = slot === 'Mañana'
+    ? `AND(
+      FIND("WhatsApp", ARRAYJOIN({Dónde publicar}, ",")),
+      IS_SAME({Fecha comunicación}, "${today}", "day"),
+      OR({Hora publicación} = "Mañana", {Hora publicación} = BLANK())
+    )`
+    : `AND(
+      FIND("WhatsApp", ARRAYJOIN({Dónde publicar}, ",")),
+      IS_SAME({Fecha comunicación}, "${today}", "day"),
+      {Hora publicación} = "Tarde"
+    )`;
 
   const url = new URL(`${AIRTABLE_API}/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`);
   url.searchParams.set('filterByFormula', formula);
