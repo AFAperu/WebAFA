@@ -36,25 +36,29 @@ function markdownToWhatsApp(text) {
 
   let result = text;
 
-  // Convert headings (# Heading) → *HEADING* (bold, uppercase-ish emphasis)
+  // Step 0: Convert links [text](url) → text: url
+  // WhatsApp doesn't support hyperlinks — just show the URL directly so it auto-links
+  result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1: $2');
+
+  // Step 1: Convert headings (# Heading) → bold
   result = result.replace(/^#{1,6}\s+(.+)$/gm, '**$1**');
 
-  // Step 1: Convert bold **text** → WhatsApp *text*
+  // Step 2: Convert bold **text** → WhatsApp *text*
   // Use a placeholder to protect bold from the italic pass
   const boldMatches = [];
   result = result.replace(/\*\*(.+?)\*\*/g, (_, content) => {
-    boldMatches.push(content);
+    boldMatches.push(content.trim());
     return `\x01BOLD${boldMatches.length - 1}\x01`;
   });
   result = result.replace(/__(.+?)__/g, (_, content) => {
-    boldMatches.push(content);
+    boldMatches.push(content.trim());
     return `\x01BOLD${boldMatches.length - 1}\x01`;
   });
 
-  // Step 2: Convert italic *text* or _text_ → WhatsApp _text_
+  // Step 3: Convert italic *text* or _text_ → WhatsApp _text_
   result = result.replace(/\*(.+?)\*/g, '_$1_');
 
-  // Step 3: Restore bold placeholders as WhatsApp bold *text*
+  // Step 4: Restore bold placeholders as WhatsApp bold *text*
   result = result.replace(/\x01BOLD(\d+)\x01/g, (_, idx) => `*${boldMatches[parseInt(idx)]}*`);
 
   // Convert strikethrough: ~~text~~ → ~text~
@@ -62,9 +66,6 @@ function markdownToWhatsApp(text) {
 
   // Convert inline code: `text` → ```text```
   result = result.replace(/`([^`]+)`/g, '```$1```');
-
-  // Convert links: [text](url) → text (url)
-  result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1 ($2)');
 
   // Convert bullet lists: - item or * item → • item
   result = result.replace(/^[\-\*]\s+/gm, '• ');
