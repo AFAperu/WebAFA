@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-06-05T10:41:30.934Z",
-  "count": 22,
+  "lastUpdated": "2026-06-06T07:15:35.183Z",
+  "count": 24,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -306,6 +306,34 @@
       ],
       "descripcion": "",
       "status": "Pendiente"
+    },
+    {
+      "id": "recly4yXt8qaxuZNA",
+      "nombre": "Acogida familias",
+      "fecha": "2026-09-11",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "WhatsApp",
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recm0lW0CZsSQJ3cB",
+      "nombre": "Asamblea de socios",
+      "fecha": "2026-09-25",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web",
+        "WhatsApp"
+      ],
+      "descripcion": "",
+      "status": ""
     }
   ]
 }
