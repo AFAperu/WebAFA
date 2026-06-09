@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-09T07:15:31.495Z",
+  "lastUpdated": "2026-06-09T10:29:43.776Z",
   "count": 24,
   "eventos": [
     {
@@ -279,18 +279,18 @@
       "status": "Pendiente"
     },
     {
-      "id": "rec5aH2oDHyjYNZms",
-      "nombre": "Exhibición de gimnasia",
+      "id": "reckXkfcb14voeZVz",
+      "nombre": "Exhibición fin de curso gimnasia rítmica ",
       "fecha": "2026-06-18",
       "fechaFin": "",
-      "hora": "16:00",
+      "hora": "",
       "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
       ],
       "descripcion": "",
-      "status": "Pendiente"
+      "status": ""
     },
     {
       "id": "reci115HDoaTsJ7r1",
