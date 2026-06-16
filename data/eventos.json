@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-16T07:15:46.303Z",
+  "lastUpdated": "2026-06-16T12:05:49.325Z",
   "count": 24,
   "eventos": [
     {
@@ -297,12 +297,12 @@
       "nombre": "Fiesta fin de curso",
       "fecha": "2026-06-19",
       "fechaFin": "",
-      "hora": "17:00",
+      "hora": "16:00",
       "horaFin": "",
       "dondePublicar": [
         "WhatsApp",
-        "Email socios",
-        "Web"
+        "Web",
+        "Email socios"
       ],
       "descripcion": "",
       "status": "Pendiente"
