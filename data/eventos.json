@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-10T17:24:06.651Z",
+  "lastUpdated": "2026-09-10T17:36:38.291Z",
   "count": 29,
   "eventos": [
     {
@@ -349,11 +349,11 @@
       "status": ""
     },
     {
-      "id": "recmPXwvl7OeqMABq",
-      "nombre": "Puertas abiertas Encuentro con la Logopeda",
-      "fecha": "2026-09-16",
+      "id": "recNGFNlNQmnebfMc",
+      "nombre": "Puertas abiertas Capoeira, Gimnasia, Baloncesto, Patinaje, Ajedrez",
+      "fecha": "2026-09-17",
       "fechaFin": "",
-      "hora": "17:00",
+      "hora": "16:00",
       "horaFin": "",
       "dondePublicar": [
         "Web"
@@ -362,11 +362,11 @@
       "status": ""
     },
     {
-      "id": "recNGFNlNQmnebfMc",
-      "nombre": "Puertas abiertas Capoeira, Gimnasia, Baloncesto, Patinaje, Ajedrez",
+      "id": "recmPXwvl7OeqMABq",
+      "nombre": "Puertas abiertas Encuentro con la Logopeda",
       "fecha": "2026-09-17",
       "fechaFin": "",
-      "hora": "16:00",
+      "hora": "17:00",
       "horaFin": "",
       "dondePublicar": [
         "Web"
