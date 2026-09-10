@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-09-10T11:58:46.928Z",
-  "count": 24,
+  "lastUpdated": "2026-09-10T17:24:06.651Z",
+  "count": 29,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -318,6 +318,71 @@
         "WhatsApp",
         "Web",
         "Email socios"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recCyFswNlPALgb7u",
+      "nombre": "Puertas abiertas Música y movimiento, Fútbol, Judo, Circo y Club de ciencia",
+      "fecha": "2026-09-16",
+      "fechaFin": "",
+      "hora": "16:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recOPylLIkwQeOVSJ",
+      "nombre": "Puertas abiertas Club de Cuentistas",
+      "fecha": "2026-09-16",
+      "fechaFin": "",
+      "hora": "17:30",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recmPXwvl7OeqMABq",
+      "nombre": "Puertas abiertas Encuentro con la Logopeda",
+      "fecha": "2026-09-16",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recNGFNlNQmnebfMc",
+      "nombre": "Puertas abiertas Capoeira, Gimnasia, Baloncesto, Patinaje, Ajedrez",
+      "fecha": "2026-09-17",
+      "fechaFin": "",
+      "hora": "16:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recbHX9h6wIGoBRv6",
+      "nombre": "Puertas abiertas Inglés",
+      "fecha": "2026-09-18",
+      "fechaFin": "",
+      "hora": "16:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
       ],
       "descripcion": "",
       "status": ""
