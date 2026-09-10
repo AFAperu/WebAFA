@@ -4002,3 +4002,86 @@ h1,  h2,  h3,  h4,  h5,  h6{
     overflow: hidden;
   }
 }
+
+/* ===== Necesitamos ===== */
+.necesita-intro {
+  max-width: 52rem;
+  margin: 0 auto 1rem;
+  text-align: center;
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.necesita-intro strong {
+  color: #03B5B2;
+  font-weight: 600;
+}
+
+.necesita-card {
+  position: relative;
+}
+
+.necesita-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #03B5B2, #6366f1);
+}
+
+.necesita-card .extra-card-body {
+  padding-top: 1.5rem;
+}
+
+.necesita-desc {
+  font-family: Outfit, sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #334155;
+  margin-bottom: 1.25rem;
+  white-space: pre-line;
+}
+
+.necesita-footer {
+  margin-top: auto;
+}
+
+.necesita-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 0.4rem;
+}
+
+.necesita-meta svg {
+  flex-shrink: 0;
+  color: #94a3b8;
+}
+
+.necesita-meta strong {
+  font-weight: 600;
+  color: #475569;
+}
+
+.necesita-card .extra-card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.necesita-card .extra-card-btn svg {
+  flex-shrink: 0;
+}
+
+/* Necesitamos Dark Mode */
+.b .necesita-intro { color: #94a3b8; }
+.b .necesita-desc { color: #e2e8f0; }
+.b .necesita-meta { color: #94a3b8; }
+.b .necesita-meta strong { color: #cbd5e1; }
+.b .necesita-meta svg { color: #64748b; }
