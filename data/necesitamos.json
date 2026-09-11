@@ -1,5 +1,24 @@
 {
-  "lastUpdated": "",
-  "count": 0,
-  "necesidades": []
+  "lastUpdated": "2026-09-11T09:05:08.856Z",
+  "count": 3,
+  "necesidades": [
+    {
+      "id": "rec0lTNEueSiW67b2",
+      "descripcion": "Necesitamos alguien que ayude con las tareas de comunicación",
+      "contacto": "Jesus",
+      "email": "afaceipperu+jesus@gmail.com"
+    },
+    {
+      "id": "rec0p9mjqYPNQgHon",
+      "descripcion": "Queremos organizar un mercadillo en el que intercambiemos libros, ropa, juguetes...",
+      "contacto": "Jesús",
+      "email": "afaceipperu+jesus@gmail.com"
+    },
+    {
+      "id": "recXcPpzmhZJKJTar",
+      "descripcion": "La AFA pide a gritos una comisión de género ¿Te animas a organizarla?",
+      "contacto": "Jesús",
+      "email": "afaceipperu+jesus@gmail.com"
+    }
+  ]
 }
