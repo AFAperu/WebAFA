@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-09-22T12:14:40.251Z",
-  "count": 29,
+  "lastUpdated": "2026-09-23T07:15:43.709Z",
+  "count": 43,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -389,7 +389,7 @@
     },
     {
       "id": "recm0lW0CZsSQJ3cB",
-      "nombre": "Asamblea de socios",
+      "nombre": "Asamblea de socios de la AFA",
       "fecha": "2026-09-25",
       "fechaFin": "",
       "hora": "17:00",
@@ -397,6 +397,188 @@
       "dondePublicar": [
         "Web",
         "WhatsApp"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recV1MOfSbmIOZjux",
+      "nombre": "Fiesta de Otoño barrio de Comillas",
+      "fecha": "2026-10-24",
+      "fechaFin": "",
+      "hora": "11:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recwLiyitqOqIqxPM",
+      "nombre": "Día de las familias en el comedor",
+      "fecha": "2026-10-29",
+      "fechaFin": "",
+      "hora": "14:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "rec9P5YxuSEGyyENG",
+      "nombre": "Bicicletada",
+      "fecha": "2026-11-21",
+      "fechaFin": "",
+      "hora": "9:30",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recMOfruXtGunoPJx",
+      "nombre": "Día de las familias en el comedor",
+      "fecha": "2026-11-26",
+      "fechaFin": "",
+      "hora": "14:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recfjNTCeN1MoWgEH",
+      "nombre": "Día de las familias en el comedor",
+      "fecha": "2026-12-17",
+      "fechaFin": "",
+      "hora": "14:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "rec5h6o1RNi5x5zSu",
+      "nombre": "Fiesta Navidad",
+      "fecha": "2026-12-18",
+      "fechaFin": "",
+      "hora": "16:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recZLbuJQfXDTQ3d3",
+      "nombre": "Asamblea de socios de la AFA",
+      "fecha": "2027-01-22",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recoMnfGhxJksIk0k",
+      "nombre": "Día de las familias en el comedor",
+      "fecha": "2027-01-28",
+      "fechaFin": "",
+      "hora": "14:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "rechfyZQ2DtOK5jR8",
+      "nombre": "Día de las familias en el comedor",
+      "fecha": "2027-02-25",
+      "fechaFin": "",
+      "hora": "14:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recY79jddFk16bo6G",
+      "nombre": "Día de las familias en el comedor",
+      "fecha": "2027-03-18",
+      "fechaFin": "",
+      "hora": "14:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recFady0smcgZENKl",
+      "nombre": "Día de las familias en el comedor",
+      "fecha": "2027-04-29",
+      "fechaFin": "",
+      "hora": "14:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "rec22qZMOlxD0byzs",
+      "nombre": "Día de las familias en el comedor",
+      "fecha": "2027-05-27",
+      "fechaFin": "",
+      "hora": "14:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recLfmBAv4sI2GSUW",
+      "nombre": "Asamblea de socios de la AFA",
+      "fecha": "2027-06-04",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "reck6zkAlWrvB0J1k",
+      "nombre": "Día de las familias en el comedor",
+      "fecha": "2027-06-17",
+      "fechaFin": "",
+      "hora": "14:00",
+      "horaFin": "",
+      "dondePublicar": [
+        "Web"
       ],
       "descripcion": "",
       "status": ""
