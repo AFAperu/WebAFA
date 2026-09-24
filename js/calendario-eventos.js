@@ -4,6 +4,7 @@
  */
 
 import { downloadMonthPoster } from './poster-generator.js';
+import { renderCalendarButton, attachCalendarMenus } from './calendar-export.js';
 
 const DATA_PATH = '../data/eventos.json';
 const BASE_PATH = '../';
@@ -48,19 +49,27 @@ function isPast(isoDate) {
   return eventDate < new Date();
 }
 
+/** A multi-day event is only over once its end date has passed. */
+function hasEnded(evento) {
+  return isPast(evento.fechaFin || evento.fecha);
+}
+
 function getMonthKey(isoDate) {
-  if (!isoDate) return '9999-99';
   return isoDate.substring(0, 7); // "2026-04"
 }
 
-function getMonthLabel(isoDate) {
-  if (!isoDate) return '';
-  const d = new Date(isoDate + 'T00:00:00');
-  return MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
+function getMonthLabel(monthKey) {
+  const [year, month] = monthKey.split('-');
+  return MONTH_NAMES[parseInt(month, 10) - 1] + ' ' + year;
+}
+
+function getCurrentMonthKey() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 }
 
 function renderEvent(evento) {
-  const past = isPast(evento.fechaFin || evento.fecha);
+  const past = hasEnded(evento);
   const d = evento.fecha ? new Date(evento.fecha + 'T00:00:00') : null;
   const day = d ? d.getDate() : '';
   const monthShort = d ? d.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase() : '';
@@ -82,14 +91,19 @@ function renderEvent(evento) {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         ${timeStr}
       </span>` : ''}
+      ${past ? '' : renderCalendarButton(evento)}
     </div>`;
 }
 
-function groupByMonth(eventos) {
+function groupByMonth(eventos, currentMonthKey) {
   const groups = new Map();
   for (const e of eventos) {
-    const key = getMonthKey(e.fecha);
-    if (!groups.has(key)) groups.set(key, { label: getMonthLabel(e.fecha), eventos: [] });
+    const startKey = getMonthKey(e.fecha);
+    // An event that started in a past month but hasn't finished yet is listed
+    // under the current month, so it stays visible while it is running
+    const key = startKey < currentMonthKey && !hasEnded(e) ? currentMonthKey : startKey;
+
+    if (!groups.has(key)) groups.set(key, { label: getMonthLabel(key), eventos: [] });
     groups.get(key).eventos.push(e);
   }
   return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b));
@@ -102,21 +116,19 @@ async function init() {
   try {
     const res = await fetch(DATA_PATH);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const { eventos } = await res.json();
+    const { eventos: todos } = await res.json();
+    const eventos = (todos || []).filter(e => e.fecha);
 
-    if (!eventos || eventos.length === 0) {
+    if (eventos.length === 0) {
       container.innerHTML = '<p class="loading-msg">No hay eventos programados próximamente.</p>';
       return;
     }
 
     // Sort by date ascending
-    eventos.sort((a, b) => (a.fecha || '').localeCompare(b.fecha || ''));
+    eventos.sort((a, b) => a.fecha.localeCompare(b.fecha));
 
-    const months = groupByMonth(eventos);
-
-    // Skip months where all events are in the past
-    const now = new Date();
-    const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const currentMonthKey = getCurrentMonthKey();
+    const months = groupByMonth(eventos, currentMonthKey);
 
     let html = '';
     for (const [key, group] of months) {
@@ -134,6 +146,9 @@ async function init() {
     }
 
     container.innerHTML = html;
+
+    // Wire up the per-event "save to calendar" menus
+    attachCalendarMenus(container, new Map(eventos.map(e => [e.id, e])));
 
     // Wire up download buttons
     const monthsMap = new Map(months);

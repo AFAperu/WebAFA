@@ -3955,12 +3955,112 @@ h1,  h2,  h3,  h4,  h5,  h6{
   color: #94a3b8;
 }
 
+/* Guardar en calendario */
+.evento-cal {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.btn-add-calendar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.8rem;
+  font-family: Outfit, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  border-radius: 2rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.btn-add-calendar:hover,
+.btn-add-calendar[aria-expanded="true"] {
+  color: #fff;
+  background: #03B5B2;
+  border-color: #03B5B2;
+}
+
+.btn-add-calendar svg {
+  flex-shrink: 0;
+}
+
+.evento-row.cal-open {
+  position: relative;
+  z-index: 30;
+}
+
+.cal-menu {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  z-index: 40;
+  min-width: 14rem;
+  padding: 0.35rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.6rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+}
+
+.cal-menu[hidden] {
+  display: none;
+}
+
+.cal-menu-title {
+  display: block;
+  padding: 0.35rem 0.6rem 0.45rem;
+  font-family: Outfit, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.cal-menu a,
+.cal-menu button {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  font-family: Outfit, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: left;
+  color: #1e293b;
+  background: transparent;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.cal-menu a:hover,
+.cal-menu button:hover,
+.cal-menu a:focus-visible,
+.cal-menu button:focus-visible {
+  background: #f1f5f9;
+  color: #03B5B2;
+}
+
 /* Calendario Dark Mode */
 .b .eventos-month-header { color: #e2e8f0; border-color: #3c4556; }
 .b .evento-row { background: #1c2039; border-color: #3c4556; }
 .b .evento-nombre { color: #e2e8f0; }
 .b .evento-detalle { color: #94a3b8; }
 .b .evento-detalle svg { color: #64748b; }
+.b .btn-add-calendar { color: #cbd5e1; border-color: #3c4556; }
+.b .btn-add-calendar:hover,
+.b .btn-add-calendar[aria-expanded="true"] { color: #fff; background: #03B5B2; border-color: #03B5B2; }
+.b .cal-menu { background: #1c2039; border-color: #3c4556; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45); }
+.b .cal-menu-title { color: #64748b; }
+.b .cal-menu a, .b .cal-menu button { color: #e2e8f0; }
+.b .cal-menu a:hover, .b .cal-menu button:hover,
+.b .cal-menu a:focus-visible, .b .cal-menu button:focus-visible { background: #262c4c; color: #03B5B2; }
 .b .btn-descargar-poster { background: #03B5B2; color: #fff; }
 .b .btn-descargar-poster:hover { background: #029e9b; }
 
@@ -3975,6 +4075,13 @@ h1,  h2,  h3,  h4,  h5,  h6{
   }
   .evento-detalle {
     margin-left: 60px;
+  }
+  .evento-cal {
+    margin-left: 60px;
+  }
+  .cal-menu {
+    right: auto;
+    left: 0;
   }
 }
 

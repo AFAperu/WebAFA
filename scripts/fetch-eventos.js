@@ -55,6 +55,32 @@ async function fetchAllRecords() {
   return allRecords;
 }
 
+const EXPECTED_FIELDS = [
+  'Name',
+  'Fecha evento',
+  'Fecha fin de evento',
+  'Hora (hh:mm)',
+  'Hora fin (hh:mm)',
+  'Lugar del evento',
+  'Dónde publicar',
+  'Descripción o info extra',
+  'Status',
+];
+
+/**
+ * Airtable omits empty fields, so a column that is renamed looks exactly like a
+ * column that nobody filled in: the value silently becomes "". Logging the
+ * mismatch makes a rename visible in the workflow output.
+ */
+function warnAboutUnseenFields(records) {
+  const seen = new Set(records.flatMap(r => Object.keys(r.fields)));
+  const unseen = EXPECTED_FIELDS.filter(f => !seen.has(f));
+  if (unseen.length === 0) return;
+
+  console.warn(`⚠️  Columns with no value in any record (renamed or empty?): ${unseen.join(', ')}`);
+  console.warn(`   Columns found in Airtable: ${[...seen].sort().join(', ')}`);
+}
+
 function transformRecord(record) {
   const f = record.fields;
   return {
@@ -63,7 +89,8 @@ function transformRecord(record) {
     fecha: f['Fecha evento'] || '',
     fechaFin: f['Fecha fin de evento'] || '',
     hora: f['Hora (hh:mm)'] || '',
-    horaFin: f['Hora fin de evento'] || '',
+    horaFin: f['Hora fin (hh:mm)'] || '',
+    lugar: f['Lugar del evento'] || '',
     dondePublicar: f['Dónde publicar'] || [],
     descripcion: f['Descripción o info extra'] || '',
     status: f['Status'] || '',
@@ -74,6 +101,8 @@ async function main() {
   console.log('Fetching eventos from Airtable...');
 
   const records = await fetchAllRecords();
+  warnAboutUnseenFields(records);
+
   const eventos = records
     .map(transformRecord)
     .filter(e => e.nombre && e.dondePublicar.includes('Web'));
