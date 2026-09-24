@@ -114,54 +114,72 @@ function roundRect(ctx, x, y, w, h, r) {
 // EVENT GROUPING — merges same-name events
 // into "2 y 16 de marzo - Club lectura"
 // ──────────────────────────────────────────
+const dayOf = iso => new Date(iso + 'T00:00:00').getDate();
+const monthNameOf = iso => new Date(iso + 'T00:00:00').toLocaleDateString('es-ES', { month: 'long' });
+
+function hasDateRange(entry) {
+  return Boolean(entry.fechaFin) && entry.fechaFin !== entry.fecha;
+}
+
+/** "8 a 17 de mayo" within one month, "30 de abril a 3 de mayo" across two. */
+function formatDateRange(entry) {
+  const startMonth = monthNameOf(entry.fecha);
+  const endMonth = monthNameOf(entry.fechaFin);
+  return startMonth === endMonth
+    ? `${dayOf(entry.fecha)} a ${dayOf(entry.fechaFin)} de ${startMonth}`
+    : `${dayOf(entry.fecha)} de ${startMonth} a ${dayOf(entry.fechaFin)} de ${endMonth}`;
+}
+
+/** "8" / "8 y 15" / "8, 15 y 22" */
+function formatDayList(days) {
+  if (days.length === 1) return String(days[0]);
+  return days.slice(0, -1).join(', ') + ' y ' + days[days.length - 1];
+}
+
+/** " (18:30 - 22:00h)" — only when the entries share a single start time. */
+function formatTimePart(entries) {
+  const times = [...new Set(entries.map(e => e.hora).filter(Boolean))];
+  if (times.length !== 1) return '';
+
+  const start = times[0].substring(0, 5);
+  const endTimes = [...new Set(entries.map(e => e.horaFin).filter(Boolean))];
+  return endTimes.length === 1
+    ? ` (${start} - ${endTimes[0].substring(0, 5)}h)`
+    : ` (${start}h)`;
+}
+
 function groupEventsByName(eventos) {
   const lines = [];
   const grouped = new Map();
 
   for (const e of eventos) {
+    if (!e.fecha) continue;
     const name = e.nombre;
     if (!grouped.has(name)) grouped.set(name, []);
     grouped.get(name).push({ fecha: e.fecha, fechaFin: e.fechaFin || '', hora: e.hora || '', horaFin: e.horaFin || '' });
   }
 
   for (const [name, entries] of grouped) {
-    const d = new Date(entries[0].fecha + 'T00:00:00');
-    const monthName = d.toLocaleDateString('es-ES', { month: 'long' });
-
-    // Collect unique non-empty start times
-    const times = [...new Set(entries.map(e => e.hora).filter(Boolean))];
-    const endTimes = [...new Set(entries.map(e => e.horaFin).filter(Boolean))];
-
-    let timePart = '';
-    if (times.length === 1) {
-      const startTime = times[0].substring(0, 5);
-      if (endTimes.length === 1) {
-        timePart = ` (${startTime} - ${endTimes[0].substring(0, 5)}h)`;
-      } else {
-        timePart = ` (${startTime}h)`;
-      }
+    // A multi-day event keeps its own line: a range cannot be merged into a day list
+    for (const entry of entries.filter(hasDateRange)) {
+      lines.push({ bold: `${formatDateRange(entry)}${formatTimePart([entry])}`, text: ` - ${name}` });
     }
 
-    if (entries.length === 1) {
-      const day = d.getDate();
-      const entry = entries[0];
-      // Check for date range (fechaFin different from fecha)
-      if (entry.fechaFin && entry.fechaFin !== entry.fecha) {
-        const dEnd = new Date(entry.fechaFin + 'T00:00:00');
-        const endDay = dEnd.getDate();
-        const endMonthName = dEnd.toLocaleDateString('es-ES', { month: 'long' });
-        if (endMonthName === monthName) {
-          lines.push({ bold: `${day} a ${endDay} de ${monthName}${timePart}`, text: ` - ${name}` });
-        } else {
-          lines.push({ bold: `${day} de ${monthName} a ${endDay} de ${endMonthName}${timePart}`, text: ` - ${name}` });
-        }
-      } else {
-        lines.push({ bold: `${day} de ${monthName}${timePart}`, text: ` - ${name}` });
-      }
-    } else {
-      const days = entries.map(e => new Date(e.fecha + 'T00:00:00').getDate());
-      const dayStr = days.slice(0, -1).join(', ') + ' y ' + days[days.length - 1];
-      lines.push({ bold: `${dayStr} de ${monthName}${timePart}`, text: ` - ${name}` });
+    const singleDay = entries.filter(e => !hasDateRange(e));
+    if (singleDay.length === 0) continue;
+
+    // Remaining repeats collapse into one line per month, so a name that recurs
+    // across a month boundary doesn't get labelled with the first month only
+    const timePart = formatTimePart(singleDay);
+    const daysByMonth = new Map();
+    for (const entry of singleDay) {
+      const month = monthNameOf(entry.fecha);
+      if (!daysByMonth.has(month)) daysByMonth.set(month, []);
+      daysByMonth.get(month).push(dayOf(entry.fecha));
+    }
+
+    for (const [month, days] of daysByMonth) {
+      lines.push({ bold: `${formatDayList(days)} de ${month}${timePart}`, text: ` - ${name}` });
     }
   }
   return lines;
