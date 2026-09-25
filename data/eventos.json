@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-09-24T12:27:06.245Z",
-  "count": 43,
+  "lastUpdated": "2026-09-25T07:15:35.984Z",
+  "count": 46,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -9,6 +9,7 @@
       "fechaFin": "",
       "hora": "",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -22,6 +23,7 @@
       "fechaFin": "",
       "hora": "",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "WhatsApp",
         "Email socios",
@@ -37,6 +39,7 @@
       "fechaFin": "",
       "hora": "17:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -50,6 +53,7 @@
       "fechaFin": "",
       "hora": "18:30",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "WhatsApp",
         "Instagram",
@@ -66,6 +70,7 @@
       "fechaFin": "2026-05-17",
       "hora": "",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -79,6 +84,7 @@
       "fechaFin": "",
       "hora": "",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web",
         "WhatsApp"
@@ -93,6 +99,7 @@
       "fechaFin": "",
       "hora": "17:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -106,6 +113,7 @@
       "fechaFin": "",
       "hora": "",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web",
         "WhatsApp"
@@ -120,6 +128,7 @@
       "fechaFin": "",
       "hora": "16:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -134,6 +143,7 @@
       "fechaFin": "",
       "hora": "16:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -148,6 +158,7 @@
       "fechaFin": "",
       "hora": "18:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -162,6 +173,7 @@
       "fechaFin": "",
       "hora": "17:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -176,6 +188,7 @@
       "fechaFin": "",
       "hora": "16:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -190,6 +203,7 @@
       "fechaFin": "",
       "hora": "10:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web",
         "WhatsApp"
@@ -204,6 +218,7 @@
       "fechaFin": "",
       "hora": "16:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -218,6 +233,7 @@
       "fechaFin": "",
       "hora": "17:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -231,6 +247,7 @@
       "fechaFin": "",
       "hora": "",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -244,6 +261,7 @@
       "fechaFin": "",
       "hora": "17:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web",
         "WhatsApp"
@@ -258,6 +276,7 @@
       "fechaFin": "",
       "hora": "10.00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -271,6 +290,7 @@
       "fechaFin": "",
       "hora": "17:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web",
         "Email socios y no socios"
@@ -285,6 +305,7 @@
       "fechaFin": "",
       "hora": "",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "WhatsApp",
         "Web"
@@ -299,6 +320,7 @@
       "fechaFin": "",
       "hora": "16:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "WhatsApp",
         "Web",
@@ -314,6 +336,7 @@
       "fechaFin": "2026-09-11",
       "hora": "16:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "WhatsApp",
         "Web",
@@ -329,6 +352,7 @@
       "fechaFin": "",
       "hora": "16:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -342,6 +366,7 @@
       "fechaFin": "",
       "hora": "17:30",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -355,6 +380,7 @@
       "fechaFin": "",
       "hora": "16:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -368,6 +394,7 @@
       "fechaFin": "",
       "hora": "17:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -381,6 +408,7 @@
       "fechaFin": "",
       "hora": "16:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -393,10 +421,25 @@
       "fecha": "2026-09-25",
       "fechaFin": "",
       "hora": "17:00",
-      "horaFin": "",
+      "horaFin": "20:00",
+      "lugar": "",
       "dondePublicar": [
         "Web",
         "WhatsApp"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "receFLkRm5wr0DkEE",
+      "nombre": "Fiesta de bienvenida",
+      "fecha": "2026-10-23",
+      "fechaFin": "",
+      "hora": "16:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
       ],
       "descripcion": "",
       "status": ""
@@ -408,6 +451,21 @@
       "fechaFin": "",
       "hora": "11:00",
       "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recj4vihklp557rPI",
+      "nombre": "Club de montaña",
+      "fecha": "2026-10-25",
+      "fechaFin": "",
+      "hora": "",
+      "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -421,6 +479,21 @@
       "fechaFin": "",
       "hora": "14:00",
       "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "rec7GKqvUUfDkasbO",
+      "nombre": "Noche de sacos",
+      "fecha": "2026-10-30",
+      "fechaFin": "",
+      "hora": "",
+      "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -433,7 +506,8 @@
       "fecha": "2026-11-21",
       "fechaFin": "",
       "hora": "9:30",
-      "horaFin": "",
+      "horaFin": "13:30",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -447,6 +521,7 @@
       "fechaFin": "",
       "hora": "14:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -460,6 +535,7 @@
       "fechaFin": "",
       "hora": "14:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -473,6 +549,7 @@
       "fechaFin": "",
       "hora": "16:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -486,6 +563,7 @@
       "fechaFin": "",
       "hora": "17:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -499,6 +577,7 @@
       "fechaFin": "",
       "hora": "14:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -512,6 +591,7 @@
       "fechaFin": "",
       "hora": "14:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -525,6 +605,7 @@
       "fechaFin": "",
       "hora": "14:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -538,6 +619,7 @@
       "fechaFin": "",
       "hora": "14:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -551,6 +633,7 @@
       "fechaFin": "",
       "hora": "14:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -564,6 +647,7 @@
       "fechaFin": "",
       "hora": "17:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
@@ -577,6 +661,7 @@
       "fechaFin": "",
       "hora": "14:00",
       "horaFin": "",
+      "lugar": "",
       "dondePublicar": [
         "Web"
       ],
