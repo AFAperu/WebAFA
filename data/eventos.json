@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-09-29T07:15:40.610Z",
-  "count": 45,
+  "lastUpdated": "2026-09-29T13:36:24.562Z",
+  "count": 44,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -464,20 +464,6 @@
       "fecha": "2026-10-25",
       "fechaFin": "",
       "hora": "",
-      "horaFin": "",
-      "lugar": "",
-      "dondePublicar": [
-        "Web"
-      ],
-      "descripcion": "",
-      "status": ""
-    },
-    {
-      "id": "recwLiyitqOqIqxPM",
-      "nombre": "Día de las familias en el comedor",
-      "fecha": "2026-10-29",
-      "fechaFin": "",
-      "hora": "14:00",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
