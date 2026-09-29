@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-09-28T14:47:06.618Z",
-  "count": 46,
+  "lastUpdated": "2026-09-29T07:15:40.610Z",
+  "count": 45,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -432,7 +432,7 @@
     },
     {
       "id": "receFLkRm5wr0DkEE",
-      "nombre": "Fiesta de bienvenida",
+      "nombre": "Fiesta de bienvenida / Halloween",
       "fecha": "2026-10-23",
       "fechaFin": "",
       "hora": "16:00",
@@ -446,7 +446,7 @@
     },
     {
       "id": "recV1MOfSbmIOZjux",
-      "nombre": "Fiesta de Otoño barrio de Comillas",
+      "nombre": "Fiesta de Otoño del barrio de Comillas ",
       "fecha": "2026-10-24",
       "fechaFin": "",
       "hora": "11:00",
@@ -455,7 +455,7 @@
       "dondePublicar": [
         "Web"
       ],
-      "descripcion": "",
+      "descripcion": "Organiza: asociación de vecinos de Comillas en colaboración con la AFA CEIP Perú.",
       "status": ""
     },
     {
@@ -518,20 +518,6 @@
       "id": "recMOfruXtGunoPJx",
       "nombre": "Día de las familias en el comedor",
       "fecha": "2026-11-26",
-      "fechaFin": "",
-      "hora": "14:00",
-      "horaFin": "",
-      "lugar": "",
-      "dondePublicar": [
-        "Web"
-      ],
-      "descripcion": "",
-      "status": ""
-    },
-    {
-      "id": "recfjNTCeN1MoWgEH",
-      "nombre": "Día de las familias en el comedor",
-      "fecha": "2026-12-17",
       "fechaFin": "",
       "hora": "14:00",
       "horaFin": "",
