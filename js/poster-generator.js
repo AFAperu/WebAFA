@@ -65,9 +65,9 @@ const MONTH_NAMES = [
 const STATIC_ACTIVITIES = [
   { title: 'Extraescolares', detail: 'L a V' },
   { title: 'Primeros del cole de', detail: 'L a V (Educaventura)' },
-  { title: 'Huerto en familia', detail: 'Jueves de 16 a 18h' },
+  { title: 'Huerto en familia', detail: '16 a 18h' },
   { title: 'Familias comensales', detail: 'Último jueves de cada mes' },
-  { title: 'Patio en familia', detail: 'L a V de 16 a 18h. Hasta 29/5' },
+  { title: 'Patio en familia', detail: 'L a V de 16 a 18h. Hasta 31/5' },
 ];
 
 const CONTACT_EMAIL = 'afaceipperu@gmail.com';
