@@ -10,9 +10,14 @@
  *
  * Environment variables:
  *   AIRTABLE_TOKEN            — Personal Access Token
- *   AIRTABLE_EVENTOS_BASE_ID  — Base ID (same base for Eventos and Socios)
+ *   AIRTABLE_EVENTOS_BASE_ID  — Base ID for the public "Eventos" base
+ *   AIRTABLE_SOCIOS_BASE_ID   — Base ID for the private "Socios" base
  *   GMAIL_USER                — Gmail address (afaceipperu@gmail.com)
  *   GMAIL_APP_PASSWORD        — Gmail App Password (16 chars)
+ *
+ * Socios lives in its own base on purpose: Airtable visibility is per-base,
+ * not per-table, so anyone invited to edit events would otherwise be able to
+ * read every member's email address.
  */
 
 import nodemailer from 'nodemailer';
@@ -20,6 +25,7 @@ import { marked } from 'marked';
 
 const TOKEN = process.env.AIRTABLE_TOKEN;
 const BASE_ID = process.env.AIRTABLE_EVENTOS_BASE_ID;
+const SOCIOS_BASE_ID = process.env.AIRTABLE_SOCIOS_BASE_ID;
 const GMAIL_USER = process.env.GMAIL_USER;
 const GMAIL_PASS = process.env.GMAIL_APP_PASSWORD;
 
@@ -27,8 +33,15 @@ const EVENTOS_TABLE = 'Eventos colegio Perú';
 const SOCIOS_TABLE = 'Socios';
 const AIRTABLE_API = 'https://api.airtable.com/v0';
 
-if (!TOKEN || !BASE_ID || !GMAIL_USER || !GMAIL_PASS) {
-  console.error('Missing required env vars. Need: AIRTABLE_TOKEN, AIRTABLE_EVENTOS_BASE_ID, GMAIL_USER, GMAIL_APP_PASSWORD');
+if (!TOKEN || !BASE_ID || !SOCIOS_BASE_ID || !GMAIL_USER || !GMAIL_PASS) {
+  console.error('Missing required env vars. Need: AIRTABLE_TOKEN, AIRTABLE_EVENTOS_BASE_ID, AIRTABLE_SOCIOS_BASE_ID, GMAIL_USER, GMAIL_APP_PASSWORD');
+  process.exit(1);
+}
+
+// Pointing both at the same base would silently undo the privacy split, so
+// fail loudly instead of sending as if nothing were wrong.
+if (SOCIOS_BASE_ID === BASE_ID) {
+  console.error('AIRTABLE_SOCIOS_BASE_ID must differ from AIRTABLE_EVENTOS_BASE_ID. Member emails belong in their own base.');
   process.exit(1);
 }
 
@@ -50,12 +63,12 @@ function getTodayMadrid() {
 /**
  * Fetch all records from an Airtable table with optional filter formula
  */
-async function fetchAirtableRecords(tableName, filterFormula) {
+async function fetchAirtableRecords(baseId, tableName, filterFormula) {
   const allRecords = [];
   let offset = null;
 
   do {
-    const url = new URL(`${AIRTABLE_API}/${BASE_ID}/${encodeURIComponent(tableName)}`);
+    const url = new URL(`${AIRTABLE_API}/${baseId}/${encodeURIComponent(tableName)}`);
     if (filterFormula) url.searchParams.set('filterByFormula', filterFormula);
     if (offset) url.searchParams.set('offset', offset);
 
@@ -102,7 +115,7 @@ async function fetchEmailEvents() {
       {Hora publicación} = "Tarde"
     )`;
 
-  return fetchAirtableRecords(EVENTOS_TABLE, formula);
+  return fetchAirtableRecords(BASE_ID, EVENTOS_TABLE, formula);
 }
 
 /**
@@ -111,7 +124,7 @@ async function fetchEmailEvents() {
  */
 async function fetchContacts(sociosOnly) {
   const formula = sociosOnly ? `{Estado de membresía} = "Socio"` : '';
-  const records = await fetchAirtableRecords(SOCIOS_TABLE, formula);
+  const records = await fetchAirtableRecords(SOCIOS_BASE_ID, SOCIOS_TABLE, formula);
 
   const emails = new Set();
   for (const record of records) {
