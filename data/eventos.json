@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-08T07:15:38.251Z",
+  "lastUpdated": "2026-10-08T14:16:25.839Z",
   "count": 48,
   "eventos": [
     {
@@ -481,7 +481,8 @@
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "Email socios y no socios"
       ],
       "descripcion": "",
       "status": ""
