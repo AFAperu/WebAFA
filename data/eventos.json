@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-08T14:16:25.839Z",
+  "lastUpdated": "2026-10-09T07:15:37.694Z",
   "count": 48,
   "eventos": [
     {
@@ -476,10 +476,10 @@
       "id": "receFLkRm5wr0DkEE",
       "nombre": "Fiesta de bienvenida / Halloween",
       "fecha": "2026-10-23",
-      "fechaFin": "",
+      "fechaFin": "2026-10-23",
       "hora": "16:00",
       "horaFin": "",
-      "lugar": "",
+      "lugar": "CEIP Perú",
       "dondePublicar": [
         "Web",
         "Email socios y no socios"
