@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-12T16:21:56.669Z",
+  "lastUpdated": "2026-10-13T07:15:33.553Z",
   "count": 48,
   "eventos": [
     {
@@ -445,10 +445,10 @@
       "status": ""
     },
     {
-      "id": "reczL5HluneOGyceX",
-      "nombre": "Club de lectura 5º de Primaria",
-      "fecha": "2026-10-09",
-      "fechaFin": "2026-10-09",
+      "id": "rec58vR31XnSS5QqW",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2026-10-13",
+      "fechaFin": "2026-10-13",
       "hora": "",
       "horaFin": "",
       "lugar": "",
@@ -459,10 +459,10 @@
       "status": ""
     },
     {
-      "id": "rec58vR31XnSS5QqW",
-      "nombre": "Club de lectura 2º de Primaria",
-      "fecha": "2026-10-13",
-      "fechaFin": "2026-10-13",
+      "id": "reczL5HluneOGyceX",
+      "nombre": "Club de lectura 5º de Primaria",
+      "fecha": "2026-10-16",
+      "fechaFin": "2026-10-16",
       "hora": "",
       "horaFin": "",
       "lugar": "",
