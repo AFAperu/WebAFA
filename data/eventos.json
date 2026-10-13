@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-10-13T07:15:33.553Z",
-  "count": 48,
+  "lastUpdated": "2026-10-13T14:42:44.670Z",
+  "count": 49,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -463,6 +463,20 @@
       "nombre": "Club de lectura 5º de Primaria",
       "fecha": "2026-10-16",
       "fechaFin": "2026-10-16",
+      "hora": "",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "rectjQNRbxY0BTd0D",
+      "nombre": "Club de lectura Infantil",
+      "fecha": "2026-10-22",
+      "fechaFin": "2026-10-22",
       "hora": "",
       "horaFin": "",
       "lugar": "",
