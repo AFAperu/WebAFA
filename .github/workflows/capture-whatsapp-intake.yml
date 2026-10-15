@@ -1,0 +1,55 @@
+name: Capture WhatsApp intake
+
+# Reads direct messages sent to the AFA WhatsApp number from the green-api
+# queue and creates draft rows in the Airtable events table for human review.
+#
+# Requires green-api "pull" mode: the instance's webhook URL must be EMPTY and
+# incoming-message notifications must be ON. Message SENDING is unaffected.
+#
+# Messages wait in the green-api queue for 24 hours, so a missed or skipped run
+# loses nothing — the next run picks them up.
+
+on:
+  schedule:
+    # Once an hour, 05:00–21:00 UTC (roughly 07:00–23:00 Madrid).
+    # GitHub cron is best-effort and can run late under load; that is fine here.
+    # The script also ignores messages less than 15 minutes old, so a text and
+    # the photo or voice note that follows it are picked up together.
+    - cron: '0 5-21 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Read the queue and report, without writing, replying or deleting'
+        required: false
+        default: false
+        type: boolean
+
+# Two runs draining the same queue at once would race over the same messages.
+concurrency:
+  group: capture-whatsapp-intake
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Capture WhatsApp messages into Airtable
+        env:
+          AIRTABLE_INTAKE_TOKEN: ${{ secrets.AIRTABLE_INTAKE_TOKEN }}
+          AIRTABLE_EVENTOS_BASE_ID: ${{ secrets.AIRTABLE_EVENTOS_BASE_ID }}
+          GREENAPI_INSTANCE_ID: ${{ secrets.GREENAPI_INSTANCE_ID }}
+          GREENAPI_TOKEN: ${{ secrets.GREENAPI_TOKEN }}
+          WHATSAPP_ALLOWLIST: ${{ secrets.WHATSAPP_ALLOWLIST }}
+          # Optional: without it, voice notes are still attached to the row but
+          # not transcribed.
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # Optional override, for when Google retires the default model name.
+          GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: node scripts/capture-whatsapp-intake.js
