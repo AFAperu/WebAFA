@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-14T12:34:38.716Z",
+  "lastUpdated": "2026-10-15T12:20:53.206Z",
   "count": 49,
   "eventos": [
     {
@@ -505,12 +505,13 @@
       "id": "recV1MOfSbmIOZjux",
       "nombre": "Fiesta de Otoño del barrio de Comillas ",
       "fecha": "2026-10-24",
-      "fechaFin": "",
+      "fechaFin": "2026-10-24",
       "hora": "11:00",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "Email socios y no socios"
       ],
       "descripcion": "Organiza: asociación de vecinos de Comillas en colaboración con la AFA CEIP Perú.",
       "status": ""
