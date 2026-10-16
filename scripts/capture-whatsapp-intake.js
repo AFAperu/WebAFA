@@ -35,10 +35,17 @@
  *   WHATSAPP_ALLOWLIST        — Comma-separated phone numbers allowed to submit,
  *                               international format without "+", e.g.
  *                               "34600111222,34600333444"
- *   GEMINI_API_KEY            — OPTIONAL. If set, voice notes are transcribed so
- *                               the Airtable AI automation can read them. If not
- *                               set, the audio is still attached to the row and
- *                               flagged for someone to listen to.
+ *   CLOUDFLARE_ACCOUNT_ID     — OPTIONAL, preferred transcriber for voice notes
+ *   CLOUDFLARE_API_TOKEN        (Workers AI, needs Read AND Edit). Cloudflare
+ *                               states it does not use Customer Content to train
+ *                               models or improve services, which is why this is
+ *                               tried first.
+ *   GEMINI_API_KEY            — OPTIONAL fallback transcriber. Note that on
+ *                               Google's FREE tier, prompts and responses ARE
+ *                               used to improve Google products.
+ *
+ *   With neither set, voice notes still reach Airtable: the audio is attached to
+ *   the row and the text flags it for someone to listen to.
  *   DRY_RUN                   — "true" to read the queue and print what WOULD
  *                               happen, without writing to Airtable, replying,
  *                               or deleting anything from the queue
@@ -49,8 +56,13 @@ const BASE_ID = process.env.AIRTABLE_EVENTOS_BASE_ID;
 const GREEN_INSTANCE = process.env.GREENAPI_INSTANCE_ID;
 const GREEN_TOKEN = process.env.GREENAPI_TOKEN;
 const ALLOWLIST_RAW = process.env.WHATSAPP_ALLOWLIST || '';
+const CF_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || '';
+const CF_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || '';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const DRY_RUN = process.env.DRY_RUN === 'true';
+
+const CF_CONFIGURED = Boolean(CF_ACCOUNT_ID && CF_API_TOKEN);
+const TRANSCRIPTION_AVAILABLE = CF_CONFIGURED || Boolean(GEMINI_API_KEY);
 
 const TABLE_NAME = 'Eventos colegio Perú';
 const AIRTABLE_API = 'https://api.airtable.com/v0';
@@ -86,6 +98,8 @@ const MAX_AUDIO_BYTES = 15 * 1024 * 1024;
  *   curl "https://generativelanguage.googleapis.com/v1beta/models?key=YOUR_KEY"
  */
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+/** Workers AI model, overridable the same way. Full-size Whisper, good Spanish. */
+const CF_MODEL = process.env.CLOUDFLARE_WHISPER_MODEL || '@cf/openai/whisper-large-v3-turbo';
 
 const REPLY_TEXT =
   '✅ Recibido, ¡gracias! Lo revisamos y lo dejamos preparado para publicar. ' +
@@ -288,14 +302,8 @@ function parseMessage(body) {
   return { type, text: '', attachment: null, audio: null };
 }
 
-/**
- * Turn a WhatsApp voice note into text with the Gemini API, so the Airtable AI
- * automation has something to read. Returns null if transcription is not
- * possible — the caller then falls back to flagging the audio for a human.
- */
-async function transcribeAudio(audio) {
-  if (!GEMINI_API_KEY) return null;
-
+/** Fetch the voice note itself. Returns null if it cannot be used. */
+async function downloadAudio(audio) {
   const fileRes = await fetchWithRetry(audio.url, {}, 'voice note download');
   if (!fileRes.ok) {
     console.warn(`  ⚠️  Could not download the voice note: ${fileRes.status}`);
@@ -308,6 +316,65 @@ async function transcribeAudio(audio) {
     return null;
   }
 
+  return buffer;
+}
+
+/**
+ * Transcribe with Cloudflare Workers AI (full-size Whisper).
+ *
+ * Preferred over Gemini because Cloudflare's documented position is that it does
+ * not use Customer Content — which explicitly includes audio — to train models
+ * or improve services. Google's free tier does the opposite.
+ *
+ * Returns null on any failure so the caller can fall back.
+ */
+async function transcribeWithCloudflare(buffer) {
+  const url = `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/ai/run/${CF_MODEL}`;
+
+  const res = await fetchWithRetry(
+    url,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${CF_API_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        audio: buffer.toString('base64'),
+        task: 'transcribe',
+        language: 'es',
+        // Repetition loops are the classic Whisper failure on near-silent audio.
+        vad_filter: true,
+        condition_on_previous_text: false,
+      }),
+    },
+    'Cloudflare transcription'
+  );
+
+  if (!res.ok) {
+    const body = await res.text();
+    const hint = res.status === 403 ? ' (token needs Workers AI Read AND Edit)' : '';
+    console.warn(`  ⚠️  Cloudflare transcription failed ${res.status}${hint}: ${body.slice(0, 300)}`);
+    return null;
+  }
+
+  const data = await res.json();
+  if (!data?.success) {
+    const problems = (data?.errors || []).map(e => e.message).join('; ');
+    console.warn(`  ⚠️  Cloudflare transcription rejected: ${problems || 'unknown reason'}`);
+    return null;
+  }
+
+  const text = (data?.result?.text || '').trim();
+  return text || null;
+}
+
+/**
+ * Transcribe with the Gemini API. Kept as a fallback so there is no lock-in,
+ * but note that Google's free tier uses the audio to improve its products.
+ * Returns null on any failure.
+ */
+async function transcribeWithGemini(buffer, audio) {
   const url =
     `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent` +
     `?key=${encodeURIComponent(GEMINI_API_KEY)}`;
@@ -355,6 +422,36 @@ async function transcribeAudio(audio) {
 }
 
 /**
+ * Try each configured transcriber in privacy order: Cloudflare first (no
+ * training on your audio), Gemini second (free tier trains on it). Whichever
+ * answers first wins; if one is down the next gets a turn.
+ */
+async function transcribe(audio) {
+  if (!TRANSCRIPTION_AVAILABLE) return null;
+
+  const buffer = await downloadAudio(audio);
+  if (!buffer) return null;
+
+  const providers = [];
+  if (CF_CONFIGURED) providers.push(['Cloudflare', () => transcribeWithCloudflare(buffer)]);
+  if (GEMINI_API_KEY) providers.push(['Gemini', () => transcribeWithGemini(buffer, audio)]);
+
+  for (const [name, attempt] of providers) {
+    try {
+      const text = await attempt();
+      if (text) {
+        console.log(`  Transcribed by ${name}: ${text.length} characters.`);
+        return text;
+      }
+    } catch (err) {
+      console.warn(`  ⚠️  ${name} transcription error: ${err.message}`);
+    }
+  }
+
+  return null;
+}
+
+/**
  * Replace a voice note with its transcription, keeping the audio file attached
  * either way so a human can always check what was actually said.
  */
@@ -362,22 +459,16 @@ async function transcribeIfVoiceNote(message) {
   if (!message.audio) return;
 
   console.log(`  Voice note from ${maskPhone(message.sender)} — transcribing...`);
-  let transcript = null;
-  try {
-    transcript = await transcribeAudio(message.audio);
-  } catch (err) {
-    console.warn(`  ⚠️  Transcription error: ${err.message}`);
-  }
+  const transcript = await transcribe(message.audio);
 
   if (transcript) {
     message.text = [message.text, `🎙️ Nota de voz transcrita:\n${transcript}`]
       .filter(Boolean)
       .join('\n\n');
-    console.log(`  Transcribed ${transcript.length} characters.`);
   } else {
     message.text = [
       message.text,
-      GEMINI_API_KEY
+      TRANSCRIPTION_AVAILABLE
         ? '🎙️ Nota de voz recibida, no se ha podido transcribir. Escucha el audio adjunto.'
         : '🎙️ Nota de voz recibida. Escucha el audio adjunto (transcripción no configurada).',
     ]
@@ -637,6 +728,14 @@ async function main() {
     `Reading green-api queue${DRY_RUN ? ' (DRY RUN — inspect only, nothing is changed)' : ''}...`
   );
   console.log(`Allowlist: ${ALLOWLIST.map(maskPhone).join(', ')}`);
+
+  const transcribers = [
+    CF_CONFIGURED ? 'Cloudflare' : null,
+    GEMINI_API_KEY ? 'Gemini' : null,
+  ].filter(Boolean);
+  console.log(
+    `Voice notes: ${transcribers.length ? transcribers.join(', then ') : 'no transcriber configured — audio will be attached for a human'}`
+  );
 
   const stats = await processQueue();
 
