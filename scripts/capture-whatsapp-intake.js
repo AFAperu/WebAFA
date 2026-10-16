@@ -121,12 +121,59 @@ if (ALLOWLIST.length === 0) {
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+/** Raised when a call could not be made at all, as opposed to being refused. */
+class NetworkError extends Error {}
+
+/** How many times to retry a call that failed at the connection level. */
+const MAX_FETCH_ATTEMPTS = 4;
+
+/**
+ * Node reports every connection-level problem as the unhelpfully terse "fetch
+ * failed", hiding the real reason in err.cause. Dig it out for the log.
+ */
+function networkDetail(err) {
+  return err?.cause?.code || err?.cause?.message || err?.message || 'unknown';
+}
+
+/**
+ * fetch, but tolerant of the transient blips you get on a shared CI runner.
+ * One dropped connection used to abort the whole run and leave the rest of the
+ * queue unprocessed; now it backs off and tries again.
+ *
+ * Only connection failures are retried. An HTTP error response is returned to
+ * the caller untouched, because "403 forbidden" will not fix itself.
+ */
+async function fetchWithRetry(url, options = {}, label = 'request') {
+  let lastError;
+
+  for (let attempt = 1; attempt <= MAX_FETCH_ATTEMPTS; attempt++) {
+    try {
+      return await fetch(url, options);
+    } catch (err) {
+      lastError = err;
+      console.warn(
+        `  ⚠️  ${label}: connection failed (${networkDetail(err)}), ` +
+          `attempt ${attempt}/${MAX_FETCH_ATTEMPTS}`
+      );
+      if (attempt < MAX_FETCH_ATTEMPTS) await sleep(attempt * 1500);
+    }
+  }
+
+  throw new NetworkError(
+    `${label}: could not connect after ${MAX_FETCH_ATTEMPTS} attempts (${networkDetail(lastError)})`
+  );
+}
+
 /**
  * Pull the next notification off the green-api queue.
  * Returns null when the queue is empty (the call simply times out).
  */
 async function receiveNotification() {
-  const res = await fetch(`${GREEN_API}/receiveNotification/${GREEN_TOKEN}?receiveTimeout=5`);
+  const res = await fetchWithRetry(
+    `${GREEN_API}/receiveNotification/${GREEN_TOKEN}?receiveTimeout=5`,
+    {},
+    'receiveNotification'
+  );
 
   if (!res.ok) {
     const body = await res.text();
@@ -151,9 +198,11 @@ async function receiveNotification() {
 /** Confirm a notification so green-api drops it from the queue. */
 async function deleteNotification(receiptId) {
   for (let attempt = 1; attempt <= 3; attempt++) {
-    const res = await fetch(`${GREEN_API}/deleteNotification/${GREEN_TOKEN}/${receiptId}`, {
-      method: 'DELETE',
-    });
+    const res = await fetchWithRetry(
+      `${GREEN_API}/deleteNotification/${GREEN_TOKEN}/${receiptId}`,
+      { method: 'DELETE' },
+      `deleteNotification ${receiptId}`
+    );
     if (res.ok) return;
     if (attempt === 3) {
       const body = await res.text();
@@ -163,19 +212,30 @@ async function deleteNotification(receiptId) {
   }
 }
 
-/** Send the acknowledgement back to whoever submitted. */
+/**
+ * Send the acknowledgement back to whoever submitted.
+ * Never fatal: the submission is already safely in Airtable by this point, so a
+ * missing "Recibido" is a nuisance, not a reason to fail the run.
+ */
 async function sendReply(chatId, message) {
-  const res = await fetch(`${GREEN_API}/sendMessage/${GREEN_TOKEN}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chatId, message }),
-  });
-  if (!res.ok) {
-    // A failed acknowledgement must not lose the submission, so log and carry on.
-    console.warn(`  ⚠️  Could not send reply to ${maskPhone(chatId)}: ${res.status}`);
-    return;
+  try {
+    const res = await fetchWithRetry(
+      `${GREEN_API}/sendMessage/${GREEN_TOKEN}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chatId, message }),
+      },
+      'sendMessage'
+    );
+    if (!res.ok) {
+      console.warn(`  ⚠️  Could not send reply to ${maskPhone(chatId)}: ${res.status}`);
+      return;
+    }
+    console.log(`  Reply sent to ${maskPhone(chatId)}`);
+  } catch (err) {
+    console.warn(`  ⚠️  Could not send reply to ${maskPhone(chatId)}: ${err.message}`);
   }
-  console.log(`  Reply sent to ${maskPhone(chatId)}`);
 }
 
 /** Show only the last 3 digits in logs — GitHub Actions logs are readable by collaborators. */
@@ -236,7 +296,7 @@ function parseMessage(body) {
 async function transcribeAudio(audio) {
   if (!GEMINI_API_KEY) return null;
 
-  const fileRes = await fetch(audio.url);
+  const fileRes = await fetchWithRetry(audio.url, {}, 'voice note download');
   if (!fileRes.ok) {
     console.warn(`  ⚠️  Could not download the voice note: ${fileRes.status}`);
     return null;
@@ -252,7 +312,7 @@ async function transcribeAudio(audio) {
     `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent` +
     `?key=${encodeURIComponent(GEMINI_API_KEY)}`;
 
-  const res = await fetch(url, {
+  const res = await fetchWithRetry(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -346,8 +406,29 @@ async function transcribeIfVoiceNote(message) {
 async function processQueue() {
   /** sender digits -> { recordId, chatId, texts, attachments, lastTimestampMs } */
   const openRows = new Map();
-  const stats = { seen: 0, discarded: 0, created: 0, appended: 0, leftQueued: 0 };
+  const stats = { seen: 0, discarded: 0, created: 0, appended: 0, leftQueued: 0, abortedBy: null };
 
+  try {
+    await drainLoop(openRows, stats);
+  } catch (err) {
+    // A connection that stays down after several retries stops this run, but
+    // everything handled so far is already written AND acknowledged, and the
+    // rest is still queued for 24 hours. So this is a pause, not a loss.
+    if (!(err instanceof NetworkError)) throw err;
+    stats.abortedBy = err.message;
+  }
+
+  if (stats.seen >= MAX_NOTIFICATIONS_PER_RUN) {
+    console.warn(
+      `⚠️  Hit the ${MAX_NOTIFICATIONS_PER_RUN}-notification cap. The rest stay queued; ` +
+        'run again to continue draining.'
+    );
+  }
+
+  return stats;
+}
+
+async function drainLoop(openRows, stats) {
   while (stats.seen < MAX_NOTIFICATIONS_PER_RUN) {
     const notification = await receiveNotification();
     if (!notification) break;
@@ -430,8 +511,13 @@ async function processQueue() {
     const key = toDigits(sender);
     const open = openRows.get(key);
     const preview = (message.text || '(sin texto)').slice(0, 60).replace(/\s+/g, ' ');
+    // A second submission from the same sender much later is a NEW row, so it
+    // needs its own acknowledgement. Deciding that from `open` alone was wrong:
+    // `open` is still set from the earlier submission even when the time gap
+    // means we are starting a fresh row, which silently swallowed the reply.
+    const isFollowUp = Boolean(open) && message.timestampMs - open.lastTimestampMs <= GROUP_WINDOW_MS;
 
-    if (open && message.timestampMs - open.lastTimestampMs <= GROUP_WINDOW_MS) {
+    if (isFollowUp) {
       // Same sender, moments later: treat it as part of the same submission.
       if (message.text) open.texts.push(message.text);
       if (message.attachment) open.attachments.push(message.attachment);
@@ -464,18 +550,11 @@ async function processQueue() {
     // Only now is it safe to acknowledge: the content is in Airtable.
     await deleteNotification(receiptId);
 
-    if (!open) await sendReply(chatId, REPLY_TEXT);
+    // One acknowledgement per submission: a follow-up photo should not trigger
+    // a second "Recibido", but a genuinely new submission must get its own.
+    if (!isFollowUp) await sendReply(chatId, REPLY_TEXT);
     await sleep(API_PAUSE_MS);
   }
-
-  if (stats.seen >= MAX_NOTIFICATIONS_PER_RUN) {
-    console.warn(
-      `⚠️  Hit the ${MAX_NOTIFICATIONS_PER_RUN}-notification cap. The rest stay queued; ` +
-        'run again to continue draining.'
-    );
-  }
-
-  return stats;
 }
 
 /**
@@ -504,14 +583,18 @@ function intakeFields(row) {
 
 async function createIntakeRecord(row) {
   const url = `${AIRTABLE_API}/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${AIRTABLE_TOKEN}`,
-      'Content-Type': 'application/json',
+  const res = await fetchWithRetry(
+    url,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${AIRTABLE_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ records: [{ fields: intakeFields(row) }], typecast: true }),
     },
-    body: JSON.stringify({ records: [{ fields: intakeFields(row) }], typecast: true }),
-  });
+    'Airtable create'
+  );
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -528,14 +611,18 @@ async function createIntakeRecord(row) {
  */
 async function appendToIntakeRecord(row) {
   const url = `${AIRTABLE_API}/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}/${row.recordId}`;
-  const res = await fetch(url, {
-    method: 'PATCH',
-    headers: {
-      Authorization: `Bearer ${AIRTABLE_TOKEN}`,
-      'Content-Type': 'application/json',
+  const res = await fetchWithRetry(
+    url,
+    {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${AIRTABLE_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ fields: intakeFields(row), typecast: true }),
     },
-    body: JSON.stringify({ fields: intakeFields(row), typecast: true }),
-  });
+    'Airtable update'
+  );
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -561,6 +648,23 @@ async function main() {
 
   if (stats.created === 0 && stats.appended === 0) {
     console.log('No new submissions.');
+  }
+
+  if (stats.abortedBy) {
+    const progress = stats.created + stats.appended + stats.discarded;
+
+    // A blip partway through a run cost nothing: anything remaining is still in
+    // the queue and the next run picks it up. Failing the build for that would
+    // train everyone to ignore red runs. But never reaching green-api at all is
+    // worth shouting about.
+    if (progress > 0) {
+      console.warn(`⚠️  Stopped early: ${stats.abortedBy}`);
+      console.warn('   Nothing was lost. The remaining messages stay queued for the next run.');
+      console.log('Done.');
+      return;
+    }
+
+    throw new Error(`Could not reach green-api at all. ${stats.abortedBy}`);
   }
 
   console.log('Done.');
