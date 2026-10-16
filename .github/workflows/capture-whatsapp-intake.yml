@@ -46,8 +46,14 @@ jobs:
           GREENAPI_INSTANCE_ID: ${{ secrets.GREENAPI_INSTANCE_ID }}
           GREENAPI_TOKEN: ${{ secrets.GREENAPI_TOKEN }}
           WHATSAPP_ALLOWLIST: ${{ secrets.WHATSAPP_ALLOWLIST }}
-          # Optional: without it, voice notes are still attached to the row but
-          # not transcribed.
+          # Voice-note transcription. Cloudflare is tried first: it does not use
+          # your audio to train models. Gemini is an optional fallback, but its
+          # free tier DOES use the audio to improve Google products.
+          # With neither configured, voice notes still arrive — the audio is
+          # attached to the row and flagged for someone to listen to.
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_WHISPER_MODEL: ${{ secrets.CLOUDFLARE_WHISPER_MODEL }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           # Optional override, for when Google retires the default model name.
           GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
