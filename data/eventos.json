@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-15T12:20:53.206Z",
+  "lastUpdated": "2026-10-16T12:01:23.955Z",
   "count": 49,
   "eventos": [
     {
@@ -546,14 +546,15 @@
     },
     {
       "id": "rec7GKqvUUfDkasbO",
-      "nombre": "Noche de sacos",
+      "nombre": "🌙Noche de sacos: viernes 30 de octubre🌙",
       "fecha": "2026-10-30",
-      "fechaFin": "",
+      "fechaFin": "2026-10-31",
       "hora": "",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "Email socios y no socios"
       ],
       "descripcion": "",
       "status": ""
