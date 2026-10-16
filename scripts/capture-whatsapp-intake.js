@@ -74,9 +74,9 @@ const GROUP_WINDOW_MS = 10 * 60 * 1000;
  */
 const SETTLE_MS = 15 * 60 * 1000;
 /** Hard stop, so a flooded queue can never loop forever. */
-const MAX_NOTIFICATIONS_PER_RUN = 60;
+const MAX_NOTIFICATIONS_PER_RUN = 200;
 /** Pause between green-api calls, to stay under its per-second rate limit. */
-const API_PAUSE_MS = 600;
+const API_PAUSE_MS = 400;
 /** Refuse to transcribe anything bigger than this (voice notes are tiny). */
 const MAX_AUDIO_BYTES = 15 * 1024 * 1024;
 /**
@@ -295,77 +295,104 @@ async function transcribeAudio(audio) {
 }
 
 /**
- * Replace each voice note with its transcription, keeping the audio file
- * attached either way so a human can always check what was actually said.
+ * Replace a voice note with its transcription, keeping the audio file attached
+ * either way so a human can always check what was actually said.
  */
-async function transcribeVoiceNotes(messages) {
-  for (const message of messages) {
-    if (!message.audio) continue;
+async function transcribeIfVoiceNote(message) {
+  if (!message.audio) return;
 
-    console.log(`  Voice note from ${maskPhone(message.sender)} — transcribing...`);
-    let transcript = null;
-    try {
-      transcript = await transcribeAudio(message.audio);
-    } catch (err) {
-      console.warn(`  ⚠️  Transcription error: ${err.message}`);
-    }
+  console.log(`  Voice note from ${maskPhone(message.sender)} — transcribing...`);
+  let transcript = null;
+  try {
+    transcript = await transcribeAudio(message.audio);
+  } catch (err) {
+    console.warn(`  ⚠️  Transcription error: ${err.message}`);
+  }
 
-    if (transcript) {
-      message.text = [message.text, `🎙️ Nota de voz transcrita:\n${transcript}`]
-        .filter(Boolean)
-        .join('\n\n');
-      console.log(`  Transcribed ${transcript.length} characters.`);
-    } else {
-      message.text = [
-        message.text,
-        GEMINI_API_KEY
-          ? '🎙️ Nota de voz recibida, no se ha podido transcribir. Escucha el audio adjunto.'
-          : '🎙️ Nota de voz recibida. Escucha el audio adjunto (transcripción no configurada).',
-      ]
-        .filter(Boolean)
-        .join('\n\n');
-    }
+  if (transcript) {
+    message.text = [message.text, `🎙️ Nota de voz transcrita:\n${transcript}`]
+      .filter(Boolean)
+      .join('\n\n');
+    console.log(`  Transcribed ${transcript.length} characters.`);
+  } else {
+    message.text = [
+      message.text,
+      GEMINI_API_KEY
+        ? '🎙️ Nota de voz recibida, no se ha podido transcribir. Escucha el audio adjunto.'
+        : '🎙️ Nota de voz recibida. Escucha el audio adjunto (transcripción no configurada).',
+    ]
+      .filter(Boolean)
+      .join('\n\n');
   }
 }
 
 /**
- * Drain the queue, keeping only direct messages from allowlisted senders.
- * Everything else (group messages, strangers, delivery receipts, our own
- * outgoing messages) is acknowledged and dropped — it is noise, not an error.
+ * Walk the queue once, handling each notification before asking for the next.
  *
- * Note: the queue is FIFO and a notification keeps coming back until it is
- * deleted, so a message cannot be skipped and revisited later. Anything we
- * choose not to keep has to be deleted now.
+ * WHY ONE AT A TIME: green-api re-serves the SAME notification on every
+ * receiveNotification call until it is deleted. Collecting a batch and deleting
+ * afterwards does not work — the loop just re-reads the head of the queue until
+ * it hits the cap, which is exactly the bug this replaced. So every
+ * notification must be acknowledged (or deliberately left) before the next read.
+ *
+ * Noise (group messages, strangers, delivery receipts, our own outgoing
+ * messages) is deleted straight away; it is not an error, just not for us.
+ *
+ * Keepers are written to Airtable FIRST and deleted only once the write
+ * succeeded, so a failure leaves the message queued for the next run rather
+ * than losing it. Follow-up messages from the same sender update the row that
+ * was just created instead of making a second one.
  */
-async function drainQueue() {
-  const kept = [];
-  const discardedReceipts = [];
-  let seen = 0;
+async function processQueue() {
+  /** sender digits -> { recordId, chatId, texts, attachments, lastTimestampMs } */
+  const openRows = new Map();
+  const stats = { seen: 0, discarded: 0, created: 0, appended: 0, leftQueued: 0 };
 
-  while (seen < MAX_NOTIFICATIONS_PER_RUN) {
+  while (stats.seen < MAX_NOTIFICATIONS_PER_RUN) {
     const notification = await receiveNotification();
     if (!notification) break;
-    seen++;
+    stats.seen++;
 
     const { receiptId, body } = notification;
     const typeWebhook = body?.typeWebhook;
     const timestampMs = (body?.timestamp || Math.floor(Date.now() / 1000)) * 1000;
+    const ageMin = Math.round((Date.now() - timestampMs) / 60000);
 
     // Too fresh: a follow-up photo or voice note may still be on its way. Leave
-    // this one queued (do NOT delete it) and stop — the queue is FIFO, so
-    // everything after this is even newer.
+    // it queued (do NOT delete) and stop — the queue is FIFO, so everything
+    // after this is newer still.
     if (Date.now() - timestampMs < SETTLE_MS) {
       console.log(
-        `  Leaving ${receiptId} queued: only ${Math.round(
-          (Date.now() - timestampMs) / 60000
-        )} min old, waiting for any follow-up messages.`
+        `  Leaving ${receiptId} queued: only ${ageMin} min old, waiting for any follow-ups.`
+      );
+      stats.leftQueued++;
+      break;
+    }
+
+    // Dry run cannot acknowledge anything, and an unacknowledged notification
+    // is served again forever, so there is no way to look past the head of the
+    // queue. Report what is there and stop rather than spinning.
+    if (DRY_RUN) {
+      const chatId = body?.senderData?.chatId || '(none)';
+      console.log(
+        `  DRY RUN — head of queue is receipt ${receiptId}: ${typeWebhook}, ` +
+          `chat ${maskPhone(chatId)}${chatId.endsWith('@g.us') ? ' (group)' : ''}, ${ageMin} min old.`
+      );
+      console.log(
+        '  Stopping here: a dry run cannot acknowledge notifications, so it cannot see past this one.'
       );
       break;
     }
 
-    if (typeWebhook !== 'incomingMessageReceived') {
-      discardedReceipts.push({ receiptId, why: `webhook type ${typeWebhook}` });
+    const discard = async why => {
+      console.log(`  Discarding ${receiptId}: ${why}`);
+      await deleteNotification(receiptId);
+      stats.discarded++;
       await sleep(API_PAUSE_MS);
+    };
+
+    if (typeWebhook !== 'incomingMessageReceived') {
+      await discard(`webhook type ${typeWebhook}`);
       continue;
     }
 
@@ -374,81 +401,81 @@ async function drainQueue() {
 
     // Group chats end in @g.us; direct messages end in @c.us.
     if (!chatId.endsWith('@c.us')) {
-      discardedReceipts.push({ receiptId, why: 'not a direct message' });
-      await sleep(API_PAUSE_MS);
+      await discard('not a direct message');
       continue;
     }
 
     if (!ALLOWLIST.includes(toDigits(sender))) {
-      discardedReceipts.push({ receiptId, why: `sender ${maskPhone(sender)} not allowlisted` });
-      await sleep(API_PAUSE_MS);
+      await discard(`sender ${maskPhone(sender)} not allowlisted`);
       continue;
     }
 
     const parsed = parseMessage(body);
     if (!parsed.text && !parsed.attachment) {
-      discardedReceipts.push({ receiptId, why: `no usable content (${parsed.type})` });
-      await sleep(API_PAUSE_MS);
+      await discard(`no usable content (${parsed.type})`);
       continue;
     }
 
-    kept.push({
+    const message = {
       receiptId,
       chatId,
       sender,
       senderName: body?.senderData?.senderName || body?.senderData?.senderContactName || '',
       timestampMs,
       ...parsed,
-    });
+    };
 
+    await transcribeIfVoiceNote(message);
+
+    const key = toDigits(sender);
+    const open = openRows.get(key);
+    const preview = (message.text || '(sin texto)').slice(0, 60).replace(/\s+/g, ' ');
+
+    if (open && message.timestampMs - open.lastTimestampMs <= GROUP_WINDOW_MS) {
+      // Same sender, moments later: treat it as part of the same submission.
+      if (message.text) open.texts.push(message.text);
+      if (message.attachment) open.attachments.push(message.attachment);
+      open.lastTimestampMs = message.timestampMs;
+
+      await appendToIntakeRecord(open);
+      console.log(`  Added to ${open.recordId}: "${preview}"`);
+      stats.appended++;
+    } else {
+      console.log(
+        `From ${maskPhone(sender)}: "${preview}" (${message.attachment ? 1 : 0} attachment(s))`
+      );
+
+      const row = {
+        chatId,
+        senderName: message.senderName,
+        sender,
+        firstTimestampMs: message.timestampMs,
+        lastTimestampMs: message.timestampMs,
+        texts: message.text ? [message.text] : [],
+        attachments: message.attachment ? [message.attachment] : [],
+      };
+      const record = await createIntakeRecord(row);
+      row.recordId = record.id;
+      openRows.set(key, row);
+      console.log(`  Created record ${record.id}`);
+      stats.created++;
+    }
+
+    // Only now is it safe to acknowledge: the content is in Airtable.
+    await deleteNotification(receiptId);
+
+    if (!open) await sendReply(chatId, REPLY_TEXT);
     await sleep(API_PAUSE_MS);
   }
 
-  if (seen >= MAX_NOTIFICATIONS_PER_RUN) {
+  if (stats.seen >= MAX_NOTIFICATIONS_PER_RUN) {
     console.warn(
-      `⚠️  Hit the ${MAX_NOTIFICATIONS_PER_RUN}-notification cap. The rest stay queued for the next run.`
+      `⚠️  Hit the ${MAX_NOTIFICATIONS_PER_RUN}-notification cap. The rest stay queued; ` +
+        'run again to continue draining.'
     );
   }
 
-  return { kept, discardedReceipts, seen };
-}
-
-/**
- * Merge consecutive messages from the same sender that arrived close together,
- * so "here's the event" followed by a photo becomes one row rather than two.
- * A message sent much later is treated as a new submission.
- */
-function groupSubmissions(messages) {
-  const groups = [];
-
-  for (const message of messages) {
-    const open = groups.find(
-      group =>
-        group.sender === message.sender &&
-        message.timestampMs - group.lastTimestampMs <= GROUP_WINDOW_MS
-    );
-
-    if (open) {
-      if (message.text) open.texts.push(message.text);
-      if (message.attachment) open.attachments.push(message.attachment);
-      open.receiptIds.push(message.receiptId);
-      open.lastTimestampMs = message.timestampMs;
-      continue;
-    }
-
-    groups.push({
-      sender: message.sender,
-      chatId: message.chatId,
-      senderName: message.senderName,
-      firstTimestampMs: message.timestampMs,
-      lastTimestampMs: message.timestampMs,
-      texts: message.text ? [message.text] : [],
-      attachments: message.attachment ? [message.attachment] : [],
-      receiptIds: [message.receiptId],
-    });
-  }
-
-  return groups;
+  return stats;
 }
 
 /**
@@ -456,22 +483,26 @@ function groupSubmissions(messages) {
  * Airtable fills Name / Fecha evento / Hora / Lugar / Descripción / Texto para
  * redes from "Mensaje WhatsApp", and a human sets "Dónde publicar" to approve.
  */
-async function createIntakeRecord(group) {
+function intakeFields(row) {
   const fields = {
-    [FIELD_RAW_MESSAGE]: group.texts.join('\n\n'),
-    [FIELD_SENDER]: group.senderName
-      ? `${group.senderName} (${toDigits(group.sender)})`
-      : toDigits(group.sender),
-    [FIELD_RECEIVED_AT]: new Date(group.firstTimestampMs).toISOString(),
+    [FIELD_RAW_MESSAGE]: row.texts.join('\n\n'),
+    [FIELD_SENDER]: row.senderName
+      ? `${row.senderName} (${toDigits(row.sender)})`
+      : toDigits(row.sender),
+    [FIELD_RECEIVED_AT]: new Date(row.firstTimestampMs).toISOString(),
   };
 
-  if (group.attachments.length > 0) {
-    fields[FIELD_ATTACHMENTS] = group.attachments.map(a => ({
+  if (row.attachments.length > 0) {
+    fields[FIELD_ATTACHMENTS] = row.attachments.map(a => ({
       url: a.url,
       filename: a.filename,
     }));
   }
 
+  return fields;
+}
+
+async function createIntakeRecord(row) {
   const url = `${AIRTABLE_API}/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`;
   const res = await fetch(url, {
     method: 'POST',
@@ -479,7 +510,7 @@ async function createIntakeRecord(group) {
       Authorization: `Bearer ${AIRTABLE_TOKEN}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ records: [{ fields }], typecast: true }),
+    body: JSON.stringify({ records: [{ fields: intakeFields(row) }], typecast: true }),
   });
 
   if (!res.ok) {
@@ -491,56 +522,45 @@ async function createIntakeRecord(group) {
   return data.records[0];
 }
 
+/**
+ * Fold a follow-up message into the row already created for this sender.
+ * The full merged value is sent every time, so no read-back is needed.
+ */
+async function appendToIntakeRecord(row) {
+  const url = `${AIRTABLE_API}/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}/${row.recordId}`;
+  const res = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${AIRTABLE_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ fields: intakeFields(row), typecast: true }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(`Airtable update ${res.status}: ${err?.error?.message || res.statusText}`);
+  }
+
+  return res.json();
+}
+
 async function main() {
   console.log(
-    `Draining green-api queue${DRY_RUN ? ' (DRY RUN — nothing will be written or deleted)' : ''}...`
+    `Reading green-api queue${DRY_RUN ? ' (DRY RUN — inspect only, nothing is changed)' : ''}...`
   );
   console.log(`Allowlist: ${ALLOWLIST.map(maskPhone).join(', ')}`);
 
-  const { kept, discardedReceipts, seen } = await drainQueue();
-  console.log(`Read ${seen} notification(s): ${kept.length} to keep, ${discardedReceipts.length} to discard.`);
+  const stats = await processQueue();
 
-  for (const discarded of discardedReceipts) {
-    console.log(`  Discarding ${discarded.receiptId}: ${discarded.why}`);
-    if (!DRY_RUN) await deleteNotification(discarded.receiptId);
-  }
+  console.log(
+    `Read ${stats.seen} notification(s): ${stats.created} row(s) created, ` +
+      `${stats.appended} follow-up(s) merged, ${stats.discarded} discarded, ` +
+      `${stats.leftQueued} left queued.`
+  );
 
-  if (kept.length === 0) {
-    console.log('No new submissions. Done.');
-    return;
-  }
-
-  // Transcribe before grouping, so a voice note's text joins the same row as
-  // any typed message that came with it.
-  await transcribeVoiceNotes(kept);
-
-  const groups = groupSubmissions(kept);
-  console.log(`Creating ${groups.length} draft row(s) in "${TABLE_NAME}".`);
-
-  for (const group of groups) {
-    const preview = group.texts.join(' ').slice(0, 60).replace(/\s+/g, ' ');
-    console.log(
-      `From ${maskPhone(group.sender)}: "${preview}${preview.length === 60 ? '…' : ''}" ` +
-        `(${group.attachments.length} attachment(s))`
-    );
-
-    if (DRY_RUN) {
-      console.log('  DRY RUN — skipping Airtable write, reply and queue delete.');
-      continue;
-    }
-
-    // Order matters: write to Airtable FIRST, and only then delete from the
-    // queue. If the write fails the messages stay queued (24h) and the next
-    // run retries them, instead of being silently lost.
-    const record = await createIntakeRecord(group);
-    console.log(`  Created record ${record.id}`);
-
-    for (const receiptId of group.receiptIds) {
-      await deleteNotification(receiptId);
-    }
-
-    await sendReply(group.chatId, REPLY_TEXT);
-    await sleep(API_PAUSE_MS);
+  if (stats.created === 0 && stats.appended === 0) {
+    console.log('No new submissions.');
   }
 
   console.log('Done.');
