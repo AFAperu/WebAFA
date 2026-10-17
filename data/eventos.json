@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-10-16T12:01:23.955Z",
-  "count": 49,
+  "lastUpdated": "2026-10-17T07:15:34.616Z",
+  "count": 51,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -560,6 +560,20 @@
       "status": ""
     },
     {
+      "id": "recbSi0HNLvPmQl98",
+      "nombre": "Club de lectura 1º de Primaria",
+      "fecha": "2026-11-13",
+      "fechaFin": "2026-10-13",
+      "hora": "",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "rec9P5YxuSEGyyENG",
       "nombre": "Bicicletada",
       "fecha": "2026-11-21",
@@ -579,6 +593,20 @@
       "fecha": "2026-11-26",
       "fechaFin": "",
       "hora": "14:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recr2Do0Bkaj21WNL",
+      "nombre": "Club de lectura 1º de Primaria",
+      "fecha": "2026-12-11",
+      "fechaFin": "2026-10-13",
+      "hora": "",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
