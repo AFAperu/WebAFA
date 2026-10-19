@@ -13,6 +13,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { unescapeMarkdownUrls } from './lib/airtable-text.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -98,10 +99,10 @@ function transformRecord(record) {
     precioSocio: f['Precio socia/o'] ?? null,
     precioNoSocio: f['Precio NO socia/o'] ?? null,
     empresa: f['Empresa'] || '',
-    otrosDatos: f['Otros datos'] || '',
+    otrosDatos: unescapeMarkdownUrls(f['Otros datos'] || ''),
     ubicacion: f['Ubicación'] || '',
     foto: f['Foto'] || null,
-    enlace: f['Enlace'] || '',
+    enlace: unescapeMarkdownUrls(f['Enlace'] || ''),
     activo: f['Activo'] === 'Sí',
     publicado: typeof f['Publicado'] === 'boolean' ? f['Publicado'] : f['Publicado'] !== 'No',
   };

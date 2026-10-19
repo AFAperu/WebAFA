@@ -11,6 +11,8 @@
  *   GREENAPI_GROUP_ID         — WhatsApp group chat ID (120363XXX@g.us)
  */
 
+import { unescapeMarkdownUrls } from './lib/airtable-text.js';
+
 const TOKEN = process.env.AIRTABLE_TOKEN;
 const BASE_ID = process.env.AIRTABLE_EVENTOS_BASE_ID;
 const GREEN_INSTANCE = process.env.GREENAPI_INSTANCE_ID;
@@ -185,7 +187,9 @@ async function main() {
 
   for (const record of records) {
     const fields = record.fields;
-    const texto = (fields['Texto para redes'] || '').trim();
+    // WhatsApp never renders Markdown, so an escape left in a URL would be
+    // shown — and auto-linked — with the backslash in it.
+    const texto = unescapeMarkdownUrls((fields['Texto para redes'] || '').trim());
     const imagenes = fields['Imagen para redes'] || [];
 
     if (!texto && imagenes.length === 0) {

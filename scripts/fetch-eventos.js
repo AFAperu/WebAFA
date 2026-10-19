@@ -13,6 +13,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { unescapeMarkdownUrls } from './lib/airtable-text.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -92,7 +93,9 @@ function transformRecord(record) {
     horaFin: f['Hora fin (hh:mm)'] || '',
     lugar: f['Lugar del evento'] || '',
     dondePublicar: f['Dónde publicar'] || [],
-    descripcion: f['Descripción o info extra'] || '',
+    // Long text, so it is Markdown. Unescape at the ingest boundary and every
+    // consumer of eventos.json gets working links (calendar list, ICS export).
+    descripcion: unescapeMarkdownUrls(f['Descripción o info extra'] || ''),
     status: f['Status'] || '',
   };
 }

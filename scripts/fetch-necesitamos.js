@@ -22,6 +22,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { unescapeMarkdownUrls } from './lib/airtable-text.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -85,7 +86,7 @@ function transformRecord(record) {
   const f = record.fields;
   return {
     id: record.id,
-    descripcion: String(field(f, ['Descripción', 'Descripcion'])).trim(),
+    descripcion: unescapeMarkdownUrls(String(field(f, ['Descripción', 'Descripcion'])).trim()),
     contacto: String(field(f, ['Contacto'])).trim(),
     email: String(field(f, ['Email', 'Correo'])).trim(),
     publicado: isPublicado(field(f, ['Publicado', 'Publicar'])),

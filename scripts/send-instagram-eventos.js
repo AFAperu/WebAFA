@@ -12,6 +12,8 @@
  *   INSTAGRAM_ACCOUNT_ID      — Instagram Business Account ID
  */
 
+import { unescapeMarkdownUrls } from './lib/airtable-text.js';
+
 const TOKEN = process.env.AIRTABLE_TOKEN;
 const BASE_ID = process.env.AIRTABLE_EVENTOS_BASE_ID;
 const IG_TOKEN = process.env.INSTAGRAM_ACCESS_TOKEN;
@@ -189,8 +191,10 @@ async function main() {
 
   for (const record of records) {
     const fields = record.fields;
-    const textoInstagram = (fields['Texto Instagram'] || '').trim();
-    const textoRedes = (fields['Texto para redes'] || '').trim();
+    // Captions are plain text, so a Markdown escape would reach followers
+    // as a literal backslash inside the URL.
+    const textoInstagram = unescapeMarkdownUrls((fields['Texto Instagram'] || '').trim());
+    const textoRedes = unescapeMarkdownUrls((fields['Texto para redes'] || '').trim());
     const texto = textoInstagram || textoRedes;
     const imagenes = fields['Imagen para redes'] || [];
 

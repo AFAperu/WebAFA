@@ -22,6 +22,7 @@
 
 import nodemailer from 'nodemailer';
 import { marked } from 'marked';
+import { unescapeMarkdownUrls } from './lib/airtable-text.js';
 
 const TOKEN = process.env.AIRTABLE_TOKEN;
 const BASE_ID = process.env.AIRTABLE_EVENTOS_BASE_ID;
@@ -230,7 +231,9 @@ async function main() {
 
   for (const record of records) {
     const fields = record.fields;
-    const texto = (fields['Texto para redes'] || '').trim();
+    // Both the HTML and the plain-text body derive from this, so unescaping
+    // here fixes links in rendering and non-rendering clients alike.
+    const texto = unescapeMarkdownUrls((fields['Texto para redes'] || '').trim());
     const nombre = fields['Name'] || 'Evento AFA Perú';
     const dondePublicar = fields['Dónde publicar'] || [];
     const imagenes = fields['Imagen para redes'] || [];
