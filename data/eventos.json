@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-19T07:15:36.149Z",
+  "lastUpdated": "2026-10-20T07:15:37.799Z",
   "count": 51,
   "eventos": [
     {
@@ -518,14 +518,15 @@
     },
     {
       "id": "recj4vihklp557rPI",
-      "nombre": "Club de montaña",
+      "nombre": "Club de montaña: ¡Nos vamos a Cercedilla!",
       "fecha": "2026-10-25",
-      "fechaFin": "",
+      "fechaFin": "2026-10-25",
       "hora": "",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "Email socios y no socios"
       ],
       "descripcion": "",
       "status": ""
