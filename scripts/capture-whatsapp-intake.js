@@ -78,13 +78,18 @@ const GROUP_WINDOW_MS = 10 * 60 * 1000;
 /**
  * Messages younger than this are left in the queue for the next run.
  *
- * Grouping can only merge messages that arrive in the SAME run, so without this
- * delay a text at 10:59 and its photo at 11:01 would straddle two runs and
- * produce two rows. The queue is FIFO and the youngest message is always last,
- * so stopping early simply leaves the tail for next time. Keep this comfortably
- * larger than GROUP_WINDOW_MS.
+ * Grouping can only merge messages handled in the SAME run, so without a delay
+ * a text and the photo a minute later could straddle two runs and produce two
+ * rows. The queue is FIFO and the youngest message is always last, so stopping
+ * early simply leaves the tail for next time.
+ *
+ * Kept SHORT on purpose. GitHub's scheduler is unreliable enough that runs land
+ * every 3-4 hours rather than hourly, and this delay compounds with that gap: a
+ * message that misses one run waits for the next. What actually makes grouping
+ * work is that both messages sit in the queue until a run happens, not the
+ * length of this window.
  */
-const SETTLE_MS = 15 * 60 * 1000;
+const SETTLE_MS = 5 * 60 * 1000;
 /** Hard stop, so a flooded queue can never loop forever. */
 const MAX_NOTIFICATIONS_PER_RUN = 200;
 /** Pause between green-api calls, to stay under its per-second rate limit. */
@@ -527,13 +532,42 @@ async function drainLoop(openRows, stats) {
 
     const { receiptId, body } = notification;
     const typeWebhook = body?.typeWebhook;
-    const timestampMs = (body?.timestamp || Math.floor(Date.now() / 1000)) * 1000;
-    const ageMin = Math.round((Date.now() - timestampMs) / 60000);
+
+    /*
+     * Work out how old this notification is — carefully.
+     *
+     * This used to read `body.timestamp || Date.now()/1000`, which looks
+     * harmless and is not: when green-api omits the timestamp, "now" makes the
+     * notification look brand new on EVERY run, so the settle delay defers it
+     * forever and, because the queue is strictly oldest-first, it blocks
+     * everything behind it. The giveaway in the log was the same notification
+     * reported as "0 min old" in runs hours apart.
+     *
+     * So an unknown or impossible age means "process it now". Deferring is only
+     * ever correct when we positively know the message is recent.
+     */
+    const rawTimestamp = Number(body?.timestamp);
+    const hasTimestamp = Number.isFinite(rawTimestamp) && rawTimestamp > 0;
+    const timestampMs = hasTimestamp ? rawTimestamp * 1000 : Date.now();
+    const ageMs = hasTimestamp ? Date.now() - timestampMs : null;
+    const ageMin = ageMs === null ? null : Math.round(ageMs / 60000);
+
+    if (!hasTimestamp) {
+      console.warn(
+        `  ⚠️  ${receiptId} has no usable timestamp (raw: ${JSON.stringify(body?.timestamp)}). ` +
+          'Processing it now rather than deferring it forever.'
+      );
+    } else if (ageMs < 0) {
+      console.warn(
+        `  ⚠️  ${receiptId} is timestamped ${Math.abs(ageMin)} min in the future (clock skew). ` +
+          'Processing it now.'
+      );
+    }
 
     // Too fresh: a follow-up photo or voice note may still be on its way. Leave
     // it queued (do NOT delete) and stop — the queue is FIFO, so everything
     // after this is newer still.
-    if (Date.now() - timestampMs < SETTLE_MS) {
+    if (ageMs !== null && ageMs >= 0 && ageMs < SETTLE_MS) {
       console.log(
         `  Leaving ${receiptId} queued: only ${ageMin} min old, waiting for any follow-ups.`
       );
@@ -548,7 +582,8 @@ async function drainLoop(openRows, stats) {
       const chatId = body?.senderData?.chatId || '(none)';
       console.log(
         `  DRY RUN — head of queue is receipt ${receiptId}: ${typeWebhook}, ` +
-          `chat ${maskPhone(chatId)}${chatId.endsWith('@g.us') ? ' (group)' : ''}, ${ageMin} min old.`
+          `chat ${maskPhone(chatId)}${chatId.endsWith('@g.us') ? ' (group)' : ''}, ` +
+          `${ageMin === null ? 'age unknown' : `${ageMin} min old`}.`
       );
       console.log(
         '  Stopping here: a dry run cannot acknowledge notifications, so it cannot see past this one.'
