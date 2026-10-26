@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-10-26T10:17:30.975Z",
-  "count": 51,
+  "lastUpdated": "2026-10-26T10:26:11.326Z",
+  "count": 52,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -614,6 +614,20 @@
         "Web"
       ],
       "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recSaR5hPEv6oFaRO",
+      "nombre": "Circo Price",
+      "fecha": "2026-12-12",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "Circo Price",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "Tenemos reservadas 500 entradas para el Price el 12 de diciembre a las 17:00. Si compramos en grupo, el precio es más barato: Preferente A y B, filas 1 a 8 a 13€, filas 9 a 11 a 11€, con un 50% de descuento. No compres por tu cuenta si quieres aprovechar la oferta.",
       "status": ""
     },
     {
