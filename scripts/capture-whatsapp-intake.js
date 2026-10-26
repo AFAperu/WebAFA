@@ -257,6 +257,96 @@ async function sendReply(chatId, message) {
   }
 }
 
+/**
+ * Resolve each allowlisted phone number to its @lid identifier, once per run.
+ *
+ * WhatsApp is phasing out phone numbers as chat identifiers in favour of opaque
+ * lids, which are NOT derived from the number — so a phone-number allowlist
+ * cannot match a lid by itself. CheckWhatsapp takes a phone number and returns
+ * that contact's lid, which lets us keep the allowlist readable (real phone
+ * numbers a human can audit) while still recognising migrated senders.
+ *
+ * Deliberately lazy: nothing calls this until a lid actually shows up, so today
+ * it costs zero API calls. Deliberately not cached between runs either, because
+ * a chat can move from one lid to another at WhatsApp's discretion.
+ */
+let allowedLidsPromise = null;
+
+function allowedLids() {
+  if (allowedLidsPromise) return allowedLidsPromise;
+
+  allowedLidsPromise = (async () => {
+    const lids = new Set();
+    let complete = true;
+    console.log('  Resolving allowlisted numbers to @lid identifiers...');
+
+    for (const phone of ALLOWLIST) {
+      try {
+        const res = await fetchWithRetry(
+          `${GREEN_API}/checkWhatsapp/${GREEN_TOKEN}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chatId: phone }),
+          },
+          'checkWhatsapp'
+        );
+
+        if (!res.ok) {
+          console.warn(`  ⚠️  checkWhatsapp ${res.status} for ${maskPhone(phone)}`);
+          complete = false;
+          continue;
+        }
+
+        const data = await res.json();
+        const resolved = toDigits(data?.chatId);
+        if (data?.existsWhatsapp && resolved) lids.add(resolved);
+      } catch (err) {
+        console.warn(`  ⚠️  Could not resolve ${maskPhone(phone)}: ${err.message}`);
+        complete = false;
+      }
+      await sleep(API_PAUSE_MS);
+    }
+
+    return { lids, complete };
+  })();
+
+  return allowedLidsPromise;
+}
+
+/**
+ * May this sender create rows? Returns 'allowed', 'denied' or 'unknown'.
+ *
+ * The three-way answer matters. Fails CLOSED on 'denied' because this is access
+ * control. But 'unknown' — meaning the lid lookup itself failed, so we could not
+ * check — must not be treated as 'denied': discarding then would silently throw
+ * away a real submission from someone who got no reply and no way to know.
+ * 'unknown' leaves the message queued for the next run instead.
+ */
+async function senderVerdict(sender, chatId) {
+  const digits = toDigits(sender);
+  if (ALLOWLIST.includes(digits)) return 'allowed';
+
+  // Only reach for the network when the identifier actually looks like a lid.
+  const looksLikeLid = sender.endsWith('@lid') || chatId.endsWith('@lid');
+  if (!looksLikeLid) return 'denied';
+
+  const { lids, complete } = await allowedLids();
+
+  if (lids.has(digits)) {
+    console.log('  Sender recognised via @lid lookup.');
+    return 'allowed';
+  }
+
+  if (!complete) return 'unknown';
+
+  console.warn(
+    `  ⚠️  @lid sender ${maskPhone(sender)} did not match any allowlisted number. ` +
+      'If this is a legitimate submitter, WhatsApp may have moved their chat to a new lid.'
+  );
+  return 'denied';
+}
+
 /** Show only the last 3 digits in logs — GitHub Actions logs are readable by collaborators. */
 function maskPhone(value) {
   const digits = toDigits(value);
@@ -606,13 +696,28 @@ async function drainLoop(openRows, stats) {
     const chatId = body?.senderData?.chatId || '';
     const sender = body?.senderData?.sender || '';
 
-    // Group chats end in @g.us; direct messages end in @c.us.
-    if (!chatId.endsWith('@c.us')) {
-      await discard('not a direct message');
+    // Group chats end in @g.us. Everything else is a one-to-one chat: today
+    // that means @c.us, but WhatsApp is replacing phone numbers with opaque
+    // @lid identifiers, so we must NOT require @c.us — that would silently drop
+    // real submissions once a contact migrates. Identifying the group form and
+    // treating the rest as direct is the check that survives the migration.
+    if (chatId.endsWith('@g.us')) {
+      await discard('group message, not a direct one');
       continue;
     }
 
-    if (!ALLOWLIST.includes(toDigits(sender))) {
+    const verdict = await senderVerdict(sender, chatId);
+
+    if (verdict === 'unknown') {
+      console.warn(
+        `  ⚠️  Cannot verify sender ${maskPhone(sender)}: the @lid lookup failed. ` +
+          'Leaving the message queued for the next run rather than discarding it.'
+      );
+      stats.leftQueued++;
+      break;
+    }
+
+    if (verdict === 'denied') {
       await discard(`sender ${maskPhone(sender)} not allowlisted`);
       continue;
     }
