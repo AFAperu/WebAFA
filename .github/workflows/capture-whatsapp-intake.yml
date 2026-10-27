@@ -3,6 +3,9 @@ name: Capture WhatsApp intake
 # Reads direct messages sent to the AFA WhatsApp number from the green-api
 # queue and creates draft rows in the Airtable events table for human review.
 #
+# The same run also archives the messages the AFA SENDS to the WhatsApp group,
+# if AIRTABLE_ARCHIVE_BASE_ID is configured.
+#
 # Requires green-api "pull" mode: the instance's webhook URL must be EMPTY and
 # incoming-message notifications must be ON. Message SENDING is unaffected.
 #
@@ -48,6 +51,12 @@ jobs:
         env:
           AIRTABLE_INTAKE_TOKEN: ${{ secrets.AIRTABLE_INTAKE_TOKEN }}
           AIRTABLE_EVENTOS_BASE_ID: ${{ secrets.AIRTABLE_EVENTOS_BASE_ID }}
+          # Archive of the messages WE send to the WhatsApp group. Optional: with
+          # no base configured, outgoing messages are discarded as they always
+          # were. Same queue, same run — a second script polling green-api would
+          # race this one. See docs/whatsapp-archivo-enviados.md
+          AIRTABLE_ARCHIVE_BASE_ID: ${{ secrets.AIRTABLE_ARCHIVE_BASE_ID }}
+          AIRTABLE_ARCHIVE_TOKEN: ${{ secrets.AIRTABLE_ARCHIVE_TOKEN }}
           GREENAPI_INSTANCE_ID: ${{ secrets.GREENAPI_INSTANCE_ID }}
           GREENAPI_TOKEN: ${{ secrets.GREENAPI_TOKEN }}
           WHATSAPP_ALLOWLIST: ${{ secrets.WHATSAPP_ALLOWLIST }}
