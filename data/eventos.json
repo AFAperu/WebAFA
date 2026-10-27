@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-10-27T08:15:39.626Z",
-  "count": 52,
+  "lastUpdated": "2026-10-27T13:50:41.559Z",
+  "count": 60,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -561,6 +561,76 @@
       "status": ""
     },
     {
+      "id": "recVfv8vhdjtSPbVc",
+      "nombre": "Amigos saharauis de Madrid",
+      "fecha": "2026-11-03",
+      "fechaFin": "",
+      "hora": "17:15",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recaJa1tfDIeyduNp",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2026-11-10",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "rec4ZQfup3rkIwKkn",
+      "nombre": "Mural",
+      "fecha": "2026-11-10",
+      "fechaFin": "",
+      "hora": "16:30",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recrz39iQSSx0zhwU",
+      "nombre": "Mural",
+      "fecha": "2026-11-11",
+      "fechaFin": "",
+      "hora": "16:30",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "reclhN0FlX8PMSyHb",
+      "nombre": "Mural",
+      "fecha": "2026-11-11",
+      "fechaFin": "",
+      "hora": "16:30",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "recbSi0HNLvPmQl98",
       "nombre": "Club de lectura 1º de Primaria",
       "fecha": "2026-11-13",
@@ -575,12 +645,54 @@
       "status": ""
     },
     {
+      "id": "recYDORhYCYZAGMlt",
+      "nombre": "Mural",
+      "fecha": "2026-11-13",
+      "fechaFin": "",
+      "hora": "16:30",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "rec9P5YxuSEGyyENG",
       "nombre": "Bicicletada",
-      "fecha": "2026-11-21",
+      "fecha": "2026-11-14",
       "fechaFin": "",
       "hora": "9:30",
       "horaFin": "13:30",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recYDV6pVRK25l4X8",
+      "nombre": "Mural",
+      "fecha": "2026-11-21",
+      "fechaFin": "",
+      "hora": "16:30",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recE0Elu3DcNyAFfM",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2026-11-24",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
       "lugar": "",
       "dondePublicar": [
         "Web"
