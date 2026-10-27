@@ -49,6 +49,30 @@
  *   DRY_RUN                   — "true" to read the queue and print what WOULD
  *                               happen, without writing to Airtable, replying,
  *                               or deleting anything from the queue
+ *
+ *   AIRTABLE_ARCHIVE_BASE_ID  — OPTIONAL. Turns on the archive of messages the
+ *                               AFA SENDS to the WhatsApp group (see below).
+ *                               Unset, outgoing messages are discarded exactly
+ *                               as they were before this existed.
+ *   AIRTABLE_ARCHIVE_TOKEN    — OPTIONAL. Defaults to AIRTABLE_INTAKE_TOKEN, so
+ *                               the simplest setup is to give that token access
+ *                               to the archive base too.
+ *   AIRTABLE_ARCHIVE_TABLE    — OPTIONAL. Defaults to "Mensajes enviados".
+ *
+ * ARCHIVE OF SENT MESSAGES
+ * ------------------------
+ * The same green-api queue also carries our OWN outgoing messages, which this
+ * script used to throw away as noise. With AIRTABLE_ARCHIVE_BASE_ID set, the
+ * ones sent to a WhatsApp GROUP are copied into a separate base first, giving a
+ * searchable record of everything the AFA has published.
+ *
+ * Only group messages. One-to-one chats are deliberately excluded: those are
+ * private conversations with families, and the acknowledgements this very
+ * script sends ("Recibido, ¡gracias!") would otherwise be archived too.
+ *
+ * It runs INSIDE this script on purpose. Green-api serves one notification at a
+ * time and only moves on once it is deleted, so a second script polling the
+ * same instance would race this one and delete messages it still needed.
  */
 
 const AIRTABLE_TOKEN = process.env.AIRTABLE_INTAKE_TOKEN;
@@ -72,6 +96,48 @@ const FIELD_RAW_MESSAGE = 'Mensaje WhatsApp';
 const FIELD_SENDER = 'Remitente';
 const FIELD_RECEIVED_AT = 'Recibido el';
 const FIELD_ATTACHMENTS = 'Imágenes u otros documentos que quieras para la comunicación';
+
+/* ─── Archive of messages we SEND (optional, off unless the base is set) ─── */
+
+const ARCHIVE_BASE_ID = process.env.AIRTABLE_ARCHIVE_BASE_ID || '';
+/** Reusing the intake token keeps this to one new secret; override if you prefer. */
+const ARCHIVE_TOKEN = process.env.AIRTABLE_ARCHIVE_TOKEN || AIRTABLE_TOKEN;
+const ARCHIVE_TABLE_NAME = process.env.AIRTABLE_ARCHIVE_TABLE || 'Mensajes enviados';
+/**
+ * The archive may live in its own base or in a new table of the events base —
+ * both work, since only the base id and the table name decide where rows go.
+ *
+ * But sharing the base makes one misconfiguration possible that a separate base
+ * made impossible: pointing the archive at the INTAKE table, which would drop
+ * copies of our own broadcasts in among the event drafts a human reviews. So
+ * refuse that combination and carry on with the archive switched off — intake is
+ * the path that matters, and it must not fail over a nice-to-have.
+ */
+const ARCHIVE_COLLIDES_WITH_INTAKE =
+  ARCHIVE_BASE_ID === BASE_ID && ARCHIVE_TABLE_NAME === TABLE_NAME;
+const ARCHIVE_ENABLED = Boolean(ARCHIVE_BASE_ID) && !ARCHIVE_COLLIDES_WITH_INTAKE;
+
+const ARCHIVE_FIELD_SUMMARY = 'Resumen';
+const ARCHIVE_FIELD_MESSAGE = 'Mensaje';
+const ARCHIVE_FIELD_SENT_AT = 'Enviado el';
+const ARCHIVE_FIELD_CHAT = 'Chat';
+const ARCHIVE_FIELD_SOURCE = 'Origen';
+const ARCHIVE_FIELD_ATTACHMENTS = 'Adjuntos';
+const ARCHIVE_FIELD_MESSAGE_ID = 'ID mensaje';
+
+/**
+ * The two webhook types that mean "we sent this", and what to record as its
+ * origin. Green-api distinguishes them, and the distinction is worth keeping:
+ * one is send-whatsapp-eventos.js, the other is a person typing on the phone.
+ *
+ * Delivery receipts (outgoingMessageStatus) are NOT here. They are pure noise
+ * and there are several per message, so leave that notification switched off in
+ * the green-api console rather than paying to drain them.
+ */
+const OUTGOING_SOURCES = {
+  outgoingAPIMessageReceived: 'Automático (web)',
+  outgoingMessageReceived: 'Manual (teléfono)',
+};
 
 /** Consecutive messages from the same sender within this window become one row. */
 const GROUP_WINDOW_MS = 10 * 60 * 1000;
@@ -354,6 +420,14 @@ function maskPhone(value) {
 }
 
 /**
+ * Mask every long digit run inside a block of text, for logging messages that
+ * come from green-api and embed phone numbers (the quota warning lists them).
+ */
+function maskNumbersIn(text) {
+  return String(text).replace(/\d{7,}/g, match => `***${match.slice(-3)}`);
+}
+
+/**
  * Pull the text and any attachment out of a green-api incoming message payload.
  * Green-api uses a different sub-object per message type.
  */
@@ -592,7 +666,15 @@ async function transcribeIfVoiceNote(message) {
 async function processQueue() {
   /** sender digits -> { recordId, chatId, texts, attachments, lastTimestampMs } */
   const openRows = new Map();
-  const stats = { seen: 0, discarded: 0, created: 0, appended: 0, leftQueued: 0, abortedBy: null };
+  const stats = {
+    seen: 0,
+    discarded: 0,
+    created: 0,
+    appended: 0,
+    archived: 0,
+    leftQueued: 0,
+    abortedBy: null,
+  };
 
   try {
     await drainLoop(openRows, stats);
@@ -687,6 +769,79 @@ async function drainLoop(openRows, stats) {
       stats.discarded++;
       await sleep(API_PAUSE_MS);
     };
+
+    /*
+     * The green-api Developer (free) plan only lets an instance talk to THREE
+     * chats per month — the WhatsApp group counts as one — and silently blocks
+     * every other chat, sending this webhook instead of the message. A submitter
+     * outside those three never reaches the queue at all, so from our side their
+     * messages simply do not exist.
+     *
+     * This carries the list of chats that ARE allowed, so print it rather than
+     * discarding it as just another webhook type. It is the only place the real
+     * reason for a missing submission appears.
+     */
+    if (typeWebhook === 'quotaExceeded') {
+      const quota = body?.quotaData || {};
+      console.warn(
+        '  ⚠️  GREEN-API PLAN LIMIT REACHED — this is why some submitters never arrive.'
+      );
+      console.warn(
+        `     ${quota.used ?? '?'}/${quota.total ?? '?'} ${quota.method || 'chats'} used this month` +
+          `${quota.status ? ` (${quota.status})` : ''}.`
+      );
+      if (quota.description) console.warn(`     ${maskNumbersIn(quota.description)}`);
+      await discard('plan quota exceeded (see warning above)');
+      continue;
+    }
+
+    /*
+     * A message WE sent. Everything the AFA publishes goes to the group, so
+     * archive those and ignore one-to-one chats — which also skips this
+     * script's own "Recibido" replies, since those are always DMs.
+     */
+    const outgoingSource = OUTGOING_SOURCES[typeWebhook];
+    if (outgoingSource) {
+      if (!ARCHIVE_ENABLED) {
+        await discard(`webhook type ${typeWebhook} (archive not configured)`);
+        continue;
+      }
+
+      const sentChatId = body?.senderData?.chatId || '';
+      if (!sentChatId.endsWith('@g.us')) {
+        await discard('message we sent to a private chat, not archived');
+        continue;
+      }
+
+      const sentParsed = parseMessage(body);
+      if (!sentParsed.text && !sentParsed.attachment) {
+        await discard(`message we sent with no usable content (${sentParsed.type})`);
+        continue;
+      }
+
+      const sentPreview = (sentParsed.text || '(solo adjunto)').slice(0, 60).replace(/\s+/g, ' ');
+      console.log(`Sent to ${body?.senderData?.chatName || 'group'}: "${sentPreview}"`);
+
+      const archived = await archiveSentMessage({
+        ...sentParsed,
+        chatId: sentChatId,
+        chatName: body?.senderData?.chatName || '',
+        idMessage: body?.idMessage || '',
+        source: outgoingSource,
+        timestampMs,
+      });
+
+      if (archived) {
+        console.log('  Archived.');
+        stats.archived++;
+      }
+
+      // Cleared either way — see archiveSentMessage for why a failure here must
+      // not hold up the queue.
+      await deleteNotification(receiptId);
+      await sleep(API_PAUSE_MS);
+      continue;
+    }
 
     if (typeWebhook !== 'incomingMessageReceived') {
       await discard(`webhook type ${typeWebhook}`);
@@ -863,6 +1018,76 @@ async function appendToIntakeRecord(row) {
   return res.json();
 }
 
+/**
+ * One row per message sent, with no grouping.
+ *
+ * Grouping was considered and rejected: send-whatsapp-eventos.js pauses 2s
+ * between the images of one event and 3s between events, so a time window
+ * cannot tell "another photo of the same announcement" from "the next
+ * announcement" and would silently merge two unrelated publications.
+ */
+function sentMessageFields(sent) {
+  const text = sent.text || '';
+  const fields = {
+    [ARCHIVE_FIELD_SUMMARY]: text ? text.replace(/\s+/g, ' ').slice(0, 60) : '(solo adjunto)',
+    [ARCHIVE_FIELD_MESSAGE]: text,
+    [ARCHIVE_FIELD_SENT_AT]: new Date(sent.timestampMs).toISOString(),
+    [ARCHIVE_FIELD_CHAT]: sent.chatName || sent.chatId,
+    [ARCHIVE_FIELD_SOURCE]: sent.source,
+    [ARCHIVE_FIELD_MESSAGE_ID]: sent.idMessage,
+  };
+
+  if (sent.attachment) {
+    fields[ARCHIVE_FIELD_ATTACHMENTS] = [
+      { url: sent.attachment.url, filename: sent.attachment.filename },
+    ];
+  }
+
+  return fields;
+}
+
+/**
+ * Copy a sent message into the archive base. Returns true on success.
+ *
+ * DELIBERATELY NOT FATAL, unlike the intake write. The queue is strictly
+ * oldest-first and nothing moves until the head is acknowledged, so refusing to
+ * delete a message we failed to archive would stall the queue and stop real
+ * submissions from families arriving — a far worse outcome than losing a copy of
+ * a broadcast we already sent. So on failure this warns, prints enough of the
+ * message to re-enter it by hand, and lets the caller clear the notification.
+ */
+async function archiveSentMessage(sent) {
+  const url = `${AIRTABLE_API}/${ARCHIVE_BASE_ID}/${encodeURIComponent(ARCHIVE_TABLE_NAME)}`;
+
+  try {
+    const res = await fetchWithRetry(
+      url,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${ARCHIVE_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ records: [{ fields: sentMessageFields(sent) }], typecast: true }),
+      },
+      'Airtable archive'
+    );
+
+    if (res.ok) return true;
+
+    const err = await res.json().catch(() => ({}));
+    console.warn(
+      `  ⚠️  Could not archive the sent message: Airtable ${res.status} ` +
+        `${err?.error?.message || res.statusText}`
+    );
+  } catch (archiveError) {
+    console.warn(`  ⚠️  Could not archive the sent message: ${archiveError.message}`);
+  }
+
+  console.warn(`     Text was: ${(sent.text || '(solo adjunto)').slice(0, 200)}`);
+  return false;
+}
+
 async function main() {
   console.log(
     `Reading green-api queue${DRY_RUN ? ' (DRY RUN — inspect only, nothing is changed)' : ''}...`
@@ -876,13 +1101,25 @@ async function main() {
   console.log(
     `Voice notes: ${transcribers.length ? transcribers.join(', then ') : 'no transcriber configured — audio will be attached for a human'}`
   );
+  if (ARCHIVE_COLLIDES_WITH_INTAKE) {
+    console.warn(
+      `⚠️  Sent-message archive: OFF — it is pointed at "${TABLE_NAME}", the intake table ` +
+        'itself. Set AIRTABLE_ARCHIVE_TABLE to a different table.'
+    );
+  } else {
+    console.log(
+      ARCHIVE_ENABLED
+        ? `Sent-message archive: ON — group messages are copied to "${ARCHIVE_TABLE_NAME}"`
+        : 'Sent-message archive: off (set AIRTABLE_ARCHIVE_BASE_ID to turn it on)'
+    );
+  }
 
   const stats = await processQueue();
 
   console.log(
     `Read ${stats.seen} notification(s): ${stats.created} row(s) created, ` +
-      `${stats.appended} follow-up(s) merged, ${stats.discarded} discarded, ` +
-      `${stats.leftQueued} left queued.`
+      `${stats.appended} follow-up(s) merged, ${stats.archived} sent message(s) archived, ` +
+      `${stats.discarded} discarded, ${stats.leftQueued} left queued.`
   );
 
   if (stats.created === 0 && stats.appended === 0) {
@@ -890,7 +1127,7 @@ async function main() {
   }
 
   if (stats.abortedBy) {
-    const progress = stats.created + stats.appended + stats.discarded;
+    const progress = stats.created + stats.appended + stats.archived + stats.discarded;
 
     // A blip partway through a run cost nothing: anything remaining is still in
     // the queue and the next run picks it up. Failing the build for that would
