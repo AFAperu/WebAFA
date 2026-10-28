@@ -1,0 +1,64 @@
+name: Draft monthly summary
+
+# Writes a draft of the monthly newsletter into the Airtable events table, from
+# everything the AFA published that month (WhatsApp group messages + Instagram
+# captions, both held in "Mensajes enviados").
+#
+# The draft is NOT sent. The script leaves "Dónde publicar", "Fecha comunicación"
+# and "Hora publicación" empty, which is what stops send-email-eventos.js from
+# picking it up. A human edits the text and fills those in to approve it.
+#
+# The "lo que viene" half is built in code from the events table, so its dates
+# and names are never model-generated.
+
+on:
+  schedule:
+    # 08:12 UTC on the 2nd of each month, so the whole previous month is in and
+    # the WhatsApp/Instagram archives have had a night to catch up.
+    #
+    # Not the 1st and not on the hour: GitHub's scheduler is best-effort and
+    # skips its most contended slots. A day late costs nothing here.
+    - cron: '12 8 2 * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Print the draft without creating the Airtable row'
+        required: false
+        default: true
+        type: boolean
+      month:
+        description: 'Month to summarise as YYYY-MM (blank = last month)'
+        required: false
+        default: ''
+        type: string
+
+concurrency:
+  group: draft-resumen-mensual
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Draft the monthly summary
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          AIRTABLE_INTAKE_TOKEN: ${{ secrets.AIRTABLE_INTAKE_TOKEN }}
+          AIRTABLE_EVENTOS_BASE_ID: ${{ secrets.AIRTABLE_EVENTOS_BASE_ID }}
+          AIRTABLE_ARCHIVE_BASE_ID: ${{ secrets.AIRTABLE_ARCHIVE_BASE_ID }}
+          AIRTABLE_ARCHIVE_TABLE: ${{ secrets.AIRTABLE_ARCHIVE_TABLE }}
+          # Workers AI, the same account and token already used for voice-note
+          # transcription. Cloudflare states it does not use Customer Content to
+          # train models, which is why it is preferred over the free Gemini tier.
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_TEXT_MODEL: ${{ secrets.CLOUDFLARE_TEXT_MODEL }}
+          MONTH: ${{ inputs.month }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: node scripts/draft-resumen-mensual.js
