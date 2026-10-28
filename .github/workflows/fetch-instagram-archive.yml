@@ -1,0 +1,61 @@
+name: Archive Instagram posts
+
+# Copies the AFA's own Instagram posts into the "Mensajes enviados" Airtable
+# table, alongside the WhatsApp messages we send.
+#
+# Instagram is where the AFA posts AFTER an activity, with photos, so a caption
+# is the only record of how something actually went. The WhatsApp archive only
+# ever proves that something was announced.
+#
+# Uses the same Instagram credentials that send-instagram-eventos.js already
+# uses to publish. Reading your own media needs no extra permission.
+
+on:
+  schedule:
+    # Once a day at 06:41 UTC. An AFA account posts a few times a month, so
+    # anything more frequent would just spend Airtable API calls — the Free plan
+    # allows 1,000 a month across the whole workspace.
+    #
+    # Off the hour on purpose: minute zero is GitHub's most contended slot and
+    # scheduled runs there are routinely skipped or badly delayed.
+    - cron: '41 6 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'List the posts and their captions without writing anything'
+        required: false
+        default: true
+        type: boolean
+      lookback_days:
+        description: 'How far back to look (default 90)'
+        required: false
+        default: '90'
+        type: string
+
+# Two runs writing the same posts would race the duplicate check.
+concurrency:
+  group: fetch-instagram-archive
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Archive Instagram posts into Airtable
+        env:
+          # The same two secrets send-instagram-eventos.js already uses.
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_ACCOUNT_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
+          AIRTABLE_ARCHIVE_BASE_ID: ${{ secrets.AIRTABLE_ARCHIVE_BASE_ID }}
+          AIRTABLE_ARCHIVE_TOKEN: ${{ secrets.AIRTABLE_ARCHIVE_TOKEN }}
+          AIRTABLE_INTAKE_TOKEN: ${{ secrets.AIRTABLE_INTAKE_TOKEN }}
+          AIRTABLE_ARCHIVE_TABLE: ${{ secrets.AIRTABLE_ARCHIVE_TABLE }}
+          INSTAGRAM_LOOKBACK_DAYS: ${{ inputs.lookback_days }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: node scripts/fetch-instagram-archive.js
