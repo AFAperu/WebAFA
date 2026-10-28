@@ -81,8 +81,12 @@ const E_BODY = 'Texto para redes';
  */
 const DRAFT_MARKER = 'resumen-mensual';
 
-/** How many upcoming activities to list. Beyond this the section stops being read. */
-const MAX_UPCOMING = 8;
+/**
+ * Sanity cap only. "Lo que viene" is meant to list the WHOLE of next month —
+ * that is what a monthly newsletter is for — so this is high on purpose.
+ * Repeated activities collapse onto one line, which keeps the section readable.
+ */
+const MAX_UPCOMING = 20;
 /**
  * "Lo que viene" covers the month AFTER the one being summarised. But a floor
  * matters more than the rule: this calendar is empty in July and August, and a
@@ -312,7 +316,9 @@ async function fetchUpcoming() {
     .map(record => {
       const f = record.fields;
       return {
-        name: (f[E_NAME] || '').trim(),
+        // Some event names are wrapped in decorative emoji ("🌙Noche de sacos🌙"),
+        // which looks wrong once the name is set in bold next to a real date.
+        name: (f[E_NAME] || '').replace(EMOJI_AT_START, '').replace(/\s*(\p{Extended_Pictographic}\uFE0F?)+\s*$/u, '').trim(),
         date: f[E_DATE] || '',
         dateEnd: f[E_DATE_END] || '',
         time: f[E_TIME] || '',
@@ -342,39 +348,62 @@ MATERIAL DEL MES:
 ${material}
 
 Devuelve un JSON con esta forma exacta:
-{"asunto": "...", "entradilla": "...", "hechos": ["...", "..."]}
+{"asunto": "...", "entradilla": "...", "actividades": [{"emoji": "🎉", "titulo": "...", "frase": "..."}]}
 
 - asunto: línea de asunto de correo, máximo 60 caracteres. Nombra 2 o 3 cosas
   reales del mes. Nunca "Newsletter", "Boletín" ni "Resumen mensual".
 - entradilla: una o dos frases para abrir. Empieza por el gancho, no por
-  "Os informamos de que".
-- hechos: entre 5 y 8 líneas, una por actividad. Cada línea empieza por un
-  emoji, luego el nombre de la actividad entre ** y ** y una frase corta.
+  "Os informamos de que". No repitas luego lo mismo en las actividades.
+- actividades: una por cada cosa que realmente ocurrió. Cada una con TRES campos
+  separados, y nada más:
+    emoji: UN solo emoji.
+    titulo: el nombre de la actividad, 2 a 6 palabras. Sin fechas, sin emojis,
+            sin asteriscos, sin comillas.
+    frase: UNA frase corta sobre lo que pasó. Sin emojis, sin asteriscos.
 
-REGLAS SOBRE LOS HECHOS — esto es lo importante:
+El programa se encarga del formato. No pongas guiones, ni asteriscos, ni saltos
+de línea dentro de los campos.
 
-1. Solo lo que YA HA PASADO. Una publicación escrita en futuro ("el sábado que
-   viene", "¿te apuntas?") es un anuncio: la actividad cuenta, pero no copies la
-   invitación, porque cuando se lea el correo ya habrá pasado.
+REGLAS SOBRE LAS ACTIVIDADES — esto es lo importante:
 
-2. NO INVENTES RESULTADOS. Puedes decir que algo se organizó, se celebró o
+1. UNA ACTIVIDAD, UNA ENTRADA. Si en el material solo hay dos actividades,
+   devuelve dos. NO RELLENES para alargar la lista: es mejor un resumen corto y
+   cierto que uno largo y repetido.
+
+2. SOLO ACTIVIDADES. Nada de información permanente: el correo de contacto, el
+   horario de la oficina, cómo asociarse, la cuota, los canales de WhatsApp o
+   recordatorios generales NO son actividades y no deben aparecer. Si un mensaje
+   mezcla una actividad con ese tipo de información, quédate solo con la
+   actividad.
+
+3. SOLO LO QUE YA HA PASADO. Una publicación escrita en futuro ("el sábado que
+   viene", "¿te apuntas?") es un anuncio: la actividad cuenta si ya ocurrió,
+   pero no copies la invitación, porque cuando se lea el correo ya habrá pasado.
+
+4. EN PRIMERA PERSONA DEL PLURAL Y EN ACTIVO: "hemos organizado", "estrenamos",
+   "subimos a la sierra". PROHIBIDO el impersonal con "se": nada de "se ha
+   celebrado", "se ha puesto a disposición", "se ha recordado". Suena a acta de
+   reunión, no a un correo entre familias.
+
+5. NO INVENTES RESULTADOS. Puedes decir que algo se organizó, se celebró o
    arrancó. No digas cuánta gente fue, que fue un éxito ni que gustó mucho, a
    menos que el texto original lo diga. Si lo dice, puedes recogerlo.
 
-3. AGRUPA lo repetido. Cuatro sesiones del club de lectura son UNA línea que
-   menciona los cursos, no cuatro líneas.
+6. AGRUPA lo repetido. Cuatro sesiones del club de lectura son UNA actividad que
+   menciona los cursos, no cuatro.
 
-4. SIN FECHAS NI HORAS. Ya ha pasado; el día exacto no le sirve a nadie.
+7. SIN FECHAS NI HORAS. Ya ha pasado; el día exacto no le sirve a nadie.
 
-5. RESPETA QUIÉN ORGANIZA. Si el texto dice que organiza otra entidad y el AFA
+8. RESPETA QUIÉN ORGANIZA. Si el texto dice que organiza otra entidad y el AFA
    colabora, no lo cambies por "organizamos". Si menciona una comisión o a las
    personas que lo hicieron, mantenlo: es lo que anima a otras a apuntarse.
 
-6. Quita hashtags, @menciones y asteriscos sueltos de Instagram. Reescribe, no
-   copies: el tono de Instagram no es el de un correo.
+9. Quita hashtags, @menciones y asteriscos de Instagram. Reescribe, no copies:
+   el tono de Instagram no es el de un correo.
 
-7. Las movilizaciones y huelgas en defensa de la educación pública se resumen en
-   UNA SOLA línea, al final, por muchas publicaciones que haya.
+10. Las movilizaciones y huelgas en defensa de la educación pública se resumen
+    en UNA SOLA actividad, la última de la lista, por muchas publicaciones que
+    haya.
 
 No añadas despedida, ni enlaces, ni nada sobre actividades futuras: de eso se
 encarga el programa.`;
@@ -413,13 +442,100 @@ function parseModelOutput(raw) {
   if (!raw || typeof raw !== 'object') return null;
 
   // Already the object we asked for.
-  if (raw.asunto || raw.hechos) return raw;
+  if (raw.asunto || raw.actividades || raw.hechos) return raw;
 
   const nested = raw.response ?? raw.content ?? raw.text ?? raw.output;
   if (typeof nested === 'string') return extractJson(nested);
   if (nested && typeof nested === 'object') return nested;
 
   return null;
+}
+
+/** One line, no markdown, no stray bullet characters. */
+function cleanText(value) {
+  return String(value ?? '')
+    .replace(/\s+/g, ' ')
+    .replace(/\*+/g, '')
+    .replace(/^[-–•\s]+/, '')
+    .trim();
+}
+
+const EMOJI_AT_START = /^(\p{Extended_Pictographic}\uFE0F?\u200D?)+/u;
+
+/**
+ * Turn whatever the model sent into clean {emoji, titulo, frase} rows.
+ *
+ * This exists because the first version let the model compose the finished
+ * bullet — emoji, bold name and sentence in one string — and it answered with
+ * the emoji and the text as SEPARATE array items. The email came out as a bullet
+ * holding nothing but "🎒" followed by a bullet holding a bare sentence.
+ *
+ * So the model now supplies parts and the formatting happens here. The older
+ * "hechos" shape is still accepted and taken apart, because a model that drifted
+ * once will drift again and a run is not worth losing over it.
+ */
+function normaliseActivities(parsed) {
+  const raw = Array.isArray(parsed.actividades)
+    ? parsed.actividades
+    : Array.isArray(parsed.hechos)
+      ? parsed.hechos
+      : [];
+
+  const activities = [];
+  /** An emoji the model left stranded on its own, waiting for its sentence. */
+  let pendingEmoji = '';
+
+  for (const item of raw) {
+    let emoji = '';
+    let titulo = '';
+    let frase = '';
+
+    if (item && typeof item === 'object') {
+      emoji = cleanText(item.emoji);
+      titulo = cleanText(item.titulo ?? item.nombre ?? item.actividad);
+      frase = cleanText(item.frase ?? item.texto ?? item.descripcion);
+    } else {
+      // A plain string: pull a leading emoji off, then split name from sentence.
+      const text = cleanText(item);
+      const match = text.match(EMOJI_AT_START);
+      if (match) emoji = match[0];
+      const rest = text.slice(match ? match[0].length : 0).trim();
+      const split = rest.split(/\s+[—–]\s+|:\s+/);
+      titulo = cleanText(split[0]);
+      frase = cleanText(split.slice(1).join(' — '));
+    }
+
+    // Keep only a leading emoji, and only if that is all the field holds.
+    const emojiMatch = emoji.match(EMOJI_AT_START);
+    emoji = emojiMatch && cleanText(emoji.replace(EMOJI_AT_START, '')) === '' ? emojiMatch[0] : '';
+
+    // A title that is just an emoji, or two words of nothing, is the padding we
+    // are trying to avoid rather than a real activity.
+    titulo = titulo.replace(EMOJI_AT_START, '').replace(/[:.]$/, '').trim();
+
+    if (titulo.length < 4) {
+      // Nothing but an emoji: that is the model having split one bullet into
+      // two items, so hold the emoji for the sentence that follows instead of
+      // throwing it away.
+      if (emoji && !titulo) pendingEmoji = emoji;
+      continue;
+    }
+
+    if (!emoji && pendingEmoji) emoji = pendingEmoji;
+    pendingEmoji = '';
+
+    const key = titulo.toLowerCase();
+    if (activities.some(a => a.titulo.toLowerCase() === key)) continue;
+
+    activities.push({ emoji, titulo, frase });
+  }
+
+  return activities;
+}
+
+function activityLine({ emoji, titulo, frase }) {
+  const head = `- ${emoji ? `${emoji} ` : ''}**${titulo}**`;
+  return frase ? `${head} — ${frase}` : head;
 }
 
 async function writeRecap(monthKey, entries) {
@@ -463,9 +579,10 @@ async function writeRecap(monthKey, entries) {
   }
 
   const parsed = parseModelOutput(data?.result?.response);
+  const activities = parsed ? normaliseActivities(parsed) : [];
 
-  if (!parsed || !parsed.asunto || !Array.isArray(parsed.hechos) || parsed.hechos.length === 0) {
-    console.error('The model did not return the expected JSON. What came back:');
+  if (!parsed || !parsed.asunto || activities.length === 0) {
+    console.error('The model did not return anything usable. What came back:');
     // JSON.stringify, not String: an object logged with String() reads
     // "[object Object]" and hides the very thing you need to see.
     console.error(JSON.stringify(data?.result, null, 2).slice(0, 1000));
@@ -473,9 +590,9 @@ async function writeRecap(monthKey, entries) {
   }
 
   return {
-    asunto: String(parsed.asunto).trim().slice(0, 120),
-    entradilla: String(parsed.entradilla || '').trim(),
-    hechos: parsed.hechos.map(h => String(h).trim()).filter(Boolean).slice(0, 10),
+    asunto: cleanText(parsed.asunto).slice(0, 120),
+    entradilla: cleanText(parsed.entradilla),
+    activities: activities.slice(0, 12),
   };
 }
 
@@ -499,6 +616,7 @@ async function writeRecap(monthKey, entries) {
 function selectUpcoming(events, monthKey) {
   const scope = nextMonthKey(monthKey);
   const inScope = events.filter(event => event.date.startsWith(scope)).length;
+  // Everything in the scope month, with the floor only propping up a thin one.
   const limit = Math.min(MAX_UPCOMING, Math.max(MIN_UPCOMING, inScope));
 
   return { scope, events: events.slice(0, limit), inScope };
@@ -548,7 +666,7 @@ function buildBody(monthKey, recap, upcoming, links) {
   if (recap.entradilla) parts.push(recap.entradilla);
 
   parts.push(`## Esto hemos hecho en ${monthLabel(monthKey).replace(/ de \d{4}$/, '')}`);
-  parts.push(recap.hechos.map(h => (h.startsWith('-') ? h : `- ${h}`)).join('\n'));
+  parts.push(recap.activities.map(activityLine).join('\n'));
 
   if (links.length > 0) {
     parts.push(
@@ -663,7 +781,7 @@ async function main() {
 
   console.log(`Asking ${CF_MODEL} for the recap...`);
   const recap = await writeRecap(monthKey, entries);
-  console.log(`Got ${recap.hechos.length} line(s). Subject: "${recap.asunto}"`);
+  console.log(`Got ${recap.activities.length} activity(ies). Subject: "${recap.asunto}"`);
 
   const body = buildBody(monthKey, recap, upcomingLines(upcoming.events), photoLinks(entries));
 
