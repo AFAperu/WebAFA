@@ -144,19 +144,42 @@ async function fetchWithRetry(url, options = {}, label = 'request') {
  * a missing permission look nothing alike, so quote the message rather than the
  * status. Never log the URL: paging links carry the access token.
  */
+/**
+ * Turn a Graph API error into something actionable.
+ *
+ * Code 190 covers two completely different problems and the distinction decides
+ * what you do next, so split on the message: "could not be decrypted" means the
+ * stored VALUE is mangled (truncated on copy, wrapped in quotes, a stray space
+ * or newline), while the rest of code 190 means a real token that is no longer
+ * accepted. Treating the first as expiry sends you off to generate another
+ * perfectly good token and paste it in just as badly.
+ */
+function graphHint(err) {
+  if (err.code === 190) {
+    if (/could not be decrypted|malformed/i.test(err.message || '')) {
+      return (
+        ' — the token VALUE looks mangled, not expired. Check the secret for a ' +
+        'truncated copy, surrounding quotes, or a stray space or line break'
+      );
+    }
+    return ' — the access token has expired or been invalidated; regenerate it';
+  }
+
+  if (err.code === 10 || err.code === 200) {
+    return ' — the token is missing a permission for this call (instagram_basic)';
+  }
+
+  return '';
+}
+
 async function graphError(res, label) {
   const body = await res.json().catch(() => ({}));
   const err = body?.error || {};
-  const hint =
-    err.code === 190
-      ? ' — the access token has expired or been invalidated; regenerate it'
-      : err.code === 10 || err.code === 200
-        ? ' — the token is missing a permission for this call (instagram_basic)'
-        : '';
+
   return new Error(
     `${label} ${res.status}: ${err.message || 'unknown error'}${
       err.code ? ` (code ${err.code})` : ''
-    }${hint}`
+    }${graphHint(err)}`
   );
 }
 
@@ -257,10 +280,25 @@ async function storedInstagramIds() {
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
+      /*
+       * Airtable returns the same 403 for "your token lacks the scope" and "that
+       * table does not exist", so name the likely cause first. The intake token
+       * was created with data.records:write only — enough for the WhatsApp
+       * archive, which just writes, but this script has to READ to deduplicate.
+       */
+      const hint =
+        res.status === 403
+          ? '\n  Most likely the token is missing the data.records:READ scope. ' +
+            'AIRTABLE_INTAKE_TOKEN was created write-only, which is fine for writing ' +
+            'rows but not for the duplicate check.\n' +
+            '  Add data.records:read to it at airtable.com/create/tokens, or set ' +
+            'AIRTABLE_ARCHIVE_TOKEN to a token that has both.\n' +
+            `  Failing that, check the table "${TABLE_NAME}" exists in that base and has ` +
+            `the columns "${FIELD_SOURCE}" and "${FIELD_MESSAGE_ID}".`
+          : '';
+
       throw new Error(
-        `Airtable read ${res.status}: ${err?.error?.message || res.statusText}. ` +
-          `Check that the table "${TABLE_NAME}" has the columns "${FIELD_SOURCE}" and ` +
-          `"${FIELD_MESSAGE_ID}".`
+        `Airtable read ${res.status}: ${err?.error?.message || res.statusText}${hint}`
       );
     }
 
