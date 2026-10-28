@@ -400,6 +400,28 @@ function extractJson(text) {
   }
 }
 
+/**
+ * Normalise whatever Workers AI put in `result.response`.
+ *
+ * Most models return a string there. Some return the JSON already parsed, and a
+ * few nest the text one level deeper. The first version of this assumed a string
+ * and called String() on it, which turned a perfectly good object into
+ * "[object Object]" and failed the run with a diagnostic that told you nothing.
+ */
+function parseModelOutput(raw) {
+  if (typeof raw === 'string') return extractJson(raw);
+  if (!raw || typeof raw !== 'object') return null;
+
+  // Already the object we asked for.
+  if (raw.asunto || raw.hechos) return raw;
+
+  const nested = raw.response ?? raw.content ?? raw.text ?? raw.output;
+  if (typeof nested === 'string') return extractJson(nested);
+  if (nested && typeof nested === 'object') return nested;
+
+  return null;
+}
+
 async function writeRecap(monthKey, entries) {
   const url = `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/ai/run/${CF_MODEL}`;
 
@@ -440,11 +462,13 @@ async function writeRecap(monthKey, entries) {
     throw new Error(`Cloudflare rejected the request: ${problems || 'unknown reason'}`);
   }
 
-  const parsed = extractJson(data?.result?.response);
+  const parsed = parseModelOutput(data?.result?.response);
 
   if (!parsed || !parsed.asunto || !Array.isArray(parsed.hechos) || parsed.hechos.length === 0) {
-    console.error('The model did not return the expected JSON. Raw response:');
-    console.error(String(data?.result?.response || '').slice(0, 800));
+    console.error('The model did not return the expected JSON. What came back:');
+    // JSON.stringify, not String: an object logged with String() reads
+    // "[object Object]" and hides the very thing you need to see.
+    console.error(JSON.stringify(data?.result, null, 2).slice(0, 1000));
     throw new Error('Unusable response from the model. Nothing was written.');
   }
 
