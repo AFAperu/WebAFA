@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-10-28T08:15:39.865Z",
-  "count": 60,
+  "lastUpdated": "2026-10-29T08:15:40.446Z",
+  "count": 62,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -547,7 +547,7 @@
     },
     {
       "id": "rec7GKqvUUfDkasbO",
-      "nombre": "🌙Noche de sacos: viernes 30 de octubre🌙",
+      "nombre": "🌙Noche de sacos🌙",
       "fecha": "2026-10-30",
       "fechaFin": "2026-10-31",
       "hora": "",
@@ -563,7 +563,7 @@
     {
       "id": "recVfv8vhdjtSPbVc",
       "nombre": "Amigos saharauis de Madrid",
-      "fecha": "2026-11-03",
+      "fecha": "2026-11-04",
       "fechaFin": "",
       "hora": "17:15",
       "horaFin": "",
@@ -617,11 +617,11 @@
       "status": ""
     },
     {
-      "id": "reclhN0FlX8PMSyHb",
-      "nombre": "Mural",
-      "fecha": "2026-11-11",
+      "id": "recbSi0HNLvPmQl98",
+      "nombre": "Club de lectura infantil",
+      "fecha": "2026-11-12",
       "fechaFin": "",
-      "hora": "16:30",
+      "hora": "17:30",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
@@ -631,11 +631,11 @@
       "status": ""
     },
     {
-      "id": "recbSi0HNLvPmQl98",
-      "nombre": "Club de lectura 1º de Primaria",
-      "fecha": "2026-11-13",
+      "id": "recz2pHHl4s1wWj3d",
+      "nombre": "Mural",
+      "fecha": "2026-11-12",
       "fechaFin": "",
-      "hora": "",
+      "hora": "16:30",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
@@ -659,11 +659,25 @@
       "status": ""
     },
     {
+      "id": "rectHos465XcYDTrd",
+      "nombre": "Club de lectura 5º",
+      "fecha": "2026-11-13",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "rec9P5YxuSEGyyENG",
       "nombre": "Bicicletada",
       "fecha": "2026-11-14",
       "fechaFin": "",
-      "hora": "9:30",
+      "hora": "10:30",
       "horaFin": "13:30",
       "lugar": "",
       "dondePublicar": [
@@ -707,6 +721,20 @@
       "fechaFin": "",
       "hora": "14:00",
       "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "reclNRLlK6Isy2fr8",
+      "nombre": "Cine en familia",
+      "fecha": "2026-11-27",
+      "fechaFin": "",
+      "hora": "17:30",
+      "horaFin": "19:30",
       "lugar": "",
       "dondePublicar": [
         "Web"
