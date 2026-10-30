@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-10-30T08:15:40.497Z",
-  "count": 62,
+  "lastUpdated": "2026-10-30T11:19:16.314Z",
+  "count": 63,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -661,6 +661,20 @@
     {
       "id": "rectHos465XcYDTrd",
       "nombre": "Club de lectura 5º",
+      "fecha": "2026-11-13",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recEC6n7hKiZ7AX9a",
+      "nombre": "Club de lectura 1° de Primaria",
       "fecha": "2026-11-13",
       "fechaFin": "",
       "hora": "17:00",
