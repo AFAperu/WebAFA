@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-11-03T08:15:45.069Z",
-  "count": 62,
+  "lastUpdated": "2026-11-04T08:15:39.549Z",
+  "count": 68,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -705,7 +705,7 @@
       "nombre": "Mural",
       "fecha": "2026-11-21",
       "fechaFin": "",
-      "hora": "16:30",
+      "hora": "10:00",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
@@ -757,6 +757,20 @@
       "status": ""
     },
     {
+      "id": "recJ0pWBdfY0bnW9S",
+      "nombre": "Club de lectura 5º de Primaria",
+      "fecha": "2026-12-11",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "recSaR5hPEv6oFaRO",
       "nombre": "Circo Price",
       "fecha": "2026-12-12",
@@ -776,6 +790,20 @@
       "fecha": "2026-12-18",
       "fechaFin": "",
       "hora": "16:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "rec2MQq8oh333izu0",
+      "nombre": "Club de lectura 5º de Primaria",
+      "fecha": "2027-01-15",
+      "fechaFin": "",
+      "hora": "17:00",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
@@ -813,11 +841,39 @@
       "status": ""
     },
     {
+      "id": "recMdVLcfGOnrv0g8",
+      "nombre": "Club de lectura 5º de Primaria",
+      "fecha": "2027-02-19",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "rechfyZQ2DtOK5jR8",
       "nombre": "Día de las familias en el comedor",
       "fecha": "2027-02-25",
       "fechaFin": "",
       "hora": "14:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recJBwMxwIxsl1rpr",
+      "nombre": "Club de lectura 5º de Primaria",
+      "fecha": "2027-03-12",
+      "fechaFin": "",
+      "hora": "17:00",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
@@ -841,11 +897,39 @@
       "status": ""
     },
     {
+      "id": "recguzwJOU5nEOjjE",
+      "nombre": "Club de lectura 5º de Primaria",
+      "fecha": "2027-04-02",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "recFady0smcgZENKl",
       "nombre": "Día de las familias en el comedor",
       "fecha": "2027-04-29",
       "fechaFin": "",
       "hora": "14:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recBqTU2gqHoGqNgz",
+      "nombre": "Club de lectura 5º de Primaria",
+      "fecha": "2027-05-07",
+      "fechaFin": "",
+      "hora": "17:00",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
