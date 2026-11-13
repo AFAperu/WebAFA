@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-11-12T08:15:43.090Z",
-  "count": 68,
+  "lastUpdated": "2026-11-13T15:35:08.171Z",
+  "count": 67,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -589,21 +589,6 @@
       "status": ""
     },
     {
-      "id": "rec4ZQfup3rkIwKkn",
-      "nombre": "Mural participativo en el cole",
-      "fecha": "2026-11-10",
-      "fechaFin": "2026-11-21",
-      "hora": "",
-      "horaFin": "",
-      "lugar": "CEIP Perú",
-      "dondePublicar": [
-        "Web",
-        "Email socios y no socios"
-      ],
-      "descripcion": "🎨 ¡VAMOS A CREAR UN MURAL ENTRE TODAS Y TODOS! 🎨\n\n¡Tenemos un proyecto muy especial entre manos! Vamos a realizar un mural participativo con el alumnado de 1.º, 2.º y 3.º de Primaria, en el que los peques podrán aportar sus ideas, creatividad y color para transformar una de las paredes del cole.\n\nY, como todo lo bonito se construye en comunidad, ¡queremos contar también con las familias! 💚\n\n📅 Calendario previsto:\n\n🖌️ Martes 10, miércoles 11 y viernes 13\nA partir de las 16:30 h.\nPrepararemos y pintaremos la pared para dejarla lista para el mural.\n👉 ¡Necesitamos familias voluntarias!\n\n🎨 Jueves 19 y viernes 20\nDurante las mañanas, en horario lectivo.\nSe realizarán talleres con los peques para trabajar y dar forma a las ideas que plasmarán en el mural.\n👉 Es posible que hagan falta  también familias voluntarias para apoyar a las/os profes durante los talleres.\n\n🌈 Sábado 21, a las 10:00 h.\n¡Llega el gran día! Se realizará la pintura final del mural junto con todas las familias que quieran acercarse y participar.\n\nSerá una oportunidad estupenda para compartir tiempo, creatividad y trabajo en equipo.\n\n💶 Este proyecto está financiado gracias a una subvención concedida por el Área de Asociacionismo de la Junta Municipal de Carabanchel.\n\n¡Os animamos a participar y a formar parte de esta experiencia colectiva! 🎨💚",
-      "status": ""
-    },
-    {
       "id": "recrz39iQSSx0zhwU",
       "nombre": "Mural",
       "fecha": "2026-11-11",
@@ -773,14 +758,15 @@
     },
     {
       "id": "recSaR5hPEv6oFaRO",
-      "nombre": "Circo Price",
+      "nombre": "🎪12 de diciembre: ¡Nos vamos al Circo Price! 🎪",
       "fecha": "2026-12-12",
       "fechaFin": "",
       "hora": "17:00",
       "horaFin": "",
       "lugar": "Circo Price",
       "dondePublicar": [
-        "Web"
+        "Web",
+        "Email socios y no socios"
       ],
       "descripcion": "Tenemos reservadas 500 entradas para el Price el 12 de diciembre a las 17:00. Si compramos en grupo, el precio es más barato: Preferente A y B, filas 1 a 8 a 13€, filas 9 a 11 a 11€, con un 50% de descuento. No compres por tu cuenta si quieres aprovechar la oferta.",
       "status": ""
