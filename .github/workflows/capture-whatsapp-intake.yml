@@ -57,6 +57,10 @@ jobs:
           # race this one. See docs/whatsapp-archivo-enviados.md
           AIRTABLE_ARCHIVE_BASE_ID: ${{ secrets.AIRTABLE_ARCHIVE_BASE_ID }}
           AIRTABLE_ARCHIVE_TOKEN: ${{ secrets.AIRTABLE_ARCHIVE_TOKEN }}
+          # The one group whose sent messages get archived. Without it, every
+          # group this number belongs to is archived — board, class groups, all
+          # of it. Same secret send-whatsapp-eventos.js already uses.
+          GREENAPI_GROUP_ID: ${{ secrets.GREENAPI_GROUP_ID }}
           GREENAPI_INSTANCE_ID: ${{ secrets.GREENAPI_INSTANCE_ID }}
           GREENAPI_TOKEN: ${{ secrets.GREENAPI_TOKEN }}
           WHATSAPP_ALLOWLIST: ${{ secrets.WHATSAPP_ALLOWLIST }}
