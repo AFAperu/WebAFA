@@ -58,6 +58,10 @@
  *                               the simplest setup is to give that token access
  *                               to the archive base too.
  *   AIRTABLE_ARCHIVE_TABLE    — OPTIONAL. Defaults to "Mensajes enviados".
+ *   GREENAPI_GROUP_ID         — OPTIONAL but recommended: the one group chat
+ *                               whose sent messages are archived
+ *                               ("120363...@g.us"). Unset, EVERY group this
+ *                               number belongs to is archived.
  *
  * ARCHIVE OF SENT MESSAGES
  * ------------------------
@@ -66,9 +70,12 @@
  * ones sent to a WhatsApp GROUP are copied into a separate base first, giving a
  * searchable record of everything the AFA has published.
  *
- * Only group messages. One-to-one chats are deliberately excluded: those are
- * private conversations with families, and the acknowledgements this very
- * script sends ("Recibido, ¡gracias!") would otherwise be archived too.
+ * Only group messages, and with GREENAPI_GROUP_ID set, only the ONE group it
+ * names. One-to-one chats are deliberately excluded: those are private
+ * conversations with families, and the acknowledgements this very script sends
+ * ("Recibido, ¡gracias!") would otherwise be archived too. Other groups the
+ * number belongs to — the board, class groups — are excluded for the same
+ * reason.
  *
  * It runs INSIDE this script on purpose. Green-api serves one notification at a
  * time and only moves on once it is deleted, so a second script polling the
@@ -203,6 +210,18 @@ if (ALLOWLIST.length === 0) {
   );
   process.exit(1);
 }
+
+/**
+ * The one group whose sent messages get archived, as bare digits.
+ *
+ * The AFA number belongs to other groups — the board, class groups — and their
+ * messages are nobody's business. Without this, every group the number is in
+ * ends up in Airtable.
+ *
+ * Compared as digits so that "120363…@g.us" and a bare id both match, since this
+ * value is pasted in by hand.
+ */
+const ARCHIVE_GROUP_DIGITS = toDigits(process.env.GREENAPI_GROUP_ID || '');
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -813,6 +832,13 @@ async function drainLoop(openRows, stats) {
         continue;
       }
 
+      if (ARCHIVE_GROUP_DIGITS && toDigits(sentChatId) !== ARCHIVE_GROUP_DIGITS) {
+        await discard(
+          `message we sent to another group (${body?.senderData?.chatName || 'sin nombre'}), not archived`
+        );
+        continue;
+      }
+
       const sentParsed = parseMessage(body);
       if (!sentParsed.text && !sentParsed.attachment) {
         await discard(`message we sent with no usable content (${sentParsed.type})`);
@@ -1106,11 +1132,20 @@ async function main() {
       `⚠️  Sent-message archive: OFF — it is pointed at "${TABLE_NAME}", the intake table ` +
         'itself. Set AIRTABLE_ARCHIVE_TABLE to a different table.'
     );
-  } else {
+  } else if (!ARCHIVE_ENABLED) {
+    console.log('Sent-message archive: off (set AIRTABLE_ARCHIVE_BASE_ID to turn it on)');
+  } else if (ARCHIVE_GROUP_DIGITS) {
     console.log(
-      ARCHIVE_ENABLED
-        ? `Sent-message archive: ON — group messages are copied to "${ARCHIVE_TABLE_NAME}"`
-        : 'Sent-message archive: off (set AIRTABLE_ARCHIVE_BASE_ID to turn it on)'
+      `Sent-message archive: ON — only the group ${maskPhone(ARCHIVE_GROUP_DIGITS)}, ` +
+        `copied to "${ARCHIVE_TABLE_NAME}"`
+    );
+  } else {
+    console.warn(
+      `Sent-message archive: ON for EVERY group, copied to "${ARCHIVE_TABLE_NAME}".`
+    );
+    console.warn(
+      '   ⚠️  GREENAPI_GROUP_ID is not set, so messages sent to any other group this ' +
+        'number belongs to are archived too. Set it to restrict this to the AFA group.'
     );
   }
 
