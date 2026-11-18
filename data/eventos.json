@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-11-17T08:15:43.198Z",
-  "count": 67,
+  "lastUpdated": "2026-11-18T08:15:44.732Z",
+  "count": 68,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -769,6 +769,20 @@
         "Email socios y no socios"
       ],
       "descripcion": "Tenemos reservadas 500 entradas para el Price el 12 de diciembre a las 17:00. Si compramos en grupo, el precio es más barato: Preferente A y B, filas 1 a 8 a 13€, filas 9 a 11 a 11€, con un 50% de descuento. No compres por tu cuenta si quieres aprovechar la oferta.",
+      "status": ""
+    },
+    {
+      "id": "recrh2irmIPOFdU0K",
+      "nombre": "Club de lectura Infantil",
+      "fecha": "2026-12-17",
+      "fechaFin": "2026-11-17",
+      "hora": "17:30",
+      "horaFin": "18:30",
+      "lugar": "Biblioteca del cole",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
       "status": ""
     },
     {
