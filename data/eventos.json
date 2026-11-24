@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-11-23T08:15:40.187Z",
-  "count": 68,
+  "lastUpdated": "2026-11-24T08:15:44.429Z",
+  "count": 71,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -701,12 +701,12 @@
       "status": ""
     },
     {
-      "id": "recE0Elu3DcNyAFfM",
-      "nombre": "Club de lectura 2º de Primaria",
-      "fecha": "2026-11-24",
+      "id": "reclNRLlK6Isy2fr8",
+      "nombre": "Cine en familia",
+      "fecha": "2026-11-27",
       "fechaFin": "",
-      "hora": "17:00",
-      "horaFin": "",
+      "hora": "17:30",
+      "horaFin": "19:30",
       "lugar": "",
       "dondePublicar": [
         "Web"
@@ -715,12 +715,27 @@
       "status": ""
     },
     {
-      "id": "reclNRLlK6Isy2fr8",
-      "nombre": "Cine en familia",
-      "fecha": "2026-11-27",
+      "id": "recT8h8vpgGDS6QK4",
+      "nombre": "♻️ Recogida de ropa, juguetes y otros objetos",
+      "fecha": "2026-11-30",
+      "fechaFin": "2026-12-09",
+      "hora": "",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Email socios y no socios",
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recE0Elu3DcNyAFfM",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2026-12-01",
       "fechaFin": "",
-      "hora": "17:30",
-      "horaFin": "19:30",
+      "hora": "17:00",
+      "horaFin": "",
       "lugar": "",
       "dondePublicar": [
         "Web"
@@ -772,6 +787,20 @@
       "status": ""
     },
     {
+      "id": "recQGj6i6JlBTiLJ4",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2026-12-15",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "recrh2irmIPOFdU0K",
       "nombre": "Club de lectura Infantil",
       "fecha": "2026-12-17",
@@ -794,6 +823,21 @@
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "reckg7NYfecybBSFl",
+      "nombre": "¡Mercadillo Navideño en el CEIP Perú! 🎄🛍️ ",
+      "fecha": "2026-12-18",
+      "fechaFin": "2026-12-18",
+      "hora": "",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Email socios y no socios",
         "Web"
       ],
       "descripcion": "",
