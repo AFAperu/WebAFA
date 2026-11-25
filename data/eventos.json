@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-24T08:15:44.429Z",
+  "lastUpdated": "2026-11-25T08:15:41.266Z",
   "count": 71,
   "eventos": [
     {
@@ -704,7 +704,7 @@
       "id": "reclNRLlK6Isy2fr8",
       "nombre": "Cine en familia",
       "fecha": "2026-11-27",
-      "fechaFin": "",
+      "fechaFin": "2026-11-27",
       "hora": "17:30",
       "horaFin": "19:30",
       "lugar": "",
