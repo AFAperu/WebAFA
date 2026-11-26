@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-11-25T08:15:41.266Z",
-  "count": 71,
+  "lastUpdated": "2026-11-26T08:15:44.430Z",
+  "count": 81,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -744,6 +744,21 @@
       "status": ""
     },
     {
+      "id": "rec2fo5L9tSQ15h2h",
+      "nombre": "🎄♻️ ¡Taller de Navidad: Recicla tu tote bag! ♻️🎄",
+      "fecha": "2026-12-09",
+      "fechaFin": "2026-12-10",
+      "hora": "",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Email socios y no socios",
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "recr2Do0Bkaj21WNL",
       "nombre": "Club de lectura 1º de Primaria",
       "fecha": "2026-12-11",
@@ -832,12 +847,26 @@
       "id": "reckg7NYfecybBSFl",
       "nombre": "¡Mercadillo Navideño en el CEIP Perú! 🎄🛍️ ",
       "fecha": "2026-12-18",
-      "fechaFin": "2026-12-18",
+      "fechaFin": "",
       "hora": "",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
         "Email socios y no socios",
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "reck7ipQ2uQP0HB2I",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2027-01-12",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
         "Web"
       ],
       "descripcion": "",
@@ -872,11 +901,39 @@
       "status": ""
     },
     {
+      "id": "recUzzEJJm86vHQ8x",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2027-01-26",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "recoMnfGhxJksIk0k",
       "nombre": "Día de las familias en el comedor",
       "fecha": "2027-01-28",
       "fechaFin": "",
       "hora": "14:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recyJ7qmlg0Y2SShE",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2027-02-09",
+      "fechaFin": "",
+      "hora": "17:00",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
@@ -900,11 +957,39 @@
       "status": ""
     },
     {
+      "id": "recTJc9HUv2NWJsgp",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2027-02-23",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "rechfyZQ2DtOK5jR8",
       "nombre": "Día de las familias en el comedor",
       "fecha": "2027-02-25",
       "fechaFin": "",
       "hora": "14:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "reckJ1E8TG5ne9MYF",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2027-03-09",
+      "fechaFin": "",
+      "hora": "17:00",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
@@ -956,6 +1041,34 @@
       "status": ""
     },
     {
+      "id": "recgYWaZeDegYZrlA",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2027-04-06",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recQdIQMxQyjjzw27",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2027-04-20",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "recFady0smcgZENKl",
       "nombre": "Día de las familias en el comedor",
       "fecha": "2027-04-29",
@@ -970,9 +1083,37 @@
       "status": ""
     },
     {
+      "id": "recgTlhjhzKZxk7NC",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2027-05-04",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
       "id": "recBqTU2gqHoGqNgz",
       "nombre": "Club de lectura 5º de Primaria",
       "fecha": "2027-05-07",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recb99yHO8iiBqux0",
+      "nombre": "Club de lectura 2º de Primaria",
+      "fecha": "2027-05-18",
       "fechaFin": "",
       "hora": "17:00",
       "horaFin": "",
