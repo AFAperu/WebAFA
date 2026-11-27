@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-11-26T08:15:44.430Z",
-  "count": 81,
+  "lastUpdated": "2026-11-27T12:06:14.161Z",
+  "count": 84,
   "eventos": [
     {
       "id": "recKBl38AGlqlcaOq",
@@ -718,7 +718,7 @@
       "id": "recT8h8vpgGDS6QK4",
       "nombre": "♻️ Recogida de ropa, juguetes y otros objetos",
       "fecha": "2026-11-30",
-      "fechaFin": "2026-12-09",
+      "fechaFin": "2026-11-30",
       "hora": "",
       "horaFin": "",
       "lugar": "",
@@ -744,15 +744,43 @@
       "status": ""
     },
     {
-      "id": "rec2fo5L9tSQ15h2h",
-      "nombre": "🎄♻️ ¡Taller de Navidad: Recicla tu tote bag! ♻️🎄",
-      "fecha": "2026-12-09",
-      "fechaFin": "2026-12-10",
+      "id": "recd1i3H9I5nkXz3n",
+      "nombre": "♻️ Recogida de ropa, juguetes y otros objetos",
+      "fecha": "2026-12-01",
+      "fechaFin": "2026-12-09",
       "hora": "",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "rec2fo5L9tSQ15h2h",
+      "nombre": "🎄♻️ ¡Taller: Recicla tu tote bag! - Primaria♻️🎄",
+      "fecha": "2026-12-09",
+      "fechaFin": "",
+      "hora": "17:00",
+      "horaFin": "18:30",
+      "lugar": "",
+      "dondePublicar": [
         "Email socios y no socios",
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recm4sAUuP8Ms6Vee",
+      "nombre": "🎄♻️ ¡Taller: Recicla tu tote bag! - Infantil ♻️🎄",
+      "fecha": "2026-12-10",
+      "fechaFin": "",
+      "hora": "16:30",
+      "horaFin": "18:30",
+      "lugar": "",
+      "dondePublicar": [
         "Web"
       ],
       "descripcion": "",
@@ -778,6 +806,20 @@
       "fecha": "2026-12-11",
       "fechaFin": "",
       "hora": "17:00",
+      "horaFin": "",
+      "lugar": "",
+      "dondePublicar": [
+        "Web"
+      ],
+      "descripcion": "",
+      "status": ""
+    },
+    {
+      "id": "recKxOWkJ5fnbDYEI",
+      "nombre": "Concierto profesores por la pública",
+      "fecha": "2026-12-11",
+      "fechaFin": "",
+      "hora": "",
       "horaFin": "",
       "lugar": "",
       "dondePublicar": [
